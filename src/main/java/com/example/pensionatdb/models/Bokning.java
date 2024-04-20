@@ -22,13 +22,13 @@ public class Bokning {
     int startSlutDatum;
 
 
-    @OneToOne
-    @JoinColumn(name = "KundId")
-    Kund kund;
+    @ManyToOne
+    @JoinColumn
+    private Kund kund;
 
-    @OneToOne
-    @JoinColumn(name = "RumId")
-    Rum rum;
+    @ManyToOne
+    @JoinColumn
+    private Rum rum;
 
 
     public Bokning(int nätter, int startSlutDatum, Kund kund, Rum rum) {
@@ -37,4 +37,6 @@ public class Bokning {
         this.kund = kund;
         this.rum = rum;
     }
+
+    private boolean avbokad = false;
 }

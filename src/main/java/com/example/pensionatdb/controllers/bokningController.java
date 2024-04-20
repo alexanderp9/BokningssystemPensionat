@@ -2,24 +2,30 @@ package com.example.pensionatdb.controllers;
 
 import com.example.pensionatdb.models.Bokning;
 import com.example.pensionatdb.repos.bokningRepo;
+import com.example.pensionatdb.services.BokningService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
+@Controller
 public class bokningController {
 
     private final bokningRepo br;
+    private final BokningService bokningService;
 
     private static final Logger log = LoggerFactory.getLogger(bokningController.class);
 
 
-    public bokningController(bokningRepo br) {
+@Autowired
+    public bokningController(bokningRepo br, BokningService bs) {
         this.br = br;
+        this.bokningService = bs;
     }
 
 
@@ -44,6 +50,25 @@ public class bokningController {
         br.deleteById(id);
         log.info("bokning deleted with id "+ id);
         return br.findAll();
+    }
+
+    @PutMapping("/{id}/avboka")
+    public ResponseEntity<Bokning> avbokaBokning(@PathVariable Long id) {
+        Optional<Bokning> optionalBokning = br.findById(id);
+        if (optionalBokning.isPresent()) {
+            Bokning bokning = optionalBokning.get();
+            bokning.setAvbokad(true);
+            br.save(bokning);
+            log.info("Bokning avbokad with id " + id);
+            return ResponseEntity.ok(bokning);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @PutMapping("/{id}/update")
+    public ResponseEntity<Bokning> updateBokning(@PathVariable Long id, @RequestBody Bokning updatedBokning) {
+        Bokning updated = bokningService.updateBokning(id, updatedBokning);
+        return ResponseEntity.ok(updated);
     }
 
 }
