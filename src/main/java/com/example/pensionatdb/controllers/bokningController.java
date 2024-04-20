@@ -42,7 +42,7 @@ public class bokningController {
     @RequestMapping("bokning/{id}/delete")
     public List<Bokning> deleteById(@PathVariable Long id){
         br.deleteById(id);
-        log.info("kompis deleted with id "+ id);
+        log.info("bokning deleted with id "+ id);
         return br.findAll();
     }
 

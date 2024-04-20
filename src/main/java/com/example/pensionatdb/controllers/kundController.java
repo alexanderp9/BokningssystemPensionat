@@ -41,7 +41,7 @@ public class kundController {
     @RequestMapping("kund/{id}/delete")
     public List<Kund> deleteById(@PathVariable Long id){
         kr.deleteById(id);
-        log.info("kompis deleted with id "+ id);
+        log.info("kund deleted with id "+ id);
         return kr.findAll();
     }
 }

@@ -42,7 +42,7 @@ public class rumController {
     @RequestMapping("Rum/{id}/delete")
     public List<Rum> deleteById(@PathVariable Long id){
         rr.deleteById(id);
-        log.info("kompis deleted with id "+ id);
+        log.info("Rum deleted with id "+ id);
         return rr.findAll();
     }
 }
