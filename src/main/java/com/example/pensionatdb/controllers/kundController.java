@@ -5,13 +5,10 @@ import com.example.pensionatdb.models.Kund;
 import com.example.pensionatdb.repos.kundRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@RestController
 public class kundController {
 
     private static final Logger log = LoggerFactory.getLogger(bokningController.class);
@@ -44,4 +41,17 @@ public class kundController {
         log.info("kund deleted with id "+ id);
         return kr.findAll();
     }
+
+    @RequestMapping("kundNameChange/{id}/{namn}")
+    public List<Kund> updateName(@PathVariable Long id,@PathVariable String namn){
+        kr.updateNameById(id, namn);
+        return kr.findAll();
+    }
+
+    @RequestMapping("kundAddressChange/{id}/{adress}")
+    public List<Kund> updateAddress(@PathVariable Long id,@PathVariable String adress){
+        kr.updateAddressById(id, adress);
+        return kr.findAll();
+    }
+
 }
