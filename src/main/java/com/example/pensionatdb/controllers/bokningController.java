@@ -7,13 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
+@RequestMapping("/bokning")
 public class bokningController {
 
     private final bokningRepo br;
@@ -29,23 +29,29 @@ public class bokningController {
     }
 
 
-    @RequestMapping("bokning")
+    @RequestMapping()
     public List<Bokning> getAllBokning(){
         return br.findAll();
     }
 
-    @RequestMapping("bokning/{id}")
+    @RequestMapping("/{id}")
     public Bokning findById(@PathVariable Long id){
         return br.findById(id).get();
     }
 
-    @PostMapping("bokning/add")
-    public List<Bokning> addBokning(@RequestBody Bokning b){
-        br.save(b);
-        return br.findAll();
+    @PostMapping("/add")
+    public void addBokning(@RequestBody Bokning b) {
+        boolean isRoomAvailable = bokningService.isRoomAvailable(b.getRum(), b.getStartSlutDatum());
+        if (isRoomAvailable) {
+            br.save(b);
+            log.info("Bokning lyckades");
+        } else {
+            log.info("Rummet du ville boka är upptaget för perioden.");
+        }
     }
 
-    @RequestMapping("bokning/{id}/delete")
+
+    @RequestMapping("/{id}/delete")
     public List<Bokning> deleteById(@PathVariable Long id){
         br.deleteById(id);
         log.info("bokning deleted with id "+ id);

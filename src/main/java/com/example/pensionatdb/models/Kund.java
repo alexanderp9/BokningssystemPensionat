@@ -2,11 +2,10 @@ package com.example.pensionatdb.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.antlr.v4.runtime.misc.NotNull;
 
 
 @Data
@@ -16,12 +15,13 @@ import lombok.NoArgsConstructor;
 public class Kund {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
-    String namn;
-
-    String adress;
+    @NotNull
+    private String namn;
+    @NotNull
+    private String adress;
 
     public Kund(String namn, String adress) {
         this.namn = namn;

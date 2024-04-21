@@ -14,24 +14,24 @@ import lombok.NoArgsConstructor;
 public class Bokning {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
     int nätter;
 
-    int startSlutDatum;
+    String startSlutDatum;
 
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "kund_id")
     private Kund kund;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "rum_id")
     private Rum rum;
 
 
-    public Bokning(int nätter, int startSlutDatum, Kund kund, Rum rum) {
+    public Bokning(int nätter, String startSlutDatum, Kund kund, Rum rum) {
         this.nätter = nätter;
         this.startSlutDatum = startSlutDatum;
         this.kund = kund;
