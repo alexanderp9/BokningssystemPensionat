@@ -1,9 +1,6 @@
 package com.example.pensionatdb.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,9 +17,10 @@ public class Rum {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
-    String rumTyp;
+    @Column(name = "rumTyp")
+    private String rumTyp;
 
-    int extraSäng;
+    private int extraSäng;
 
     public Rum(String rumTyp, int extraSäng) {
         this.rumTyp = rumTyp;

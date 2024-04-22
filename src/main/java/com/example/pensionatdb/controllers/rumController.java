@@ -34,8 +34,9 @@ public class rumController {
     }
 
     @PostMapping("/add")
-    public List<Rum> addRum(@RequestBody Rum b){
-        rr.save(b);
+    public List<Rum> addRum(@RequestBody Rum rum) {
+        rr.save(rum);
+        log.info("Rum added: " + rum.toString());
         return rr.findAll();
     }
 
