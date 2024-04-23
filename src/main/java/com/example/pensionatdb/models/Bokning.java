@@ -23,11 +23,11 @@ public class Bokning {
 
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "kund_id")
     private Kund kund;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "rum_id")
     private Rum rum;
 
 
