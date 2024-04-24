@@ -1,9 +1,12 @@
 package com.example.pensionatdb.controllers;
 
+import com.example.pensionatdb.dtos.DetailedKundDto;
 import com.example.pensionatdb.models.Bokning;
 import com.example.pensionatdb.models.Kund;
 import com.example.pensionatdb.repos.bokningRepo;
 import com.example.pensionatdb.repos.kundRepo;
+import com.example.pensionatdb.services.kundService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 public class kundController {
 
     private static final Logger log = LoggerFactory.getLogger(bokningController.class);
@@ -19,14 +23,12 @@ public class kundController {
     private final kundRepo kr;
     private final bokningRepo br;
 
-    public kundController(kundRepo kr, bokningRepo br) {
-        this.kr = kr;
-        this.br = br;
-    }
+    private final kundService ks;
+
 
     @RequestMapping("kund")
-    public List<Kund> getAllKund(){
-        return kr.findAll();
+    public List<DetailedKundDto> getAllKund(){
+        return ks.getAllKnud();
     }
 
     @RequestMapping("kund/{id}")

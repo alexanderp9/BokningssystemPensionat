@@ -6,21 +6,19 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+
 public class Kund {
 
     @Id
     @GeneratedValue
-    protected long id;
+    protected Long id;
 
     @NotEmpty(message = "Name is Mandatory")
     @Size(min = 3, message ="At least 3 Letters for Author")
