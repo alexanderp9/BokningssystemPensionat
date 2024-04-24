@@ -1,5 +1,6 @@
 package com.example.pensionatdb.services;
 
+import com.example.pensionatdb.dtos.BokningDTO;
 import com.example.pensionatdb.models.Bokning;
 import com.example.pensionatdb.models.Rum;
 import com.example.pensionatdb.repos.bokningRepo;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BokningService {
@@ -22,7 +24,54 @@ public class BokningService {
         this.bokningRepo = bokningRepo;
     }
 
-    public Bokning updateBokning(Long id, Bokning updatedBokning) {
+
+    private BokningDTO convertToBokningDTO(Bokning bokning) {
+        BokningDTO dto = new BokningDTO();
+        dto.setId(bokning.getId());
+        dto.setNätter(bokning.getNätter());
+        dto.setStartSlutDatum(bokning.getStartSlutDatum());
+        dto.setKundNamn(bokning.getKund().getNamn());
+        dto.setRumId(bokning.getRum().getId());
+        return dto;
+    }
+
+
+    public List<BokningDTO> getAllBokningDTOs() {
+        List<Bokning> bokningar = bokningRepo.findAll();
+        return bokningar.stream()
+                .map(this::convertToBokningDTO)
+                .collect(Collectors.toList());
+    }
+
+
+    public BokningDTO findBokningDTOById(Long id) {
+        Optional<Bokning> optionalBokning = bokningRepo.findById(id);
+        return optionalBokning.map(this::convertToBokningDTO).orElse(null);
+    }
+
+
+    public BokningDTO addBokning(Bokning bokning) {
+        Bokning savedBokning = bokningRepo.save(bokning);
+        return convertToBokningDTO(savedBokning);
+    }
+
+
+    public void deleteBokning(Long id) {
+        bokningRepo.deleteById(id);
+    }
+
+
+    public void avbokaBokning(Long id) {
+        Optional<Bokning> optionalBokning = bokningRepo.findById(id);
+        if (optionalBokning.isPresent()) {
+            Bokning bokning = optionalBokning.get();
+            bokning.setAvbokad(true);
+            bokningRepo.save(bokning);
+        }
+    }
+
+
+    public BokningDTO updateBokning(Long id, Bokning updatedBokning) {
         Optional<Bokning> optionalBokning = bokningRepo.findById(id);
         if (optionalBokning.isPresent()) {
             Bokning bokning = optionalBokning.get();
@@ -30,7 +79,8 @@ public class BokningService {
             bokning.setStartSlutDatum(updatedBokning.getStartSlutDatum());
             bokning.setKund(updatedBokning.getKund());
             bokning.setRum(updatedBokning.getRum());
-            return bokningRepo.save(bokning);
+            Bokning savedBokning = bokningRepo.save(bokning);
+            return convertToBokningDTO(savedBokning);
         } else {
             throw new RuntimeException("Bokning not found with id: " + id);
         }

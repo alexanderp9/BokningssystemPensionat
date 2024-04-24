@@ -1,5 +1,6 @@
 package com.example.pensionatdb.controllers;
 
+import com.example.pensionatdb.dtos.BokningDTO;
 import com.example.pensionatdb.models.Bokning;
 import com.example.pensionatdb.repos.bokningRepo;
 import com.example.pensionatdb.services.BokningService;
@@ -16,65 +17,65 @@ import java.util.Optional;
 @RequestMapping("/bokning")
 public class bokningController {
 
-    private final bokningRepo br;
     private final BokningService bokningService;
 
     private static final Logger log = LoggerFactory.getLogger(bokningController.class);
 
-
-@Autowired
-    public bokningController(bokningRepo br, BokningService bs) {
-        this.br = br;
-        this.bokningService = bs;
+    @Autowired
+    public bokningController(BokningService bokningService) {
+        this.bokningService = bokningService;
     }
 
-
-    @RequestMapping()
-    public List<Bokning> getAllBokning(){
-        return br.findAll();
+    @GetMapping
+    public ResponseEntity<List<BokningDTO>> getAllBokning() {
+        List<BokningDTO> bokningar = bokningService.getAllBokningDTOs();
+        return ResponseEntity.ok(bokningar);
     }
 
-    @RequestMapping("/{id}")
-    public Bokning findById(@PathVariable Long id){
-        return br.findById(id).get();
-    }
-
-    @PostMapping("/add")
-    public void addBokning(@RequestBody Bokning b) {
-        boolean isRoomAvailable = bokningService.isRoomAvailable(b.getRum(), b.getStartSlutDatum());
-        if (isRoomAvailable) {
-            br.save(b);
-            log.info("Bokning lyckades");
-        } else {
-            log.info("Rummet du ville boka är upptaget för perioden.");
-        }
-    }
-
-
-    @RequestMapping("/{id}/delete")
-    public List<Bokning> deleteById(@PathVariable Long id){
-        br.deleteById(id);
-        log.info("bokning deleted with id "+ id);
-        return br.findAll();
-    }
-
-    @PutMapping("/{id}/avboka")
-    public ResponseEntity<Bokning> avbokaBokning(@PathVariable Long id) {
-        Optional<Bokning> optionalBokning = br.findById(id);
-        if (optionalBokning.isPresent()) {
-            Bokning bokning = optionalBokning.get();
-            bokning.setAvbokad(true);
-            br.save(bokning);
-            log.info("Bokning avbokad with id " + id);
+    @GetMapping("/{id}")
+    public ResponseEntity<BokningDTO> findById(@PathVariable Long id) {
+        BokningDTO bokning = bokningService.findBokningDTOById(id);
+        if (bokning != null) {
             return ResponseEntity.ok(bokning);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-    @PutMapping("/{id}/update")
-    public ResponseEntity<Bokning> updateBokning(@PathVariable Long id, @RequestBody Bokning updatedBokning) {
-        Bokning updated = bokningService.updateBokning(id, updatedBokning);
-        return ResponseEntity.ok(updated);
+
+    @PostMapping("/add")
+    public ResponseEntity<Void> addBokning(@RequestBody Bokning b) {
+        boolean isRoomAvailable = bokningService.isRoomAvailable(b.getRum(), b.getStartSlutDatum());
+        if (isRoomAvailable) {
+            bokningService.addBokning(b);
+            log.info("Bokning lyckades");
+            return ResponseEntity.ok().build();
+        } else {
+            log.info("Rummet du ville boka är upptaget för perioden.");
+            return ResponseEntity.badRequest().build();
+        }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        bokningService.deleteBokning(id);
+        log.info("Bokning deleted with id " + id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/avboka")
+    public ResponseEntity<Void> avbokaBokning(@PathVariable Long id) {
+        bokningService.avbokaBokning(id);
+        log.info("Bokning avbokad with id " + id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}/update")
+    public ResponseEntity<BokningDTO> updateBokning(@PathVariable Long id, @RequestBody Bokning updatedBokning) {
+        BokningDTO updated = bokningService.updateBokning(id, updatedBokning);
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
