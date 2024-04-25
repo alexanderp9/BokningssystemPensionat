@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DetailedRumDto extends Rum {
+public class DetailedRumDto {
 
     private Long id;
 

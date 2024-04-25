@@ -19,7 +19,7 @@ public class DetailedBokningDto {
 
     private int startSlutDatum;
 
-    private Kund kund;
+    private DetailedKundDto kund;
 
-    private Rum rum;
+    private DetailedRumDto rum;
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DetailedKundDto extends Kund {
+public class DetailedKundDto {
 
     private Long id;
 
