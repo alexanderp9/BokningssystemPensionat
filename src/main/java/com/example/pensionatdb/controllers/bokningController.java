@@ -2,6 +2,7 @@ package com.example.pensionatdb.controllers;
 
 import com.example.pensionatdb.dtos.BokningDTO;
 import com.example.pensionatdb.models.Bokning;
+import com.example.pensionatdb.models.Rum;
 import com.example.pensionatdb.repos.bokningRepo;
 import com.example.pensionatdb.services.BokningService;
 import org.slf4j.Logger;
@@ -43,10 +44,9 @@ public class bokningController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Void> addBokning(@RequestBody Bokning b) {
-        boolean isRoomAvailable = bokningService.isRoomAvailable(b.getRum(), b.getStartSlutDatum());
-        if (isRoomAvailable) {
-            bokningService.addBokning(b);
+    public ResponseEntity<Void> addBokning(@RequestBody BokningDTO bokningDTO) {
+        BokningDTO addedBokning = bokningService.addBokningFromDTO(bokningDTO);
+        if (addedBokning != null) {
             log.info("Bokning lyckades");
             return ResponseEntity.ok().build();
         } else {
@@ -71,11 +71,27 @@ public class bokningController {
 
     @PutMapping("/{id}/update")
     public ResponseEntity<BokningDTO> updateBokning(@PathVariable Long id, @RequestBody Bokning updatedBokning) {
-        BokningDTO updated = bokningService.updateBokning(id, updatedBokning);
+        BokningDTO updated = bokningService.updateBokningFromEntity(id, updatedBokning);
         if (updated != null) {
             return ResponseEntity.ok(updated);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Rum>> searchAvailableRooms(
+            @RequestParam String startDate,
+            @RequestParam String endDate,
+            @RequestParam int nätter
+    ) {
+        List<Rum> availableRooms = bokningService.searchAvailableRooms(startDate, endDate, nätter);
+        if (!availableRooms.isEmpty()) {
+            return ResponseEntity.ok(availableRooms);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 }

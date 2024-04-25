@@ -8,5 +8,7 @@ public class BokningDTO {
     private int nätter;
     private String startSlutDatum;
     private String kundNamn;
+    private long kundId;
     private long rumId;
+    private boolean avbokad;
 }

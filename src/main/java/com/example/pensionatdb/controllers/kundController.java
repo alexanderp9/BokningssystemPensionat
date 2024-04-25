@@ -4,10 +4,12 @@ import com.example.pensionatdb.models.Kund;
 import com.example.pensionatdb.repos.kundRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/kund")
@@ -38,10 +40,24 @@ public class kundController {
         return kr.findAll();
     }
 
-    @RequestMapping("/{id}/delete")
-    public List<Kund> deleteById(@PathVariable Long id){
-        kr.deleteById(id);
-        log.info("kund deleted with id "+ id);
-        return kr.findAll();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        Optional<Kund> optionalKund = kr.findById(id);
+        if (optionalKund.isPresent()) {
+            Kund kund = optionalKund.get();
+            if (kr.canDeleteKund(kund)) {
+                kr.deleteById(id);
+                log.info("Kund deleted with id " + id);
+                return ResponseEntity.ok().build();
+            } else {
+                log.info("Kunden har bokningar och kan inte tas bort.");
+                return ResponseEntity.badRequest().build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
+
+
 }

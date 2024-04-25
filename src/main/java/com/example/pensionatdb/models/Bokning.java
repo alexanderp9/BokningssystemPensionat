@@ -1,6 +1,5 @@
 package com.example.pensionatdb.models;
 
-
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,19 +7,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Entity
 public class Bokning {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected long id;
+    private long id;
 
-    int nätter;
-
-    String startSlutDatum;
-
+    private int nätter;
+    private String startSlutDatum;
 
     @ManyToOne
     @JoinColumn(name = "kund_id")
@@ -29,14 +26,6 @@ public class Bokning {
     @ManyToOne
     @JoinColumn(name = "rum_id")
     private Rum rum;
-
-
-    public Bokning(int nätter, String startSlutDatum, Kund kund, Rum rum) {
-        this.nätter = nätter;
-        this.startSlutDatum = startSlutDatum;
-        this.kund = kund;
-        this.rum = rum;
-    }
 
     private boolean avbokad = false;
 }
