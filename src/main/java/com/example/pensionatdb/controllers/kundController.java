@@ -3,8 +3,7 @@ package com.example.pensionatdb.controllers;
 import com.example.pensionatdb.dtos.DetailedKundDto;
 import com.example.pensionatdb.models.Bokning;
 import com.example.pensionatdb.models.Kund;
-import com.example.pensionatdb.repos.bokningRepo;
-import com.example.pensionatdb.repos.kundRepo;
+import com.example.pensionatdb.services.impl.bokningServiceImpl;
 import com.example.pensionatdb.services.impl.kundServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -20,9 +19,7 @@ public class kundController {
 
     private static final Logger log = LoggerFactory.getLogger(bokningController.class);
 
-    private final kundRepo kr;
-    private final bokningRepo br;
-
+    private final bokningServiceImpl bs;
     private final kundServiceImpl ks;
 
 
@@ -49,7 +46,7 @@ public class kundController {
         Optional<Kund> kundOptional = ks.findById(id);
         if (kundOptional.isPresent()) {
             Kund kund = kundOptional.get();
-            List<Bokning> bokningar = br.findByKund(kund);
+            List<Bokning> bokningar = bs.findBokningarByKund(kund);
             if (bokningar.isEmpty()) {
                 ks.deleteById(id);
                 log.info("kund deleted with id " + id);
@@ -62,13 +59,13 @@ public class kundController {
 
     @RequestMapping("kundNameChange/{id}/{namn}")
     public List<DetailedKundDto> updateName(@PathVariable Long id, @PathVariable String namn){
-        kr.updateNameById(id, namn);
+        ks.updateKundNameById(id, namn);
         return ks.getAllKund();
     }
 
     @RequestMapping("kundAddressChange/{id}/{adress}")
     public List<DetailedKundDto> updateAddress(@PathVariable Long id, @PathVariable String adress){
-        kr.updateAddressById(id, adress);
+        ks.updateKundAddressById(id, adress);
         return ks.getAllKund();
     }
 

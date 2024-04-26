@@ -18,6 +18,9 @@ public class bokningServiceImpl{
     final private bokningRepo br;
 
 
+    public List<Bokning> findBokningarByKund(Kund kund) {
+        return br.findByKund(kund);
+    }
 
     public List<DetailedBokningDto> getAllBokning() {
         return br.findAll().stream().map(k-> bokningToDetailedBokningDto(k)).toList();

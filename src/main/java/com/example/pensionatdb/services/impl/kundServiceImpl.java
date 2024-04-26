@@ -6,17 +6,25 @@ import com.example.pensionatdb.dtos.kundDto;
 import com.example.pensionatdb.models.Kund;
 import com.example.pensionatdb.repos.kundRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class kundServiceImpl  {
 
-    final private kundRepo kr;
+    private final kundRepo kr;
 
+
+    public void updateKundAddressById(Long id, String newAddress) {
+        kr.updateAddressById(id, newAddress);
+    }
+
+    public void updateKundNameById(Long id, String newName) {
+        kr.updateNameById(id, newName);
+    }
 
     public List<DetailedKundDto> getAllKund() {
         return kr.findAll().stream().map(k-> kundToDetDetailedKundDto(k)).toList();
