@@ -6,7 +6,6 @@ import com.example.pensionatdb.models.Bokning;
 import com.example.pensionatdb.models.Kund;
 import com.example.pensionatdb.models.Rum;
 import com.example.pensionatdb.repos.bokningRepo;
-import com.example.pensionatdb.services.bokningService;
 import com.example.pensionatdb.services.kundService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,18 +14,18 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class bokningServiceImpl implements bokningService {
+public class bokningServiceImpl{
 
     final private bokningRepo br;
 
 
-    @Override
+
     public List<DetailedBokningDto> getAllBokning() {
         return br.findAll().stream().map(k-> bokningToDetailedBokningDto(k)).toList();
     }
 
 
-    @Override
+
     public bokningDto bokningTobokningDto(Bokning b) {
         return bokningDto.builder()
                 .id(b.getId())
@@ -34,7 +33,7 @@ public class bokningServiceImpl implements bokningService {
                 .build();
     }
 
-    @Override
+
     public DetailedBokningDto bokningToDetailedBokningDto(Bokning b) {
         return DetailedBokningDto.builder()
                 .id(b.getId())

@@ -5,7 +5,7 @@ import com.example.pensionatdb.models.Bokning;
 import com.example.pensionatdb.models.Kund;
 import com.example.pensionatdb.repos.bokningRepo;
 import com.example.pensionatdb.repos.kundRepo;
-import com.example.pensionatdb.services.kundService;
+import com.example.pensionatdb.services.impl.kundServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class kundController {
     private final kundRepo kr;
     private final bokningRepo br;
 
-    private final kundService ks;
+    private final kundServiceImpl ks;
 
 
     @RequestMapping("kund")
