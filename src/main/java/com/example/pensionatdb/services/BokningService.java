@@ -31,15 +31,23 @@ public class BokningService {
         this.rumRepo = rumRepo;
     }
 
+    public List<Bokning> findBokningarByKund(Kund kund) {
+        return bokningRepo.findByKund(kund);
+    }
+
+
     private BokningDTO convertToBokningDTO(Bokning bokning) {
         BokningDTO dto = new BokningDTO();
         dto.setId(bokning.getId());
         dto.setNätter(bokning.getNätter());
         dto.setStartSlutDatum(bokning.getStartSlutDatum());
-        dto.setKundNamn(bokning.getKund().getNamn());
+        dto.setNamn(bokning.getKund().getNamn());
+        dto.setKundId(bokning.getKund().getId());
         dto.setRumId(bokning.getRum().getId());
         return dto;
     }
+
+
 
     private Bokning updateBokningDetails(Bokning existingBokning, Bokning updatedBokning) {
         existingBokning.setNätter(updatedBokning.getNätter());

@@ -54,7 +54,7 @@ public class bokningController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         bokningService.deleteBokning(id);
         log.info("Bokning deleted with id " + id);
@@ -91,6 +91,5 @@ public class bokningController {
             return ResponseEntity.notFound().build();
         }
     }
-
 
 }
