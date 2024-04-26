@@ -38,7 +38,7 @@ public class kundController {
 
     @PostMapping("kund/add")
     public List<DetailedKundDto> addKund(@RequestBody Kund b){
-        kr.save(b);
+        ks.save(b);
         return ks.getAllKund();
     }
 
@@ -52,9 +52,9 @@ public class kundController {
             List<Bokning> bokningar = br.findByKund(kund);
             if (bokningar.isEmpty()) {
                 ks.deleteById(id);
-                log.info("Kund deleted with id " + id);
+                log.info("kund deleted with id " + id);
             }
-            else log.warn("Kund with id " + id + " cannot be deleted as they have a bokning .");
+            else log.warn("kund with id " + id + " cannot be deleted as they have a bokning .");
         }
         return ks.getAllKund();
     }
