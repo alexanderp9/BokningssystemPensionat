@@ -6,7 +6,6 @@ import com.example.pensionatdb.models.Bokning;
 import com.example.pensionatdb.models.Kund;
 import com.example.pensionatdb.models.Rum;
 import com.example.pensionatdb.repos.bokningRepo;
-import com.example.pensionatdb.services.kundService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

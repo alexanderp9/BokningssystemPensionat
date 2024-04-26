@@ -28,48 +28,48 @@ public class kundController {
 
     @RequestMapping("kund")
     public List<DetailedKundDto> getAllKund(){
-        return ks.getAllKnud();
+        return ks.getAllKund();
     }
 
     @RequestMapping("kund/{id}")
     public Kund findById(@PathVariable Long id){
-        return kr.findById(id).get();
+        return ks.findById(id).get();
     }
 
     @PostMapping("kund/add")
-    public List<Kund> addKund(@RequestBody Kund b){
+    public List<DetailedKundDto> addKund(@RequestBody Kund b){
         kr.save(b);
-        return kr.findAll();
+        return ks.getAllKund();
     }
 
 
 
     @RequestMapping("/kund/{id}/delete")
-    public List<Kund> deleteById(@PathVariable Long id) {
-        Optional<Kund> kundOptional = kr.findById(id);
+    public List<DetailedKundDto> deleteById(@PathVariable Long id) {
+        Optional<Kund> kundOptional = ks.findById(id);
         if (kundOptional.isPresent()) {
             Kund kund = kundOptional.get();
             List<Bokning> bokningar = br.findByKund(kund);
             if (bokningar.isEmpty()) {
-                kr.deleteById(id);
+                ks.deleteById(id);
                 log.info("Kund deleted with id " + id);
             }
             else log.warn("Kund with id " + id + " cannot be deleted as they have a bokning .");
         }
-        return kr.findAll();
+        return ks.getAllKund();
     }
 
 
     @RequestMapping("kundNameChange/{id}/{namn}")
-    public List<Kund> updateName(@PathVariable Long id,@PathVariable String namn){
+    public List<DetailedKundDto> updateName(@PathVariable Long id, @PathVariable String namn){
         kr.updateNameById(id, namn);
-        return kr.findAll();
+        return ks.getAllKund();
     }
 
     @RequestMapping("kundAddressChange/{id}/{adress}")
-    public List<Kund> updateAddress(@PathVariable Long id,@PathVariable String adress){
+    public List<DetailedKundDto> updateAddress(@PathVariable Long id, @PathVariable String adress){
         kr.updateAddressById(id, adress);
-        return kr.findAll();
+        return ks.getAllKund();
     }
 
 }

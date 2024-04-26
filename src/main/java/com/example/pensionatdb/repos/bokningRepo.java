@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface bokningRepo extends JpaRepository<Bokning, Long> {
 
@@ -15,5 +16,6 @@ public interface bokningRepo extends JpaRepository<Bokning, Long> {
     @Transactional
     @Query("SELECT b FROM Bokning b WHERE b.kund = :kund")
     List<Bokning> findByKund(Kund kund);
+
 
 }
