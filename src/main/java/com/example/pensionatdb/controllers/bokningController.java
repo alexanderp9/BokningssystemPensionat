@@ -3,7 +3,6 @@ package com.example.pensionatdb.controllers;
 import com.example.pensionatdb.dtos.BokningDTO;
 import com.example.pensionatdb.models.Bokning;
 import com.example.pensionatdb.models.Rum;
-import com.example.pensionatdb.repos.bokningRepo;
 import com.example.pensionatdb.services.BokningService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/bokning")
