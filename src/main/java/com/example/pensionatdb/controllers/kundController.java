@@ -41,7 +41,7 @@ public class kundController {
 
 
 
-    @RequestMapping("/kund/{id}/delete")
+    @DeleteMapping("/kund/{id}/delete")
     public List<DetailedKundDto> deleteById(@PathVariable Long id) {
         Optional<Kund> kundOptional = ks.findById(id);
         if (kundOptional.isPresent()) {
