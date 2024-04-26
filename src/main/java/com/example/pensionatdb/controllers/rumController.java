@@ -1,49 +1,54 @@
 package com.example.pensionatdb.controllers;
 
-import com.example.pensionatdb.models.Kund;
+import com.example.pensionatdb.dtos.RumDTO;
 import com.example.pensionatdb.models.Rum;
-import com.example.pensionatdb.repos.rumRepo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.pensionatdb.services.RumService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/rum")
 public class rumController {
 
-    private static final Logger log = LoggerFactory.getLogger(bokningController.class);
+    private final RumService rumService;
 
-    private final rumRepo rr;
-
-
-    public rumController(rumRepo rr) {
-        this.rr = rr;
+    @Autowired
+    public rumController(RumService rumService) {
+        this.rumService = rumService;
     }
 
-    @RequestMapping()
-    public List<Rum> getAllRum(){
-        return rr.findAll();
+    @GetMapping
+    public ResponseEntity<List<RumDTO>> getAllRum() {
+        List<RumDTO> rum = rumService.getAllRumDTOs();
+        return ResponseEntity.ok(rum);
     }
 
-    @RequestMapping("/{id}")
-    public Rum findById(@PathVariable Long id){
-        return rr.findById(id).get();
+    @GetMapping("/{id}")
+    public ResponseEntity<RumDTO> findById(@PathVariable Long id) {
+        RumDTO rum = rumService.findRumDTOById(id);
+        if (rum != null) {
+            return ResponseEntity.ok(rum);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("/add")
-    public List<Rum> addRum(@RequestBody Rum rum) {
-        rr.save(rum);
-        log.info("Rum added: " + rum.toString());
-        return rr.findAll();
+    public ResponseEntity<Void> addRum(@RequestBody RumDTO rumDTO) {
+        RumDTO addedRum = rumService.addRumFromDTO(rumDTO);
+        if (addedRum != null) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
-    @RequestMapping("/{id}/delete")
-    public List<Rum> deleteById(@PathVariable Long id){
-        rr.deleteById(id);
-        log.info("Rum deleted with id "+ id);
-        return rr.findAll();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        rumService.deleteRumById(id);
+        return ResponseEntity.ok().build();
     }
 }
