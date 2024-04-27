@@ -8,12 +8,14 @@ import com.example.pensionatdb.services.KundService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class kundController {
 
@@ -23,11 +25,11 @@ public class kundController {
     private final KundService ks;
 
 
-
-
-    @RequestMapping("kund")
-    public List<DetailedKundDto> getAllKund(){
-        return ks.getAllKund();
+    @GetMapping("/kund")
+    public String getAllKund(Model model) {
+        List<DetailedKundDto> customers = ks.getAllKund();
+        model.addAttribute("customers", customers);
+        return "customerpage";
     }
 
     @RequestMapping("kund/{id}")

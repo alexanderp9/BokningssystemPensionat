@@ -48,7 +48,13 @@
     <button class="button">Ta bort</button>
     <button class="button">Uppdatera</button>
 </div>
+
 <h1>Kunder</h1>
 
+<ul>
+    <li th:each="customer : ${customers}">
+        <span th:text="${customer.namn}"></span> - <span th:text="${customer.adress}"></span>
+    </li>
+</ul>
 </body>
 </html>
