@@ -89,12 +89,15 @@ public class BokningService {
     }
 
     public BokningDTO addBokningFromDTO(BokningDTO bokningDTO) {
+        Kund kund = kundRepo.findById(bokningDTO.getKundId()).orElse(null);
+        Rum rum = rumRepo.findById(bokningDTO.getRumId()).orElse(null);
+
         Bokning bokning = new Bokning(
                 bokningDTO.getId(),
                 bokningDTO.getNätter(),
                 bokningDTO.getStartSlutDatum(),
-                null,
-                null,
+                kund,
+                rum,
                 false
         );
 

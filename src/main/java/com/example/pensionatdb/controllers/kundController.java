@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,15 +34,17 @@ public class kundController {
         return "customerpage";
     }
 
-    @RequestMapping("kund/{id}")
+    @RequestMapping("/kund/{id}")
     public Kund findById(@PathVariable Long id){
         return ks.findById(id).get();
     }
 
-    @PostMapping("kund/add")
-    public List<DetailedKundDto> addKund(@RequestBody Kund b){
+
+    @PostMapping("/kund/add")
+    public RedirectView addKund(@ModelAttribute Kund b){
+        log.info("lagt till kund");
         ks.save(b);
-        return ks.getAllKund();
+        return new RedirectView("/kund", true);
     }
 
 
@@ -61,13 +65,15 @@ public class kundController {
     }
 
 
-    @RequestMapping("kundNameChange/{id}/{namn}")
+
+
+    @RequestMapping("/kundNameChange/{id}/{namn}")
     public List<DetailedKundDto> updateName(@PathVariable Long id, @PathVariable String namn){
         ks.updateKundNameById(id, namn);
         return ks.getAllKund();
     }
 
-    @RequestMapping("kundAddressChange/{id}/{adress}")
+    @RequestMapping("/kundAddressChange/{id}/{adress}")
     public List<DetailedKundDto> updateAddress(@PathVariable Long id, @PathVariable String adress){
         ks.updateKundAddressById(id, adress);
         return ks.getAllKund();

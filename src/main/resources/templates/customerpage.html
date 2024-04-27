@@ -20,7 +20,7 @@
             flex-direction: row;
         }
 
-        .button {
+        button {
             padding: 10px 20px;
             background-color: #007bff;
             color: #fff;
@@ -31,30 +31,73 @@
             margin: 5px;
             text-transform: uppercase;
         }
-        .button:hover {
+        button:hover {
             background-color: #0056b3;
         }
         title {
             font-size: 32px;
             margin-bottom: 20px;
         }
+        #kundlista {
+            background-color: white;
+            width: 25%;
+            max-height: 200px;
+            overflow-y: auto;
+
+        }
+        #form-container {
+            padding: 20px ;
+
+        }
+
+        .customer-info {
+            display: inline-block;
+            text-align: left;
+            cursor: pointer;
+        }
+        .customer-info:hover {
+            background-color: antiquewhite ;
+        }
     </style>
 
 </head>
 <body>
 
+<!-- remove pch update inte fixat än-->
 <div class="button-container">
-    <button class="button">Lägg till</button>
-    <button class="button">Ta bort</button>
-    <button class="button">Uppdatera</button>
+    <button type="button" onclick="window.location.href='/';">Tillbaka</button>
+    <button type="button" name="action" value="add" onclick="document.getElementById('kundlistaform').action = '/kund/add'; document.getElementById('kundlistaform').submit();">Lägg till</button>
+    <button type="button" name="action" value="remove" onclick="document.getElementById('kundlistaform').action = '/kund/remove'; document.getElementById('kundlistaform').submit();">Ta bort</button>
+    <button type="button" name="action" value="update" onclick="document.getElementById('kundlistaform').action = '/kund/update'; document.getElementById('kundlistaform').submit();">Uppdatera</button>
 </div>
 
 <h1>Kunder</h1>
 
-<ul>
-    <li th:each="customer : ${customers}">
-        <span th:text="${customer.namn}"></span> - <span th:text="${customer.adress}"></span>
-    </li>
-</ul>
+<div id="kundlista">
+    <ul style="list-style: none">
+        <li th:each="customer : ${customers}">
+            <span th:text="${customer.id} + '. ' + 'Namn: ' + ${customer.namn} + ' - ' + 'Adress: ' + ${customer.adress}" class="customer-info"
+                  th:attr="data-customerId=${customer.id}, data-customerName=${customer.namn}, data-customerAddress=${customer.adress}"
+                  onclick="document.getElementById('namn').value = this.getAttribute('data-customerName'); document.getElementById('address').value = this.getAttribute('data-customerAddress');"></span>
+
+        </li>
+    </ul>
+</div>
+
+<div id="form-container">
+    <form id="kundlistaform" method="post" action="/kund/add">
+        <input type="hidden" id="customerId" name="customerId"/>
+        <label for="namn">Namn:</label>
+        <input type="text" id="namn" name="namn"/>
+        <label for="address">Adress:</label>
+        <input type="text" id="address" name="adress"/>
+    </form>
+</div>
+
+</body>
+</html>
+
+
+
 </body>
 </html>
