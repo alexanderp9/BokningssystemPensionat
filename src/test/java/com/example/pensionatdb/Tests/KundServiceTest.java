@@ -85,8 +85,8 @@ public class KundServiceTest {
     @Test
     void updateKundAddress(){
         kundServiceImpl service1 = new kundServiceImpl(kr);
-        service1.updateKundNameById(kund.getId(), "Solgatan 3");
-        verify(kr).updateNameById(kund.getId(), "Solgatan 3");
+        service1.updateKundAddressById(kund.getId(), "Solgatan 3");
+        verify(kr).updateAddressById(kund.getId(), "Solgatan 3");
     }
 
     @Test
