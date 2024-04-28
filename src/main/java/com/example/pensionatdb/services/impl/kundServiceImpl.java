@@ -6,7 +6,6 @@ import com.example.pensionatdb.dtos.kundDto;
 import com.example.pensionatdb.models.Kund;
 import com.example.pensionatdb.repos.kundRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,11 +26,12 @@ public class kundServiceImpl  {
     }
 
     public List<DetailedKundDto> getAllKund() {
-        return kr.findAll().stream().map(k-> kundToDetDetailedKundDto(k)).toList();
+        return kr.findAll().stream().map(this::kundToDetDetailedKundDto).toList();
     }
 
-    public void save(Kund k){
+    public String save(Kund k){
         kr.save(k);
+        return "Konto sparat";
     }
 
     public Optional<Kund> findById(Long id) {

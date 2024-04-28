@@ -11,7 +11,6 @@ public interface kundRepo extends JpaRepository<Kund, Long> {
 
     @Modifying
     @Transactional
-
     @Query("update Kund k set k.namn = :newNamn where k.id = :id")
     void updateNameById(Long id, String newNamn);
 

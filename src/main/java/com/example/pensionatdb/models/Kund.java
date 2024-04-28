@@ -10,25 +10,22 @@ import lombok.*;
 
 
 @Data
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-
+@Builder
 public class Kund {
 
     @Id
     @GeneratedValue
-    protected Long id;
+    private Long id;
 
     @NotEmpty(message = "Name is Mandatory")
     @Size(min = 3, message ="At least 3 Letters for Author")
     @Pattern(regexp="^[A-Öa-ö]*$", message = "Only Letter for Author")
-    String namn;
+    private String namn;
 
-    String adress;
+    private String adress;
 
-    public Kund(String namn, String adress) {
-        this.namn = namn;
-        this.adress = adress;
-    }
+
 }

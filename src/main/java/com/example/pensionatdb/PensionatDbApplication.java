@@ -24,10 +24,10 @@ public class PensionatDbApplication {
         return (args) -> {
 
 
-            Kund k1 = new Kund("pelle", "Storgatan 23");
-            Kund k2 = new Kund("Fralle", "Solgatan 55");
-            Kund k3 = new Kund("Nalle", "Väggatan 33");
-            Kund k4 = new Kund("fdsfsd", "asdsadsad");
+            Kund k1 = new Kund(1L,"pelle", "Storgatan 23");
+            Kund k2 = new Kund(2L,"Fralle", "Solgatan 55");
+            Kund k3 = new Kund(3L,"Nalle", "Väggatan 33");
+            Kund k4 = new Kund(4L,"fdsfsd", "asdsadsad");
 
             kundrepo.save(k1);
             kundrepo.save(k2);
