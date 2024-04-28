@@ -1,11 +1,7 @@
 package com.example.pensionatdb.models;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,8 +18,13 @@ public class Rum {
 
     private int extraSäng;
 
-    public Rum(String rumTyp, int extraSäng) {
+    @Getter
+    private int capacity;
+
+    public Rum(String rumTyp, int extraSäng, int capacity) {
         this.rumTyp = rumTyp;
         this.extraSäng = extraSäng;
+        this.capacity = capacity;
     }
+
 }
