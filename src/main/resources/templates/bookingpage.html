@@ -20,7 +20,7 @@
       flex-direction: row;
     }
 
-    .button {
+    button {
       padding: 10px 20px;
       background-color: #007bff;
       color: #fff;
@@ -31,7 +31,7 @@
       margin: 5px;
       text-transform: uppercase;
     }
-    .button:hover {
+    button:hover {
       background-color: #0056b3;
     }
     title {
@@ -44,10 +44,11 @@
 <body>
 
 <div class="button-container">
-  <button class="button">Lägg till</button>
-  <button class="button">Ta bort</button>
-  <button class="button">Uppdatera</button>
-  <button class="button">Sök på lediga rum</button>
+  <button type="button" onclick="window.location.href='/';">Tillbaka</button>
+  <button type="button" name="action" value="addBooking" onclick="document.getElementById('bookinglistaform').action = '/booking/add'; document.getElementById('kundlistaform').submit();">Lägg till</button>
+  <button type="button" name="action" value="removeBooking" onclick="document.getElementById('bookinglistaform').action = '/booking/delete'; document.getElementById('kundlistaform').submit();">Ta bort</button>
+  <button type="button" name="action" value="updateBooking" onclick="document.getElementById('bookinglistaform').action = '/booking/update'; document.getElementById('kundlistaform').submit();">Uppdatera</button>
+  <button type="button" name="action" value="searchBooking" onclick="document.getElementById('bookinglistaform').action = '/booking/search'; document.getElementById('kundlistaform').submit();">Sök lediga rum</button>
 </div>
 <h1>Bokningar</h1>
 

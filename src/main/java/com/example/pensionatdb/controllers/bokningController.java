@@ -8,13 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 
-@RestController
-@RequestMapping("/bokning")
+@Controller
 public class bokningController {
 
     private final BokningService bokningService;
@@ -26,11 +27,13 @@ public class bokningController {
         this.bokningService = bokningService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<BokningDTO>> getAllBokning() {
+    @GetMapping("/bokning")
+    public String getAllBokning(Model model) {
         List<BokningDTO> bokningar = bokningService.getAllBokningDTOs();
-        return ResponseEntity.ok(bokningar);
+        model.addAttribute("bokningar", bokningar);
+        return "bookingpage";
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<BokningDTO> findById(@PathVariable Long id) {

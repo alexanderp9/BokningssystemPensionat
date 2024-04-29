@@ -20,7 +20,7 @@
             flex-direction: row;
         }
 
-        .button {
+        button {
             padding: 10px 20px;
             background-color: #007bff;
             color: #fff;
@@ -31,7 +31,7 @@
             margin: 5px;
             text-transform: uppercase;
         }
-        .button:hover {
+        button:hover {
             background-color: #0056b3;
         }
         title {
@@ -44,8 +44,10 @@
 <body>
 
 <div class="button-container">
-    <button class="button">Lägg till</button>
-    <button class="button">Ändra</button>
+    <button type="button" onclick="window.location.href='/';">Tillbaka</button>
+    <button type="button" name="action" value="addRum" onclick="document.getElementById('rumlistaform').action = '/rum/add'; document.getElementById('rumlistaform').submit();">Lägg till</button>
+    <button type="button" name="action" value="updateRum" onclick="document.getElementById('rumlistaform').action = '/rum/update'; document.getElementById('rumlistaform').submit();">Ta bort</button>
+
 </div>
 <h1>Hantera rum</h1>
 

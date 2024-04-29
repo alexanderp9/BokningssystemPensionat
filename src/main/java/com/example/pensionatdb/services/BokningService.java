@@ -44,8 +44,10 @@ public class BokningService {
         dto.setNamn(bokning.getKund().getNamn());
         dto.setKundId(bokning.getKund().getId());
         dto.setRumId(bokning.getRum().getId());
+
         return dto;
     }
+
 
 
 

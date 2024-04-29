@@ -1,5 +1,6 @@
 package com.example.pensionatdb.dtos;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data

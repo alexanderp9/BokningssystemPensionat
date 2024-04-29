@@ -42,28 +42,46 @@ public class kundController {
 
     @PostMapping("/kund/add")
     public RedirectView addKund(@ModelAttribute Kund b){
-        log.info("lagt till kund");
-        ks.save(b);
-        return new RedirectView("/kund", true);
+        if (b.getNamn()==null || b.getAdress()==null){
+            log.info("lagt till kund");
+            ks.save(b);
+            return new RedirectView("/kund",true);
+        }
+        else {
+            log.info("du angav inga värden");
+            return new RedirectView("/kund",true);
+        }
     }
 
 
 
-    @DeleteMapping("/kund/{id}/delete")
-    public List<DetailedKundDto> deleteById(@PathVariable Long id) {
-        Optional<Kund> kundOptional = ks.findById(id);
+    @PostMapping("/kund/delete")
+    public RedirectView deleteKund(@RequestParam Long customerId) {
+        Optional<Kund> kundOptional = ks.findById(customerId);
         if (kundOptional.isPresent()) {
             Kund kund = kundOptional.get();
             List<Bokning> bokningar = bs.findBokningarByKund(kund);
             if (bokningar.isEmpty()) {
-                ks.deleteById(id);
-                log.info("kund deleted with id " + id);
+                ks.deleteById(customerId);
+                log.info("Kund bortagen med id:  " + customerId);
+            } else {
+                log.warn("Kund med id: " + customerId + " kan inte tas bort då den finns i en bokning.");
             }
-            else log.warn("kund with id " + id + " cannot be deleted as they have a bokning .");
         }
-        return ks.getAllKund();
+        return new RedirectView("/kund", true);
     }
 
+    @PostMapping("/kund/update")
+    public RedirectView updateraKund(@RequestParam Long customerId, @RequestParam(required = false) String namn, @RequestParam(required = false) String adress, RedirectAttributes redirectAttributes) {
+        if (namn != null || adress != null) {
+            ks.updateKundNameById(customerId, namn);
+            ks.updateKundAddressById(customerId, adress);
+            log.info("Kund med id:  " + customerId +  " har uppdaterats") ;
+            redirectAttributes.addFlashAttribute("error","Kund har uppdateras");
+
+        }
+        return new RedirectView("/kund", true);
+    }
 
 
 

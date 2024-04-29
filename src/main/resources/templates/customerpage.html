@@ -67,7 +67,7 @@
 <div class="button-container">
     <button type="button" onclick="window.location.href='/';">Tillbaka</button>
     <button type="button" name="action" value="add" onclick="document.getElementById('kundlistaform').action = '/kund/add'; document.getElementById('kundlistaform').submit();">Lägg till</button>
-    <button type="button" name="action" value="remove" onclick="document.getElementById('kundlistaform').action = '/kund/remove'; document.getElementById('kundlistaform').submit();">Ta bort</button>
+    <button type="button" name="action" value="remove" onclick="document.getElementById('kundlistaform').action = '/kund/delete'; document.getElementById('kundlistaform').submit();">Ta bort</button>
     <button type="button" name="action" value="update" onclick="document.getElementById('kundlistaform').action = '/kund/update'; document.getElementById('kundlistaform').submit();">Uppdatera</button>
 </div>
 
@@ -78,14 +78,16 @@
         <li th:each="customer : ${customers}">
             <span th:text="${customer.id} + '. ' + 'Namn: ' + ${customer.namn} + ' - ' + 'Adress: ' + ${customer.adress}" class="customer-info"
                   th:attr="data-customerId=${customer.id}, data-customerName=${customer.namn}, data-customerAddress=${customer.adress}"
-                  onclick="document.getElementById('namn').value = this.getAttribute('data-customerName'); document.getElementById('address').value = this.getAttribute('data-customerAddress');"></span>
+                  onclick="document.getElementById('customerId').value = this.getAttribute('data-customerId');
+                           document.getElementById('namn').value = this.getAttribute('data-customerName');
+                           document.getElementById('address').value = this.getAttribute('data-customerAddress');"></span>
 
         </li>
     </ul>
 </div>
 
 <div id="form-container">
-    <form id="kundlistaform" method="post" action="/kund/add">
+    <form id="kundlistaform" method="post" action="/kund">
         <input type="hidden" id="customerId" name="customerId"/>
         <label for="namn">Namn:</label>
         <input type="text" id="namn" name="namn"/>
@@ -93,6 +95,8 @@
         <input type="text" id="address" name="adress"/>
     </form>
 </div>
+
+
 
 </body>
 </html>
