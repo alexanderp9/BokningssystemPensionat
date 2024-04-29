@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@Controller
+@RestController("/bokning")
+
 public class bokningController {
 
     private final BokningService bokningService;
@@ -27,7 +28,7 @@ public class bokningController {
         this.bokningService = bokningService;
     }
 
-    @GetMapping("/bokning")
+    @GetMapping
     public String getAllBokning(Model model) {
         List<BokningDTO> bokningar = bokningService.getAllBokningDTOs();
         model.addAttribute("bokningar", bokningar);
