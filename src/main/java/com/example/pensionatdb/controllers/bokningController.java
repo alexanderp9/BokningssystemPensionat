@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@RestController("/bokning")
-
+@RequestMapping("/bokning")
+@RestController
 public class bokningController {
 
     private final BokningService bokningService;
