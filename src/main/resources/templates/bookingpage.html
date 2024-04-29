@@ -38,6 +38,21 @@
       font-size: 32px;
       margin-bottom: 20px;
     }
+    #bokninglista {
+      background-color: white;
+      width: 40%;
+      max-height: 400px;
+      overflow-y: auto;
+
+    }
+    .booking-info {
+      display: inline-block;
+      text-align: left;
+      cursor: pointer;
+    }
+    .booking-info:hover {
+      background-color: antiquewhite;
+    }
   </style>
 
 </head>
@@ -51,6 +66,20 @@
   <button type="button" name="action" value="searchBooking" onclick="document.getElementById('bookinglistaform').action = '/booking/search'; document.getElementById('kundlistaform').submit();">Sök lediga rum</button>
 </div>
 <h1>Bokningar</h1>
+
+<div id="bokninglista">
+  <ul style="list-style: none">
+    <li th:each="bokning : ${bokningar}">
+            <span th:text="${bokning.id} + ' - ' + 'Namn: ' + ${bokning.namn} + ' - ' + 'Nätter: ' + ${bokning.nätter} + ' - ' + 'Start/Slut Datum: ' + ${bokning.startSlutDatum}" class="booking-info"
+                  th:attr="data-bookingId=${bokning.id}, data-bookingName=${bokning.namn}, data-bookingNights=${bokning.nätter}, data-bookingDates=${bokning.startSlutDatum}"
+                  onclick="document.getElementById('bookingId').value = this.getAttribute('data-bookingId');
+                           document.getElementById('namn').value = this.getAttribute('data-bookingName');
+                           document.getElementById('nätter').value = this.getAttribute('data-bookingNights');
+                           document.getElementById('startSlutDatum').value = this.getAttribute('data-bookingDates');"></span>
+    </li>
+  </ul>
+</div>
+
 
 </body>
 </html>

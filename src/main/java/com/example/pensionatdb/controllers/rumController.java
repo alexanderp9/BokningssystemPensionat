@@ -1,32 +1,34 @@
 package com.example.pensionatdb.controllers;
 
 import com.example.pensionatdb.dtos.RumDTO;
-import com.example.pensionatdb.models.Rum;
+
 import com.example.pensionatdb.services.RumService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
-@RestController
-@RequestMapping("/rum")
+@Controller
+@RequiredArgsConstructor
 public class rumController {
 
     private final RumService rumService;
+    private static final Logger log = Logger.getLogger(rumController.class.getName());
 
-    @Autowired
-    public rumController(RumService rumService) {
-        this.rumService = rumService;
-    }
 
-    @GetMapping
-    public ResponseEntity<List<RumDTO>> getAllRum() {
+    @GetMapping("/rum")
+    public String getAllRum(Model model) {
         List<RumDTO> rum = rumService.getAllRumDTOs();
-        return ResponseEntity.ok(rum);
+        model.addAttribute("rum", rum);
+        log.info(rum.toString());
+        return "roompage";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/rum/{id}")
     public ResponseEntity<RumDTO> findById(@PathVariable Long id) {
         RumDTO rum = rumService.findRumDTOById(id);
         if (rum != null) {
@@ -36,7 +38,7 @@ public class rumController {
         }
     }
 
-    @PostMapping("/add")
+    @PostMapping("/rum/add")
     public ResponseEntity<Void> addRum(@RequestBody RumDTO rumDTO) {
         RumDTO addedRum = rumService.addRumFromDTO(rumDTO);
         if (addedRum != null) {
@@ -46,7 +48,7 @@ public class rumController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/rum/{id}/delete")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         rumService.deleteRumById(id);
         return ResponseEntity.ok().build();

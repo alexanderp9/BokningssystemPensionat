@@ -42,15 +42,9 @@ public class kundController {
 
     @PostMapping("/kund/add")
     public RedirectView addKund(@ModelAttribute Kund b){
-        if (b.getNamn()==null || b.getAdress()==null){
             log.info("lagt till kund");
             ks.save(b);
             return new RedirectView("/kund",true);
-        }
-        else {
-            log.info("du angav inga värden");
-            return new RedirectView("/kund",true);
-        }
     }
 
 

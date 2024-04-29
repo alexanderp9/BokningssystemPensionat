@@ -38,6 +38,20 @@
             font-size: 32px;
             margin-bottom: 20px;
         }
+        #rumlista{
+            background-color: white;
+            width: 25%;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .room-info{
+            display: inline-block;
+            text-align: left;
+            cursor: pointer;
+        }
+        .room-info:hover{
+            background-color: antiquewhite;
+        }
     </style>
 
 </head>
@@ -50,6 +64,14 @@
 
 </div>
 <h1>Hantera rum</h1>
+
+<div id="rumlista">
+    <ul style="list-style: none">
+        <li th:each="room : ${rum}">
+            <span th:text="${room.id} + '. ' + 'Rumtyp: ' + ${room.rumTyp} + ' - ' + 'Extra sängar: ' + ${room.extraSäng}" class="room-info"></span>
+        </li>
+    </ul>
+</div>
 
 </body>
 </html>
