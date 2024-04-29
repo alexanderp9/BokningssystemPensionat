@@ -41,9 +41,20 @@ public class BokningService {
         dto.setId(bokning.getId());
         dto.setNätter(bokning.getNätter());
         dto.setStartSlutDatum(bokning.getStartSlutDatum());
-        dto.setNamn(bokning.getKund().getNamn());
-        dto.setKundId(bokning.getKund().getId());
-        dto.setRumId(bokning.getRum().getId());
+
+
+        if (bokning.getKund() != null) {
+            dto.setNamn(bokning.getKund().getNamn());
+            dto.setKundId(bokning.getKund().getId());
+        }
+
+
+        if (bokning.getRum() != null) {
+            dto.setRumId(bokning.getRum().getId());
+        }
+
+        dto.setAvbokad(bokning.isAvbokad());
+
         return dto;
     }
 
@@ -89,13 +100,18 @@ public class BokningService {
     }
 
     public BokningDTO addBokningFromDTO(BokningDTO bokningDTO) {
+
+        Kund kund = kundRepo.findById(bokningDTO.getKundId()).orElse(null);
+
+        Rum rum = rumRepo.findById(bokningDTO.getRumId()).orElse(null);
+
         Bokning bokning = new Bokning(
                 bokningDTO.getId(),
                 bokningDTO.getNätter(),
                 bokningDTO.getStartSlutDatum(),
-                null,
-                null,
-                false
+                kund,
+                rum,
+                bokningDTO.isAvbokad()
         );
 
         Bokning savedBokning = bokningRepo.save(bokning);
