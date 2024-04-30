@@ -34,10 +34,28 @@ public class RumService {
 
 
     public RumDTO addRumFromDTO(RumDTO rumDTO) {
+        validateRumDTO(rumDTO);
         Rum rum = convertToRum(rumDTO);
         Rum savedRum = rumRepo.save(rum);
         log.info("Rum added: " + savedRum.toString());
         return convertToRumDTO(savedRum);
+    }
+
+    private void validateRumDTO(RumDTO rumDTO) {
+        // Validera om rummet är dubbelrum
+        if ("dubbelrum".equals(rumDTO.getRumTyp())) {
+            // Validera att antalet extrasängar är inom tillåtna gränser (0-2)
+            int maxExtrasängar = rumDTO.getMaxExtrasängar();
+            int extraSäng = rumDTO.getExtraSäng();
+            if (extraSäng < 0 || extraSäng > maxExtrasängar) {
+                throw new IllegalArgumentException("Ogiltigt antal extrasängar för dubbelrum.");
+            }
+        } else {
+            // Om rummet inte är dubbelrum, extraSäng ska vara 0
+            if (rumDTO.getExtraSäng() != 0) {
+                throw new IllegalArgumentException("Enkelrum får inte ha extrasängar.");
+            }
+        }
     }
 
     public void deleteRumById(Long id) {
