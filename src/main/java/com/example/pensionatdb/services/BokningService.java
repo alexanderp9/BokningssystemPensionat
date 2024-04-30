@@ -10,13 +10,12 @@ import com.example.pensionatdb.repos.rumRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.sql.Date;
 
 @Service
 public class BokningService {
@@ -135,29 +134,17 @@ public class BokningService {
     }
 
 
-    public boolean isRoomAvailable(Rum rum, String startSlutDatum) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-        String[] parts = startSlutDatum.split("-");
-        String startDateStr = parts[0].trim();
-        String endDateStr = parts[1].trim();
-        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
-        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
-
+    public boolean isRoomAvailable(Rum rum, Date startDate, Date endDate) {
         List<Bokning> existingBookings = bokningRepo.findByRumAndStartLessThanEqualAndEndGreaterThanEqual(rum, endDate, startDate);
-
         return existingBookings.isEmpty();
     }
 
-    public List<Rum> searchAvailableRooms(String startDate, String endDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-        LocalDate start = LocalDate.parse(startDate, formatter);
-        LocalDate end = LocalDate.parse(endDate, formatter);
-
+    public List<Rum> searchAvailableRooms(Date startDate, Date endDate) {
         List<Rum> allRooms = rumRepo.findAll();
         List<Rum> availableRooms = new ArrayList<>();
 
         for (Rum rum : allRooms) {
-            if (isRoomAvailable(rum, startDate + "-" + endDate)) {
+            if (isRoomAvailable(rum, startDate, endDate)) {
                 availableRooms.add(rum);
             }
         }

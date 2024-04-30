@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 
@@ -80,8 +81,8 @@ public class bokningController {
 
     @GetMapping("/search")
     public ResponseEntity<List<Rum>> searchAvailableRooms(
-            @RequestParam String startDate,
-            @RequestParam String endDate,
+            @RequestParam Date startDate,
+            @RequestParam Date endDate,
             @RequestParam int nätter
     ) {
         List<Rum> availableRooms = bokningService.searchAvailableRooms(startDate, endDate);
