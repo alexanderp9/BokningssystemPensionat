@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +19,6 @@
             display: flex;
             flex-direction: row;
         }
-
         button {
             padding: 10px 20px;
             background-color: #007bff;
@@ -38,39 +37,52 @@
             font-size: 32px;
             margin-bottom: 20px;
         }
-        #rumlista{
+        #rumlista {
             background-color: white;
-            width: 25%;
+            width: 30%;
             max-height: 200px;
             overflow-y: auto;
         }
-        .room-info{
+        .room-info {
             display: inline-block;
             text-align: left;
             cursor: pointer;
         }
-        .room-info:hover{
-            background-color: antiquewhite;
+        .room-info:hover {
+            background-color: antiquewhite ;
         }
     </style>
-
 </head>
 <body>
 
 <div class="button-container">
     <button type="button" onclick="window.location.href='/';">Tillbaka</button>
-    <button type="button" name="action" value="addRum" onclick="document.getElementById('rumlistaform').action = '/rum/add'; document.getElementById('rumlistaform').submit();">Lägg till</button>
-    <button type="button" name="action" value="updateRum" onclick="document.getElementById('rumlistaform').action = '/rum/update'; document.getElementById('rumlistaform').submit();">Ta bort</button>
-
+    <button type="button" name="action" value="add" onclick="document.getElementById('rumlistaform').action = '/rum/add'; document.getElementById('rumlistaform').submit();">Lägg till</button>
+    <button type="button" name="action" value="remove" onclick="document.getElementById('rumlistaform').action = '/rum/delete'; document.getElementById('rumlistaform').submit();">Ta bort</button>
 </div>
-<h1>Hantera rum</h1>
+
+<h1>Rum</h1>
 
 <div id="rumlista">
     <ul style="list-style: none">
         <li th:each="room : ${rum}">
-            <span th:text="${room.id} + '. ' + 'Rumtyp: ' + ${room.rumTyp} + ' - ' + 'Extra sängar: ' + ${room.extraSäng}" class="room-info"></span>
+            <span th:text="${room.id} + '. ' + 'Rumtyp: ' + ${room.rumTyp} + ' - ' + 'Extra sängar: ' + ${room.extraSäng}" class="room-info"
+                  th:attr="data-roomId=${room.id}, data-rumTyp=${room.rumTyp}, data-extraSäng=${room.extraSäng}"
+                  onclick="document.getElementById('roomId').value = this.getAttribute('data-roomId');
+                           document.getElementById('rumTyp').value = this.getAttribute('data-rumTyp');
+                           document.getElementById('extraSäng').value = this.getAttribute('data-extraSäng');"></span>
         </li>
     </ul>
+</div>
+
+<div id="form-container">
+    <form id="rumlistaform" method="post" action="/rum/delete">
+        <input type="hidden" id="roomId" name="id"/>
+        <label for="rumTyp">Rumstyp:</label>
+        <input type="text" id="rumTyp" name="rumTyp"/>
+        <label for="extraSäng">Extra sängar:</label>
+        <input type="text" id="extraSäng" name="extraSäng"/>
+    </form>
 </div>
 
 </body>

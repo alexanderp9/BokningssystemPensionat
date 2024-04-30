@@ -34,7 +34,7 @@
     button:hover {
       background-color: #0056b3;
     }
-    title {
+    h1 {
       font-size: 32px;
       margin-bottom: 20px;
     }
@@ -43,7 +43,6 @@
       width: 40%;
       max-height: 400px;
       overflow-y: auto;
-
     }
     .booking-info {
       display: inline-block;
@@ -54,32 +53,47 @@
       background-color: antiquewhite;
     }
   </style>
-
 </head>
 <body>
 
 <div class="button-container">
   <button type="button" onclick="window.location.href='/';">Tillbaka</button>
-  <button type="button" name="action" value="addBooking" onclick="document.getElementById('bookinglistaform').action = '/booking/add'; document.getElementById('kundlistaform').submit();">Lägg till</button>
-  <button type="button" name="action" value="removeBooking" onclick="document.getElementById('bookinglistaform').action = '/booking/delete'; document.getElementById('kundlistaform').submit();">Ta bort</button>
-  <button type="button" name="action" value="updateBooking" onclick="document.getElementById('bookinglistaform').action = '/booking/update'; document.getElementById('kundlistaform').submit();">Uppdatera</button>
-  <button type="button" name="action" value="searchBooking" onclick="document.getElementById('bookinglistaform').action = '/booking/search'; document.getElementById('kundlistaform').submit();">Sök lediga rum</button>
+  <button type="button" name="action" value="addBooking" onclick="document.getElementById('addBookingForm').submit();">Lägg till</button>
+  <button type="button" name="action" value="removeBooking" onclick="document.getElementById('removeBookingForm').submit();">Ta bort</button>
+  <button type="button" name="action" value="updateBooking" onclick="document.getElementById('updateBookingForm').submit();">Uppdatera</button>
+  <button type="button" name="action" value="searchBooking" onclick="document.getElementById('searchBookingForm').submit();">Sök lediga rum</button>
 </div>
+
 <h1>Bokningar</h1>
 
 <div id="bokninglista">
   <ul style="list-style: none">
     <li th:each="bokning : ${bokningar}">
-            <span th:text="${bokning.id} + ' - ' + 'Namn: ' + ${bokning.namn} + ' - ' + 'Nätter: ' + ${bokning.nätter} + ' - ' + 'Start/Slut Datum: ' + ${bokning.startSlutDatum}" class="booking-info"
-                  th:attr="data-bookingId=${bokning.id}, data-bookingName=${bokning.namn}, data-bookingNights=${bokning.nätter}, data-bookingDates=${bokning.startSlutDatum}"
-                  onclick="document.getElementById('bookingId').value = this.getAttribute('data-bookingId');
-                           document.getElementById('namn').value = this.getAttribute('data-bookingName');
-                           document.getElementById('nätter').value = this.getAttribute('data-bookingNights');
-                           document.getElementById('startSlutDatum').value = this.getAttribute('data-bookingDates');"></span>
+      <span th:text="${bokning.id} + ' - ' + 'Namn: ' + ${bokning.namn} + ' - ' + 'Nätter: ' + ${bokning.nätter} + ' - ' + 'Start/Slut Datum: ' + ${bokning.startSlutDatum}" class="booking-info"
+            th:attr="data-bookingId=${bokning.id}, data-bookingName=${bokning.namn}, data-bookingNights=${bokning.nätter}, data-bookingDates=${bokning.startSlutDatum}"
+            onclick="document.getElementById('bookingId').value = this.getAttribute('data-bookingId');
+                     document.getElementById('namn').value = this.getAttribute('data-bookingName');
+                     document.getElementById('nätter').value = this.getAttribute('data-bookingNights');
+                     document.getElementById('startSlutDatum').value = this.getAttribute('data-bookingDates');"></span>
     </li>
   </ul>
 </div>
 
+<div id="form-container">
+
+  <form id="addBookingForm" method="post" action="/bokning/add">
+    <input type="number" id="nätter" name="nätter" placeholder="Antal nätter" required/>
+    <input type="text" id="startSlutDatum" name="startSlutDatum" placeholder="Start/Slut Datum (YYMMDD-YYMMDD)" required/>
+    <input type="text" id="namn" name="namn" placeholder="Namn" required/>
+    <input type="number" id="kundId" name="kundId" placeholder="Kund ID" required/>
+    <input type="number" id="rumId" name="rumId" placeholder="Rum ID" required/>
+  </form>
+
+
+  <form id="searchBookingForm" method="get" action="/booking/search">
+    <input type="text" id="searchDatum" name="searchDatum" placeholder="Sök efter datum (YY-MM-DD)" required/>
+  </form>
+</div>
 
 </body>
 </html>

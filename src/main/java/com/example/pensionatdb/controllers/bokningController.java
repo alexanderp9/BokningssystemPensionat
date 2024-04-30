@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
@@ -45,21 +46,18 @@ public class bokningController {
     }
 
     @PostMapping("/bokning/add")
-    public ResponseEntity<Void> addBokning(@RequestBody BokningDTO bokningDTO) {
-        String startSlutdatum = bokningDTO.getStartSlutDatum();
-        Long rumId = bokningDTO.getRumId();
-
+    public RedirectView addBokning(@ModelAttribute("bokningDTO") BokningDTO bokningDTO) {
         BokningDTO addedBokning = bokningService.addBokningFromDTO(bokningDTO);
         if (addedBokning != null) {
-            log.info("Bokning lyckades");
-            return ResponseEntity.ok().build();
+            log.info("Bokning lades till");
+            return new RedirectView("/bokning", true);
         } else {
-            log.info("Rummet du ville boka är upptaget för perioden.");
-            return ResponseEntity.badRequest().build();
+            log.info("Fel när bokning skulle läggas till");
+            return new RedirectView("/error", true);
         }
     }
 
-    @DeleteMapping("/bokning/{id}/delete")
+    @PostMapping("/bokning/delete")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         bokningService.deleteBokning(id);
         log.info("Bokning deleted with id " + id);
