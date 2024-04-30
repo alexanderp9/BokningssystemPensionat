@@ -31,7 +31,7 @@ public class bokningServiceImpl{
     public bokningDto bokningTobokningDto(Bokning b) {
         return bokningDto.builder()
                 .id(b.getId())
-                .startSlutDatum(b.getStartSlutDatum())
+                .startSlutDatum(Integer.parseInt(b.getStartSlutDatum()))
                 .build();
     }
 
@@ -40,7 +40,7 @@ public class bokningServiceImpl{
         return DetailedBokningDto.builder()
                 .id(b.getId())
                 .nätter(b.getNätter())
-                .startSlutDatum(b.getStartSlutDatum())
+                .startSlutDatum(Integer.parseInt(b.getStartSlutDatum()))
                 .kund(new DetailedKundDto
                         (b.getKund().getId(),
                                 b.getKund().getNamn(),

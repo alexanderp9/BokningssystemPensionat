@@ -43,9 +43,9 @@ public class PensionatDbApplication {
             rumrepo.save(r2);
             rumrepo.save(r3);
 
-            bokningrepo.save(new Bokning(2, 23,k1,r1));
-            bokningrepo.save(new Bokning(1,55,k2,r2 ));
-            bokningrepo.save(new Bokning(3,77,k3,r3));
+            bokningrepo.save(new Bokning(2, "23",k1,r1));
+            bokningrepo.save(new Bokning(1,"55",k2,r2 ));
+            bokningrepo.save(new Bokning(3,"77",k3,r3));
 
 
 
