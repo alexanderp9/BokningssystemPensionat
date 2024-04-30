@@ -3,6 +3,7 @@ package com.example.pensionatdb.services;
 import com.example.pensionatdb.dtos.RumDTO;
 import com.example.pensionatdb.models.Rum;
 import com.example.pensionatdb.repos.rumRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RumService {
 
     private final rumRepo rumRepository;
     private final BokningService bokningService;
 
-    @Autowired
-    public RumService(rumRepo rumRepository, BokningService bokningService) {
-        this.rumRepository = rumRepository;
-        this.bokningService = bokningService;
-    }
 
     public List<RumDTO> searchAvailableRooms(LocalDate startDate, LocalDate endDate, int numberOfPersons) {
         List<RumDTO> availableRooms = new ArrayList<>();
@@ -37,7 +34,7 @@ public class RumService {
         return availableRooms;
     }
 
-    private boolean isRoomAvailable(Rum rum, LocalDate startDate, LocalDate endDate) {
+    public boolean isRoomAvailable(Rum rum, LocalDate startDate, LocalDate endDate) {
         String startEndDate = startDate.format(DateTimeFormatter.ofPattern("yyMMdd")) + "-" +
                 endDate.format(DateTimeFormatter.ofPattern("yyMMdd"));
         return bokningService.isRoomAvailable(rum, startEndDate);
@@ -48,7 +45,7 @@ public class RumService {
         return roomCapacity >= numberOfPersons;
     }
 
-    private RumDTO convertToRumDTO(Rum rum) {
+    public RumDTO convertToRumDTO(Rum rum) {
         RumDTO rumDTO = new RumDTO();
         rumDTO.setId(rum.getId());
         rumDTO.setRumTyp(rum.getRumTyp());
