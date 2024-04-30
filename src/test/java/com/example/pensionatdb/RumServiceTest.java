@@ -31,12 +31,21 @@ public class RumServiceTest {
 
     Kund kund = new Kund(1L, "Anders", "solgatan2");
 
-    Rum rum = new Rum(1L, "enkelRum", 0);
+    long id = 1L;
+
+    String rumTyp = "enkelRum";
+
+    int extraSäng = 0;
+
+    Rum rum = new Rum(id, rumTyp, extraSäng);
 
 
     Bokning bokning = new Bokning(1L, 3, "120524-150524", kund, rum, false);
 
 
-
-    RumDTO rumDTO = RumDTO.builder()
+    RumDTO rumDTOdd = RumDTO.builder()
+            .id(id)
+            .rumTyp(rumTyp)
+            .extraSäng(extraSäng)
+            .build();
 }
