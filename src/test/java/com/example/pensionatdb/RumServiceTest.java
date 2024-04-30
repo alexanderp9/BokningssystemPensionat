@@ -8,6 +8,7 @@ import com.example.pensionatdb.models.Rum;
 import com.example.pensionatdb.repos.rumRepo;
 import com.example.pensionatdb.services.BokningService;
 import com.example.pensionatdb.services.RumService;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -43,9 +44,16 @@ public class RumServiceTest {
     Bokning bokning = new Bokning(1L, 3, "120524-150524", kund, rum, false);
 
 
-    RumDTO rumDTOdd = RumDTO.builder()
+    RumDTO rumDTO = RumDTO.builder()
             .id(id)
             .rumTyp(rumTyp)
             .extraSäng(extraSäng)
             .build();
+
+    @Test
+    void rumDTO(){
+
+        RumDTO actual = serv
+
+    }
 }
