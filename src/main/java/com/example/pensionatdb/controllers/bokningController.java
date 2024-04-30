@@ -58,20 +58,13 @@ public class bokningController {
     }
 
     @PostMapping("/bokning/delete")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public RedirectView deleteById(@RequestParam Long id) {
         bokningService.deleteBokning(id);
         log.info("Bokning deleted with id " + id);
-        return ResponseEntity.ok().build();
+        return new RedirectView("/bokning", true);
     }
 
-    @PutMapping("/{id}/avboka")
-    public ResponseEntity<Void> avbokaBokning(@PathVariable Long id) {
-        bokningService.avbokaBokning(id);
-        log.info("Bokning avbokad with id " + id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/{id}/update")
+    @PostMapping("/bokning/update")
     public ResponseEntity<BokningDTO> updateBokning(@PathVariable Long id, @RequestBody Bokning updatedBokning) {
         BokningDTO updated = bokningService.updateBokningFromEntity(id, updatedBokning);
         if (updated != null) {
