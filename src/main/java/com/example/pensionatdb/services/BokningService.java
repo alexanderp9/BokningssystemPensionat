@@ -136,25 +136,16 @@ public class BokningService {
 
 
     public boolean isRoomAvailable(Rum rum, String startSlutDatum) {
-        /*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
         String[] parts = startSlutDatum.split("-");
         String startDateStr = parts[0].trim();
         String endDateStr = parts[1].trim();
         LocalDate startDate = LocalDate.parse(startDateStr, formatter);
         LocalDate endDate = LocalDate.parse(endDateStr, formatter);
 
-        List<Bokning> existingBookings = bokningRepo.findByRumAndStartSlutDatumBetween(rum, startDateStr, endDateStr);*/
+        List<Bokning> existingBookings = bokningRepo.findByRumAndStartLessThanEqualAndEndGreaterThanEqual(rum, endDate, startDate);
 
-       /* for (Bokning booking : existingBookings) {
-            LocalDate bookingStartDate = LocalDate.parse(booking.getStartSlutDatum().substring(0, 6), formatter);
-            LocalDate bookingEndDate = LocalDate.parse(booking.getStartSlutDatum().substring(7), formatter);
-
-            if (startDate.isBefore(bookingEndDate) && endDate.isAfter(bookingStartDate)) {
-                return false;
-            }
-        }*/
-        return true;
+        return existingBookings.isEmpty();
     }
 
     public List<Rum> searchAvailableRooms(String startDate, String endDate) {

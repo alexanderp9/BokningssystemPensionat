@@ -37,6 +37,18 @@ public class rumController {
 
     @PostMapping("/add")
     public ResponseEntity<Void> addRum(@RequestBody RumDTO rumDTO) {
+        // Kontrollera om rummet är dubbelrum och tilldela maxExtrasängar
+        if ("dubbelrum".equals(rumDTO.getRumTyp())) {
+            // Tilldela maxExtrasängar för dubbelrum
+            if (rumDTO.getExtraSäng() > 2) {
+                return ResponseEntity.badRequest().build(); // Felaktigt antal extrasängar för dubbelrum
+            }
+            rumDTO.setMaxExtrasängar(2); // Max antal extrasängar för dubbelrum
+        } else {
+            // Om rummet inte är dubbelrum, sätt maxExtrasängar till 0
+            rumDTO.setMaxExtrasängar(0);
+        }
+
         RumDTO addedRum = rumService.addRumFromDTO(rumDTO);
         if (addedRum != null) {
             return ResponseEntity.ok().build();
