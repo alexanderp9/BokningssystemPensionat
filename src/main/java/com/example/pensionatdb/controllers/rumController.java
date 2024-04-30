@@ -1,7 +1,6 @@
 package com.example.pensionatdb.controllers;
 
 import com.example.pensionatdb.dtos.RumDTO;
-import com.example.pensionatdb.models.Rum;
 import com.example.pensionatdb.services.RumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

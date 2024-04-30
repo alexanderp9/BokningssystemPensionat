@@ -20,6 +20,6 @@ public interface bokningRepo extends JpaRepository<Bokning, Long> {
     List<Bokning> findByKund(Kund kund);
 
 
-    List<Bokning> findByRumAndStartSlutDatumBetween(Rum rum, String startDate, String endDate);
+
 }
 

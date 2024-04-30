@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
 @Data
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -17,7 +19,8 @@ public class Bokning {
     private long id;
 
     private int nätter;
-    private String startSlutDatum;
+    private Date start;
+    private Date end;
 
     @ManyToOne
     @JoinColumn(name = "kund_id")

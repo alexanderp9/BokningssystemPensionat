@@ -44,7 +44,7 @@ public class bokningController {
 
     @PostMapping("/add")
     public ResponseEntity<Void> addBokning(@RequestBody BokningDTO bokningDTO) {
-        BokningDTO addedBokning = bokningService.addBokningFromDTO(bokningDTO);
+        BokningDTO addedBokning = bokningService.addBokning(bokningDTO);
         if (addedBokning != null) {
             log.info("Bokning lyckades");
             return ResponseEntity.ok().build();
@@ -68,9 +68,9 @@ public class bokningController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}/update")
-    public ResponseEntity<BokningDTO> updateBokning(@PathVariable Long id, @RequestBody Bokning updatedBokning) {
-        BokningDTO updated = bokningService.updateBokningFromEntity(id, updatedBokning);
+    @PutMapping("/{id}")
+    public ResponseEntity<BokningDTO> updateBokning(@PathVariable Long id, @RequestBody BokningDTO updatedBokning) {
+        BokningDTO updated = bokningService.updateBokning(id, updatedBokning);
         if (updated != null) {
             return ResponseEntity.ok(updated);
         } else {
@@ -84,7 +84,7 @@ public class bokningController {
             @RequestParam String endDate,
             @RequestParam int nätter
     ) {
-        List<Rum> availableRooms = bokningService.searchAvailableRooms(startDate, endDate, nätter);
+        List<Rum> availableRooms = bokningService.searchAvailableRooms(startDate, endDate);
         if (!availableRooms.isEmpty()) {
             return ResponseEntity.ok(availableRooms);
         } else {
