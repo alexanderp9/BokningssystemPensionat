@@ -17,7 +17,7 @@ public class Bokning {
 
     int nätter;
 
-    int startSlutDatum;
+    String startSlutDatum;
 
 
     @ManyToOne
@@ -29,7 +29,7 @@ public class Bokning {
     private Rum rum;
 
 
-    public Bokning(int nätter, int startSlutDatum, Kund kund, Rum rum) {
+    public Bokning(int nätter, String startSlutDatum, Kund kund, Rum rum) {
         this.nätter = nätter;
         this.startSlutDatum = startSlutDatum;
         this.kund = kund;
