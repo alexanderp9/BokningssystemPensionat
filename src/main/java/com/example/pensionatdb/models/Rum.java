@@ -8,22 +8,18 @@ import lombok.NoArgsConstructor;
 
 
 @Data
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Rum {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected long id;
+    private long id;
 
     @Column(name = "rumTyp")
     private String rumTyp;
 
     private int extraSäng;
 
-    public Rum(String rumTyp, int extraSäng) {
-        this.rumTyp = rumTyp;
-        this.extraSäng = extraSäng;
-    }
 }

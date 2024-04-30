@@ -3,25 +3,27 @@ package com.example.pensionatdb.services;
 import com.example.pensionatdb.dtos.RumDTO;
 import com.example.pensionatdb.models.Rum;
 import com.example.pensionatdb.repos.rumRepo;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class RumService {
 
     private final rumRepo rumRepo;
+    private final BokningService bokningService;
     private static final Logger log = LoggerFactory.getLogger(RumService.class);
 
-    @Autowired
-    public RumService(rumRepo rumRepo) {
-        this.rumRepo = rumRepo;
-    }
+
 
 
     public List<RumDTO> getAllRumDTOs() {
@@ -39,6 +41,12 @@ public class RumService {
         return convertToRumDTO(savedRum);
     }
 
+    public boolean isRoomAvailable(Rum rum, LocalDate startDate, LocalDate endDate) {
+        String startEndDate = startDate.format(DateTimeFormatter.ofPattern("yyMMdd")) + "-" +
+                endDate.format(DateTimeFormatter.ofPattern("yyMMdd"));
+        return bokningService.isRoomAvailable(rum, startEndDate);
+    }
+
     public void deleteRumById(Long id) {
         rumRepo.deleteById(id);
         log.info("Rum deleted with id " + id);
@@ -51,7 +59,7 @@ public class RumService {
         return rumDTO;
     }
 
-    private RumDTO convertToRumDTO(Rum rum) {
+    public RumDTO convertToRumDTO(Rum rum) {
         RumDTO rumDTO = new RumDTO();
         rumDTO.setId(rum.getId());
         rumDTO.setRumTyp(rum.getRumTyp());
