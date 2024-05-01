@@ -97,4 +97,15 @@
 </div>
 
 </body>
+
+
+<script th:inline="javascript">
+    window.onload = function() {
+        var message = /*[[${popupMessage}]]*/ 'defaultMessage';
+        if (message && message !== 'defaultMessage' && message !== 'null') {
+            alert(message);
+        }
+    };
+</script>
+
 </html>

@@ -50,7 +50,7 @@ public class kundController {
 
 
     @PostMapping("/kund/delete")
-    public RedirectView deleteKund(@RequestParam Long customerId) {
+    public RedirectView deleteKund(@RequestParam Long customerId, RedirectAttributes ra) {
         Optional<Kund> kundOptional = ks.findById(customerId);
         if (kundOptional.isPresent()) {
             Kund kund = kundOptional.get();
@@ -60,6 +60,7 @@ public class kundController {
                 log.info("Kund bortagen med id:  " + customerId);
             } else {
                 log.warn("Kund med id: " + customerId + " kan inte tas bort då den finns i en bokning.");
+                ra.addFlashAttribute("popupMessage", "Kund med id: " + customerId + " kan ej tas bort då personen finns i bokning");
             }
         }
         return new RedirectView("/kund", true);
