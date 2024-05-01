@@ -1,7 +1,6 @@
 package com.example.pensionatdb.controllers;
 
 import com.example.pensionatdb.dtos.BokningDTO;
-import com.example.pensionatdb.models.Bokning;
 import com.example.pensionatdb.models.Rum;
 import com.example.pensionatdb.services.BokningService;
 import org.slf4j.Logger;
@@ -84,6 +83,7 @@ public class bokningController {
             @RequestParam Date startDate,
             @RequestParam Date endDate,
             @RequestParam int nätter
+
     ) {
         List<Rum> availableRooms = bokningService.searchAvailableRooms(startDate, endDate);
         if (!availableRooms.isEmpty()) {

@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -168,6 +169,30 @@ public class BokningServiceTest {
 
         verify(mockBokningRepo, times(1)).findById(bokningId);
         verify(mockBokningRepo, times(1)).save(any(Bokning.class));
+    }
+
+    @Test
+    public void testSearchAvailableRooms() {
+        // Arrange
+        Date startDate = Date.valueOf(LocalDate.of(2024, 5, 1));
+        Date endDate = Date.valueOf(LocalDate.of(2024, 5, 4));
+
+        Rum availableRoom = new Rum();
+        availableRoom.setId(1L);
+
+        List<Rum> availableRooms = new ArrayList<>();
+        availableRooms.add(availableRoom);
+
+        when(mockRumRepo.findAll()).thenReturn(availableRooms);
+
+        when(mockBokningRepo.findByRumAndStartLessThanEqualAndEndGreaterThanEqual(availableRoom, endDate, startDate))
+                .thenReturn(new ArrayList<>());
+
+
+        List<Rum> result = bokningService.searchAvailableRooms(startDate, endDate);
+
+        assertEquals(1, result.size());
+        assertEquals(availableRoom, result.get(0));
     }
 
 }

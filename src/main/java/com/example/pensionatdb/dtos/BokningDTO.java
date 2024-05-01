@@ -1,10 +1,8 @@
 package com.example.pensionatdb.dtos;
 
-import com.example.pensionatdb.models.Kund;
-import com.example.pensionatdb.models.Rum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
 
 import java.sql.Date;
 
