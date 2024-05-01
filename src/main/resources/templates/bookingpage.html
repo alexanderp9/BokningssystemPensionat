@@ -83,7 +83,7 @@
 
 <div id="form-container">
   <form id="addBookingForm" method="post" action="/bokning">
-    <input type="hidden" id="bookingId" name="id"/>
+    <input type="hidden" id="bookingId" name="bookingId"/>
     <input type="number" id="nätter" name="nätter" placeholder="Antal nätter" required/>
     <input type="text" id="startSlutDatum" name="startSlutDatum" placeholder="Start/Slut Datum (YYMMDD-YYMMDD)" required/>
     <input type="text" id="namn" name="namn" placeholder="Namn" required/>
@@ -93,8 +93,8 @@
 
 
   <form id="searchBookingForm" method="get" action="/bokning/search">
-    <input type="text" id="searchDatum" name="searchDatum" placeholder="Sök efter datum (YY-MM-DD)" required/>
-    <input type="text" id="antalPersoner" name="antalPersoner" placeholder="Antal personer" required/>
+    <input type="text" id="searchDatum" name="searchDatum" placeholder="Sök efter datum (YY-MM-DD)" />
+    <input type="text" id="antalPersoner" name="antalPersoner" placeholder="Antal personer" />
   </form>
 </div>
 

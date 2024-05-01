@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class BokningDTO {
-    private long id;
+    private Long id;
     private int nätter;
     private String startSlutDatum;
     private String namn;

@@ -24,9 +24,6 @@ public class RumService {
     private static final Logger log = LoggerFactory.getLogger(RumService.class);
 
 
-
-
-
     public List<RumDTO> getAllRumDTOs() {
         List<Rum> rumList = rumRepo.findAll();
         return rumList.stream()

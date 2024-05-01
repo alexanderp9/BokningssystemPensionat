@@ -33,10 +33,6 @@
         button:hover {
             background-color: #0056b3;
         }
-        title {
-            font-size: 32px;
-            margin-bottom: 20px;
-        }
         #rumlista {
             background-color: white;
             width: 30%;
@@ -49,7 +45,7 @@
             cursor: pointer;
         }
         .room-info:hover {
-            background-color: antiquewhite ;
+            background-color: antiquewhite;
         }
     </style>
 </head>
@@ -79,11 +75,29 @@
     <form id="rumlistaform" method="post" action="/rum">
         <input type="hidden" id="roomId" name="roomId"/>
         <label for="rumTyp">Rumstyp:</label>
-        <input type="text" id="rumTyp" name="rumTyp"/>
+        <input type="text" id="rumTyp" name="rumTyp" onchange="validateExtraSäng()">
         <label for="extraSäng">Extra sängar:</label>
-        <input type="text" id="extraSäng" name="extraSäng"/>
+        <input type="number" id="extraSäng" name="extraSäng" min="0" max="2"/>
     </form>
 </div>
 
 </body>
+
+
+
+<script>
+    function validateExtraSäng() {
+        const rumTyp = document.getElementById('rumTyp').value;
+        const extraSäng = document.getElementById('extraSäng');
+        if (rumTyp === "Enkel") {
+            extraSäng.value = '0'
+            extraSäng.disabled = true;
+        } else if (rumTyp === "Dubbel") {
+            extraSäng.disabled = false;
+        }
+    }
+
+    document.getElementById('rumTyp').addEventListener('change', validateExtraSäng);
+</script>
 </html>
+

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
@@ -57,12 +58,18 @@ public class bokningController {
         }
     }
 
-    @PostMapping("/bokning/delete")
-    public RedirectView deleteById(@RequestParam Long id) {
-        bokningService.deleteBokning(id);
-        log.info("Bokning deleted with id " + id);
-        return new RedirectView("/bokning", true);
+    @PostMapping("bokning/delete")
+    public RedirectView deleteBooking(@RequestParam("id") Long id, RedirectAttributes attributes) {
+        try {
+            bokningService.avbokaBokning(id);
+            attributes.addFlashAttribute("successMessage", "Booking deleted successfully");
+            return new RedirectView("/bookings");
+        } catch (Exception e) {
+            attributes.addFlashAttribute("errorMessage", "Error deleting booking: " + e.getMessage());
+            return new RedirectView("/error");
+        }
     }
+
 
     @PostMapping("/bokning/update")
     public ResponseEntity<BokningDTO> updateBokning(@PathVariable Long id, @RequestBody Bokning updatedBokning) {
