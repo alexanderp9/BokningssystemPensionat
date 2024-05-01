@@ -12,14 +12,14 @@ import org.antlr.v4.runtime.misc.NotNull;
 
 
 @Data
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Kund {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected long id;
+    private long id;
 
 
     @NotEmpty(message = "Name is Mandatory")
@@ -30,8 +30,5 @@ public class Kund {
     @NotNull
     private String adress;
 
-    public Kund(String namn, String adress) {
-        this.namn = namn;
-        this.adress = adress;
-    }
+
 }

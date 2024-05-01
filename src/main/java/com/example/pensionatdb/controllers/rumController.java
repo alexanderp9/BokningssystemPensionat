@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -39,18 +40,21 @@ public class rumController {
     }
 
     @PostMapping("/rum/add")
-    public ResponseEntity<Void> addRum(@RequestBody RumDTO rumDTO) {
+    public RedirectView addRum(@ModelAttribute("rumDTO") RumDTO rumDTO) {
         RumDTO addedRum = rumService.addRumFromDTO(rumDTO);
         if (addedRum != null) {
-            return ResponseEntity.ok().build();
+            log.info("Rum las till");
+            return new RedirectView("/rum", true);
         } else {
-            return ResponseEntity.badRequest().build();
+            log.info("Fel när rum skulle läggas till");
+            return new RedirectView("/error", true);
         }
     }
 
-    @DeleteMapping("/rum/{id}/delete")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        rumService.deleteRumById(id);
-        return ResponseEntity.ok().build();
+
+    @PostMapping("/rum/delete")
+    public RedirectView deleteById(@RequestParam Long bookingId) {
+        rumService.deleteRumById(bookingId);
+        return new RedirectView("/rum", true);
     }
 }

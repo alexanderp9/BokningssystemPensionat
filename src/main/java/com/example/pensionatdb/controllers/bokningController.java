@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
@@ -45,35 +47,31 @@ public class bokningController {
     }
 
     @PostMapping("/bokning/add")
-    public ResponseEntity<Void> addBokning(@RequestBody BokningDTO bokningDTO) {
-        String startSlutdatum = bokningDTO.getStartSlutDatum();
-        Long rumId = bokningDTO.getRumId();
-
+    public RedirectView addBokning(@ModelAttribute("bokningDTO") BokningDTO bokningDTO) {
         BokningDTO addedBokning = bokningService.addBokningFromDTO(bokningDTO);
         if (addedBokning != null) {
-            log.info("Bokning lyckades");
-            return ResponseEntity.ok().build();
+            log.info("Bokning lades till");
+            return new RedirectView("/bokning", true);
         } else {
-            log.info("Rummet du ville boka är upptaget för perioden.");
-            return ResponseEntity.badRequest().build();
+            log.info("Fel när bokning skulle läggas till");
+            return new RedirectView("/error", true);
         }
     }
 
-    @DeleteMapping("/bokning/{id}/delete")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        bokningService.deleteBokning(id);
-        log.info("Bokning deleted with id " + id);
-        return ResponseEntity.ok().build();
+    @PostMapping("bokning/delete")
+    public RedirectView deleteBooking(@RequestParam("id") Long id, RedirectAttributes attributes) {
+        try {
+            bokningService.avbokaBokning(id);
+            attributes.addFlashAttribute("successMessage", "Booking deleted successfully");
+            return new RedirectView("/bookings");
+        } catch (Exception e) {
+            attributes.addFlashAttribute("errorMessage", "Error deleting booking: " + e.getMessage());
+            return new RedirectView("/error");
+        }
     }
 
-    @PutMapping("/{id}/avboka")
-    public ResponseEntity<Void> avbokaBokning(@PathVariable Long id) {
-        bokningService.avbokaBokning(id);
-        log.info("Bokning avbokad with id " + id);
-        return ResponseEntity.ok().build();
-    }
 
-    @PutMapping("/{id}/update")
+    @PostMapping("/bokning/update")
     public ResponseEntity<BokningDTO> updateBokning(@PathVariable Long id, @RequestBody Bokning updatedBokning) {
         BokningDTO updated = bokningService.updateBokningFromEntity(id, updatedBokning);
         if (updated != null) {

@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 
 
 @Data
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Rum {
 
@@ -22,8 +22,4 @@ public class Rum {
 
     private int extraSäng;
 
-    public Rum(String rumTyp, int extraSäng) {
-        this.rumTyp = rumTyp;
-        this.extraSäng = extraSäng;
-    }
 }

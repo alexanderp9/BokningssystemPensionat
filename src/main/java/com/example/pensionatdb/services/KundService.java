@@ -25,11 +25,12 @@ public class KundService  {
     }
 
     public List<DetailedKundDto> getAllKund() {
-        return kr.findAll().stream().map(k-> kundToDetDetailedKundDto(k)).toList();
+        return kr.findAll().stream().map(this::kundToDetDetailedKundDto).toList();
     }
 
-    public void save(Kund k){
+    public String save(Kund k){
         kr.save(k);
+        return "Konto sparat";
     }
 
     public Optional<Kund> findById(Long id) {
