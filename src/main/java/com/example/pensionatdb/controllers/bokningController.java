@@ -66,28 +66,18 @@ public class bokningController {
     }
 
 
-    @PostMapping("/bokning/update")
-    public ResponseEntity<BokningDTO> updateBokning(@PathVariable Long id, @RequestBody Bokning updatedBokning) {
-        BokningDTO updated = bokningService.updateBokningFromEntity(id, updatedBokning);
-        if (updated != null) {
-            return ResponseEntity.ok(updated);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/bokning/search")
+    public String searchAvailableRooms(@RequestParam("startSlutDatum") String startSlutDatum, Model model) {
+        List<Rum> availableRooms = bokningService.searchAvailableRoomsByDateRange(startSlutDatum);
+        List<BokningDTO> bokningar = bokningService.getAllBokningDTOs();
+
+        model.addAttribute("availableRooms", availableRooms);
+        model.addAttribute("bokningar", bokningar);
+
+        return "bookingpage";
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<Rum>> searchAvailableRooms(
-            @RequestParam String startDate,
-            @RequestParam String endDate,
-            @RequestParam int nätter
-    ) {
-        List<Rum> availableRooms = bokningService.searchAvailableRooms(startDate, endDate, nätter);
-        if (!availableRooms.isEmpty()) {
-            return ResponseEntity.ok(availableRooms);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 
 }
+
+

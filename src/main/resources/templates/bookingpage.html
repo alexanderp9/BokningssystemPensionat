@@ -38,18 +38,19 @@
       font-size: 32px;
       margin-bottom: 20px;
     }
-    #bokninglista {
+    #bokninglista, #ledigaRumLista {
       background-color: white;
       width: 40%;
       max-height: 400px;
       overflow-y: auto;
+      margin-top: 20px;
     }
-    .booking-info {
+    .booking-info, .room-info {
       display: inline-block;
       text-align: left;
       cursor: pointer;
     }
-    .booking-info:hover {
+    .booking-info:hover, .room-info:hover {
       background-color: antiquewhite;
     }
   </style>
@@ -60,11 +61,11 @@
   <button type="button" onclick="window.location.href='/';">Tillbaka</button>
   <button type="button" name="action" value="add" onclick="document.getElementById('addBookingForm').action = '/bokning/add'; document.getElementById('addBookingForm').submit();">Lägg till</button>
   <button type="button" name="action" value="remove" onclick="document.getElementById('addBookingForm').action = '/bokning/delete'; document.getElementById('addBookingForm').submit();">Ta bort</button>
-  <button type="button" name="action" value="update" onclick="document.getElementById('addBookingForm').action = '/bokning/update'; document.getElementById('addBookingForm').submit();">Uppdatera</button>
-  <button type="button" name="action" value="searchBooking" onclick="document.getElementById('searchBookingForm').submit();">Sök lediga rum</button>
+  <button type="button" name="action" value="search" onclick="document.getElementById('searchRoomForm').submit();">Sök lediga rum</button>
 </div>
 
 <h1>Bokningar</h1>
+<br>
 
 <div id="bokninglista">
   <ul style="list-style: none">
@@ -90,13 +91,19 @@
     <input type="number" id="kundId" name="kundId" placeholder="Kund ID"/>
     <input type="number" id="rumId" name="rumId" placeholder="Rum ID"/>
   </form>
-
-
-  <form id="searchBookingForm" method="get" action="/bokning/search">
-    <input type="text" id="searchDatum" name="searchDatum" placeholder="Sök efter datum (YY-MM-DD)" />
-    <input type="text" id="antalPersoner" name="antalPersoner" placeholder="Antal personer" />
-  </form>
 </div>
+
+<div id="ledigaRumLista">
+  <ul style="list-style: none">
+    <li th:each="rum : ${availableRooms}">
+      <span th:text="'Room ID: ' + ${rum.id} + ', Name: ' + ${rum.rumTyp}" class="room-info"></span>
+    </li>
+  </ul>
+</div>
+
+<form id="searchRoomForm" action="/bokning/search" method="get">
+  <input type="text" id="startSlutDatumSearch" name="startSlutDatum" placeholder="YYMMDD-YYMMDD" required>
+</form>
 
 </body>
 </html>

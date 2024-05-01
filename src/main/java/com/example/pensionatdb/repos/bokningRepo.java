@@ -18,6 +18,7 @@ public interface bokningRepo extends JpaRepository<Bokning, Long> {
     @Transactional
     @Query("SELECT b FROM Bokning b WHERE b.kund = :kund")
     List<Bokning> findByKund(Kund kund);
+    List<Bokning> findByRum(Rum rum);
 
 
     List<Bokning> findByRumAndStartSlutDatumBetween(Rum rum, String startDate, String endDate);

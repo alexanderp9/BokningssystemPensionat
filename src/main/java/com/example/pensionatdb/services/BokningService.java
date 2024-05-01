@@ -174,20 +174,37 @@ public class BokningService {
         return true;
     }
 
-    public List<Rum> searchAvailableRooms(String startDate, String endDate, int nätter) {
+    public List<Rum> searchAvailableRoomsByDateRange(String startSlutDatum) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-        LocalDate start = LocalDate.parse(startDate, formatter);
-        LocalDate end = LocalDate.parse(endDate, formatter);
+        String[] parts = startSlutDatum.split("-");
+        LocalDate startDate = LocalDate.parse(parts[0].trim(), formatter);
+        LocalDate endDate = LocalDate.parse(parts[1].trim(), formatter);
 
         List<Rum> allRooms = rumRepo.findAll();
         List<Rum> availableRooms = new ArrayList<>();
 
         for (Rum rum : allRooms) {
-            if (isRoomAvailable(rum, startDate + "-" + endDate)) {
+            // Directly using the existing isRoomAvailable method.
+            if (isRoomAvailable(rum, startDate, endDate)) {
                 availableRooms.add(rum);
             }
         }
-
         return availableRooms;
     }
+
+    private boolean isRoomAvailable(Rum rum, LocalDate startDate, LocalDate endDate) {
+        List<Bokning> bookings = bokningRepo.findByRum(rum);
+
+        for (Bokning booking : bookings) {
+            LocalDate bookingStartDate = LocalDate.parse(booking.getStartSlutDatum().substring(0, 6), DateTimeFormatter.ofPattern("yyMMdd"));
+            LocalDate bookingEndDate = LocalDate.parse(booking.getStartSlutDatum().substring(7), DateTimeFormatter.ofPattern("yyMMdd"));
+
+            if (!(endDate.isBefore(bookingStartDate) || startDate.isAfter(bookingEndDate))) {
+                return false; // Found an overlap
+            }
+        }
+        return true; // No overlaps found
+    }
+
+
 }
