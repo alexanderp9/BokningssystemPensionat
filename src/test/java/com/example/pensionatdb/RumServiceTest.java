@@ -84,8 +84,6 @@ public class RumServiceTest {
     }
 
 
-
-
     @Test
     void rumDTO(){
 
