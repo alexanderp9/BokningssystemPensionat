@@ -58,16 +58,11 @@ public class bokningController {
         }
     }
 
-    @PostMapping("bokning/delete")
-    public RedirectView deleteBooking(@RequestParam("id") Long id, RedirectAttributes attributes) {
-        try {
-            bokningService.avbokaBokning(id);
-            attributes.addFlashAttribute("successMessage", "Booking deleted successfully");
-            return new RedirectView("/bookings");
-        } catch (Exception e) {
-            attributes.addFlashAttribute("errorMessage", "Error deleting booking: " + e.getMessage());
-            return new RedirectView("/error");
-        }
+    @PostMapping("/bokning/delete")
+    public RedirectView deleteBooking(@RequestParam Long bookingId) {
+        bokningService.deleteBokning(bookingId);
+        return new RedirectView("/bokning", true);
+
     }
 
 
