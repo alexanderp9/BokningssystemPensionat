@@ -53,8 +53,8 @@ public class rumController {
 
 
     @PostMapping("/rum/delete")
-    public RedirectView deleteById(@RequestParam Long bookingId) {
-        rumService.deleteRumById(bookingId);
+    public RedirectView deleteById(@RequestParam Long roomId) {
+        rumService.deleteRumById(roomId);
         return new RedirectView("/rum", true);
     }
 }
