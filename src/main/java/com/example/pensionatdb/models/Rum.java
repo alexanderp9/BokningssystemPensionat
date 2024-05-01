@@ -15,7 +15,7 @@ public class Rum {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    protected long id;
 
     @Column(name = "rumTyp")
     private String rumTyp;

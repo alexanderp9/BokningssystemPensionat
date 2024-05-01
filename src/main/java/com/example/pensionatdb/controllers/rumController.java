@@ -47,7 +47,7 @@ public class rumController {
             return new RedirectView("/rum", true);
         } else {
             log.info("Fel när rum skulle läggas till");
-            return new RedirectView("/error", true); // Redirect to an error page if failed
+            return new RedirectView("/error", true);
         }
     }
 

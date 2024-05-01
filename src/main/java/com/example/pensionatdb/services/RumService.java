@@ -26,6 +26,7 @@ public class RumService {
 
 
 
+
     public List<RumDTO> getAllRumDTOs() {
         List<Rum> rumList = rumRepo.findAll();
         return rumList.stream()

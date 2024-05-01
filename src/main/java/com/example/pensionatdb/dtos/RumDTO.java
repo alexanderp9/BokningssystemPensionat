@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class RumDTO {
+
     private long id;
     private String rumTyp;
     private int extraSäng;
