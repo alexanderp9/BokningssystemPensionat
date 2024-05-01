@@ -53,8 +53,8 @@ public class bokningController {
             log.info("Bokning lades till");
             return new RedirectView("/bokning", true);
         } else {
-            log.info("Fel när bokning skulle läggas till");
-            return new RedirectView("/error", true);
+            log.info("Rummet är upptaget för det datumet");
+            return new RedirectView("/bokning", true);
         }
     }
 

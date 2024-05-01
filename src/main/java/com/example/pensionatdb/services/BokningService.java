@@ -10,9 +10,12 @@ import com.example.pensionatdb.repos.rumRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -91,8 +94,20 @@ public class BokningService {
     }
 
     public BokningDTO addBokningFromDTO(BokningDTO bokningDTO) {
-        Kund kund = kundRepo.findById(bokningDTO.getKundId()).orElse(null);
         Rum rum = rumRepo.findById(bokningDTO.getRumId()).orElse(null);
+        if (rum == null) {
+            return null;
+        }
+
+        if (!isRoomAvailable(rum, bokningDTO.getStartSlutDatum())) {
+            return null;
+        }
+
+        Kund kund = kundRepo.findById(bokningDTO.getKundId()).orElse(null);
+        if (kund == null) {
+
+            return null;
+        }
 
         Bokning bokning = new Bokning(
                 bokningDTO.getId(),
@@ -100,25 +115,19 @@ public class BokningService {
                 bokningDTO.getStartSlutDatum(),
                 kund,
                 rum,
-                false
+                bokningDTO.isAvbokad()
         );
 
         Bokning savedBokning = bokningRepo.save(bokning);
         return convertToBokningDTO(savedBokning);
     }
 
+
     public void deleteBokning(Long id) {
         bokningRepo.deleteById(id);
     }
 
-    public void avbokaBokning(Long id) {
-        Optional<Bokning> optionalBokning = bokningRepo.findById(id);
-        if (optionalBokning.isPresent()) {
-            Bokning bokning = optionalBokning.get();
-            bokning.setAvbokad(true);
-            bokningRepo.save(bokning);
-        }
-    }
+
 
     public BokningDTO updateBokning(Long id, BokningDTO updatedBokningDTO) {
         Bokning updatedBokning = convertToEntity(updatedBokningDTO);
