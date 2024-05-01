@@ -21,8 +21,8 @@ public class Kund {
     private Long id;
 
     @NotEmpty(message = "Name is Mandatory")
-    @Size(min = 3, message ="At least 3 Letters for Author")
-    @Pattern(regexp="^[A-Öa-ö]*$", message = "Only Letter for Author")
+    @Size(min = 3, message ="At least 3 Letters ")
+    @Pattern(regexp="^[A-Öa-ö]*$", message = "Only Letter for Name")
     private String namn;
 
     private String adress;
