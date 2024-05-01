@@ -184,7 +184,6 @@ public class BokningService {
         List<Rum> availableRooms = new ArrayList<>();
 
         for (Rum rum : allRooms) {
-            // Directly using the existing isRoomAvailable method.
             if (isRoomAvailable(rum, startDate, endDate)) {
                 availableRooms.add(rum);
             }
@@ -200,10 +199,10 @@ public class BokningService {
             LocalDate bookingEndDate = LocalDate.parse(booking.getStartSlutDatum().substring(7), DateTimeFormatter.ofPattern("yyMMdd"));
 
             if (!(endDate.isBefore(bookingStartDate) || startDate.isAfter(bookingEndDate))) {
-                return false; // Found an overlap
+                return false;
             }
         }
-        return true; // No overlaps found
+        return true;
     }
 
 
