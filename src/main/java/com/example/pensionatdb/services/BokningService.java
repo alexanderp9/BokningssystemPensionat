@@ -136,7 +136,9 @@ public class BokningService {
         Optional<Bokning> optionalBokning = bokningRepo.findById(id);
         if (optionalBokning.isPresent()) {
             Bokning existingBokning = optionalBokning.get();
-            Bokning savedBokning = updateBokningDetails(existingBokning, updatedBokning);
+            existingBokning.setStartSlutDatum(updatedBokning.getStartSlutDatum());
+            existingBokning.setNätter(updatedBokning.getNätter());
+            Bokning savedBokning = bokningRepo.save(existingBokning);
             return convertToBokningDTO(savedBokning);
         } else {
             throw new RuntimeException("Bokning not found with id: " + id);
@@ -165,20 +167,24 @@ public class BokningService {
         return true;
     }
 
-    public List<Rum> searchAvailableRooms(String startDate, String endDate, int nätter) {
+    public List<Rum> searchAvailableRooms(String startDateEndDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-        LocalDate start = LocalDate.parse(startDate, formatter);
-        LocalDate end = LocalDate.parse(endDate, formatter);
+        String[] parts = startDateEndDate.split("-");
+        String startDateStr = parts[0].trim();
+        String endDateStr = parts[1].trim();
+        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
 
         List<Rum> allRooms = rumRepo.findAll();
         List<Rum> availableRooms = new ArrayList<>();
 
         for (Rum rum : allRooms) {
-            if (isRoomAvailable(rum, startDate + "-" + endDate)) {
+            if (isRoomAvailable(rum, startDateStr + "-" + endDateStr)) {
                 availableRooms.add(rum);
             }
         }
 
         return availableRooms;
     }
+
 }

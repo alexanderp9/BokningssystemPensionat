@@ -76,13 +76,26 @@ public class bokningController {
         }
     }
 
-    @GetMapping("/search")
+    /*@GetMapping("/search")
     public ResponseEntity<List<Rum>> searchAvailableRooms(
             @RequestParam String startDate,
             @RequestParam String endDate,
-            @RequestParam int nätter
+            @RequestParam(required = false) int nätter
     ) {
         List<Rum> availableRooms = bokningService.searchAvailableRooms(startDate, endDate, nätter);
+        if (!availableRooms.isEmpty()) {
+            return ResponseEntity.ok(availableRooms);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }*/
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Rum>> searchAvailableRooms(
+            @RequestParam String startDate
+
+    ) {
+        List<Rum> availableRooms = bokningService.searchAvailableRooms(startDate);
         if (!availableRooms.isEmpty()) {
             return ResponseEntity.ok(availableRooms);
         } else {
