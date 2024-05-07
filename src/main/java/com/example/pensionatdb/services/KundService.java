@@ -1,7 +1,6 @@
 package com.example.pensionatdb.services;
 
 import com.example.pensionatdb.dtos.DetailedKundDto;
-import com.example.pensionatdb.dtos.kundDto;
 import com.example.pensionatdb.models.Kund;
 import com.example.pensionatdb.repos.kundRepo;
 import lombok.RequiredArgsConstructor;
@@ -42,15 +41,6 @@ public class KundService  {
             kr.deleteById(id);
         }
     }
-
-
-    public kundDto kundTokundDto(Kund k) {
-        return kundDto.builder()
-                .id(k.getId())
-                .namn(k.getNamn())
-                .build();
-    }
-
 
 
     public DetailedKundDto kundToDetDetailedKundDto(Kund k) {
