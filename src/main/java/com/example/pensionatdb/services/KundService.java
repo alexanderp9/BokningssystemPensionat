@@ -48,6 +48,7 @@ public class KundService  {
                 .id(k.getId())
                 .namn(k.getNamn())
                 .adress(k.getAdress())
+                .email(k.getEmail())
                 .build();
     }
 

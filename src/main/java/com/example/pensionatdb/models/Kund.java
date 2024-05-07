@@ -29,5 +29,7 @@ public class Kund {
     @NotNull
     private String adress;
 
+    private String email;
+
 
 }

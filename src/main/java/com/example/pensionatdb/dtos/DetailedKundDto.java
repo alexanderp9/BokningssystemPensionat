@@ -17,4 +17,6 @@ public class DetailedKundDto {
     private String namn;
 
     private String adress;
+
+    private String email;
 }
