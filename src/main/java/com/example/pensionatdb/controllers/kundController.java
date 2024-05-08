@@ -1,10 +1,12 @@
 package com.example.pensionatdb.controllers;
 
 import com.example.pensionatdb.dtos.DetailedKundDto;
+import com.example.pensionatdb.dtos.customersDTO;
 import com.example.pensionatdb.models.Bokning;
 import com.example.pensionatdb.models.Kund;
 import com.example.pensionatdb.services.BokningService;
 import com.example.pensionatdb.services.KundService;
+import com.example.pensionatdb.services.customersService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,7 @@ public class kundController {
 
     private final BokningService bs;
     private final KundService ks;
+    private final customersService cs;
 
 
     @GetMapping("/kund")
@@ -91,5 +94,6 @@ public class kundController {
         ks.updateKundAddressById(id, adress);
         return ks.getAllKund();
     }
+
 
 }

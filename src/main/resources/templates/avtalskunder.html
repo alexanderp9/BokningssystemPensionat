@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avtalskunder</title>
+</head>
+<body>
+
+<h1>Avtalskunder</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Företagsnamn</th>
+    <th>Kontaktnamn</th>
+    <th>Land</th>
+    <th>ID</th>
+  </tr>
+  </thead>
+  <tbody>
+  <!-- Loopa igenom avtalskunder och visa varje kund i en rad -->
+  <tr th:each="customer : ${contractCustomers}">
+    <td th:text="${customer.companyName}"></td>
+    <td th:text="${customer.contactName}"></td>
+    <td th:text="${customer.country}"></td>
+    <td th:text="${customer.id}"></td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

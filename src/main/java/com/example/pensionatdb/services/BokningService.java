@@ -88,10 +88,7 @@ public class BokningService {
         return optionalBokning.map(this::convertToBokningDTO).orElse(null);
     }
 
-    public BokningDTO addBokning(Bokning bokning) {
-        Bokning savedBokning = bokningRepo.save(bokning);
-        return convertToBokningDTO(savedBokning);
-    }
+
 
     public BokningDTO addBokningFromDTO(BokningDTO bokningDTO) {
         Rum rum = rumRepo.findById(bokningDTO.getRumId()).orElse(null);
