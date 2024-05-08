@@ -33,6 +33,10 @@ public class kundController {
         model.addAttribute("customers", customers);
         return "customerpage";
     }
+    @RequestMapping("/kunds")
+    public List<DetailedKundDto> getAllKund(){
+        return ks.getAllKund();
+    }
 
     @RequestMapping("/kund/{id}")
     public Kund findById(@PathVariable Long id){

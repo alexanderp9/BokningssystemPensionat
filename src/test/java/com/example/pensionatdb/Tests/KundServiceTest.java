@@ -39,13 +39,16 @@ public class KundServiceTest {
 
     String adress = "solgatan2";
 
+    String email = "hej@hotmail.com";
 
-    Kund kund = new Kund(1L, namn, adress);
+
+    Kund kund = new Kund(1L, namn, adress,email);
 
     DetailedKundDto detailedKundDto = DetailedKundDto.builder()
             .id(id)
             .namn(namn)
             .adress(adress)
+            .email(email)
             .build();
 
     @Test

@@ -28,7 +28,7 @@ public class Kund {
     private String namn;
     @NotNull
     private String adress;
-
+    @NotNull
     private String email;
 
 
