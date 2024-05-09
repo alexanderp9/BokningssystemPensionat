@@ -47,6 +47,7 @@ public class kundController {
     }
 
 
+
     @PostMapping("/kund/delete")
     public RedirectView deleteKund(@RequestParam Long customerId, RedirectAttributes ra) {
         Optional<Kund> kundOptional = ks.findById(customerId);
@@ -76,5 +77,7 @@ public class kundController {
         }
         return new RedirectView("/kund", true);
     }
+
+
 
 }
