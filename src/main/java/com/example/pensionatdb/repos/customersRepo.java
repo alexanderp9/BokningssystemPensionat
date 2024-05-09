@@ -1,7 +1,11 @@
 package com.example.pensionatdb.repos;
 
-import com.example.pensionatdb.models.Rum;
+import com.example.pensionatdb.models.customers;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface customersRepo extends JpaRepository<Rum, Long> {
+import java.util.List;
+
+public interface customersRepo extends JpaRepository<customers, Long> {
+
+    List<customers> findAll();
 }

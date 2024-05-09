@@ -3,5 +3,13 @@ package com.example.pensionatdb.models;
 import java.util.List;
 
 public class allcustomers {
-    public List<customers> customers;
+    private List<customers> customers;
+
+    public List<customers> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<customers> customers) {
+        this.customers = customers;
+    }
 }
