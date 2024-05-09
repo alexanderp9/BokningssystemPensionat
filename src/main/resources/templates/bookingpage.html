@@ -70,7 +70,7 @@
 <div id="bokninglista">
   <ul style="list-style: none">
     <li th:each="bokning : ${bokningar}">
-      <span th:text="${bokning.id} + ' - ' + 'Namn: ' + ${bokning.namn} + ' - ' + 'Nätter: ' + ${bokning.nätter} + ' - ' + 'Start/Slut Datum: ' + ${bokning.startSlutDatum}" class="booking-info"
+      <span th:text="${bokning.id} + ' - ' + 'Namn: ' + ${bokning.namn} + ' - ' + 'Nätter: ' + ${bokning.nätter} + ' - ' + 'Start/Slut Datum: ' + ${bokning.startSlutDatum}+ ' - ' + 'Mejl: ' + ${bokning.email}" class="booking-info"
             th:attr="data-bookingId=${bokning.id}, data-bookingName=${bokning.namn}, data-bookingNights=${bokning.nätter}, data-bookingDates=${bokning.startSlutDatum}, data-kundid=${bokning.kundId}, data-rumid=${bokning.rumId}"
             onclick="document.getElementById('bookingId').value = this.getAttribute('data-bookingId');
                      document.getElementById('nätter').value = this.getAttribute('data-bookingNights');

@@ -11,5 +11,6 @@ public class BokningDTO {
     private String namn;
     private long kundId;
     private long rumId;
+    private String email;
     private boolean avbokad;
 }
