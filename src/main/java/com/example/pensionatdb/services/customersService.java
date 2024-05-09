@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class customersService {
-    private final customersRepo cr;
+    private final customersRepo customersRepo;
 
     public customersDTO customersToCustomersDTO(customers c){
         return customersDTO.builder()
@@ -59,6 +59,16 @@ public class customersService {
     }
 
     public List<customers> getAllCustomers() {
-        return cr.findAll();
+        return customersRepo.findAll();
     }
+    public customersDTO getCustomerById(Long customerId) {
+        customers customer = customersRepo.findById(customerId).orElse(null);
+        if (customer != null) {
+            return convertToCustomersDTO(customer);
+        } else {
+            // Hantera om kunden inte hittas
+            return null;
+        }
+    }
+
 }
