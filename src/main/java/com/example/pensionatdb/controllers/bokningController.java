@@ -36,16 +36,6 @@ public class bokningController {
     }
 
 
-    @GetMapping("/bokning/{id}")
-    public ResponseEntity<BokningDTO> findById(@PathVariable Long id) {
-        BokningDTO bokning = bokningService.findBokningDTOById(id);
-        if (bokning != null) {
-            return ResponseEntity.ok(bokning);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @PostMapping("/bokning/add")
     public RedirectView addBokning(@ModelAttribute("bokningDTO") BokningDTO bokningDTO) {
         BokningDTO addedBokning = bokningService.addBokningFromDTO(bokningDTO);

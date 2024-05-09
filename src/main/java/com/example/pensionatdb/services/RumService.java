@@ -50,12 +50,6 @@ public class RumService {
         log.info("Rum deleted with id " + id);
     }
 
-    public RumDTO findRumDTOById(Long id) {
-        Optional<Rum> rumOptional = rumRepo.findById(id);
-        RumDTO rumDTO = rumOptional.map(this::convertToRumDTO)
-                .orElseThrow(() -> new RuntimeException("RumDTO not found"));
-        return rumDTO;
-    }
 
     public RumDTO convertToRumDTO(Rum rum) {
         RumDTO rumDTO = new RumDTO();

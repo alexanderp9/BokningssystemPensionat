@@ -29,15 +29,6 @@ public class rumController {
         return "roompage";
     }
 
-    @GetMapping("/rum/{id}")
-    public ResponseEntity<RumDTO> findById(@PathVariable Long id) {
-        RumDTO rum = rumService.findRumDTOById(id);
-        if (rum != null) {
-            return ResponseEntity.ok(rum);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 
     @PostMapping("/rum/add")
     public RedirectView addRum(@ModelAttribute("rumDTO") RumDTO rumDTO) {
