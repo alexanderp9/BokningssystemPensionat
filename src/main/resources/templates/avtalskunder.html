@@ -1,19 +1,57 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Avtalskunder</title>
+  <script>
+    function isNumeric(value) {
+      return !isNaN(parseFloat(value)) && isFinite(value);
+    }
+
+    let sortDirection = ['asc', 'asc', 'asc', 'asc'];
+    function sortTable(columnIndex) {
+      let table, rows, switching, i, shouldSwitch;
+      table = document.querySelector("table");
+      switching = true;
+
+      sortDirection[columnIndex] = sortDirection[columnIndex] === 'asc' ? 'desc' : 'asc';
+
+      while (switching) {
+        switching = false;
+        rows = Array.from(table.rows).slice(1);
+
+        rows.sort((a, b) => {
+          let x = a.cells[columnIndex].textContent.trim();
+          let y = b.cells[columnIndex].textContent.trim();
+
+          if (columnIndex === 3 && isNumeric(x) && isNumeric(y)) {
+            return sortDirection[columnIndex] === 'asc' ? (parseInt(x) - parseInt(y)) : (parseInt(y) - parseInt(x));
+          } else {
+
+            return sortDirection[columnIndex] === 'asc' ? x.localeCompare(y, 'sv') : y.localeCompare(x, 'sv');
+          }
+        });
+
+        rows.forEach((row, index) => {
+          if (table.rows[index + 1] !== row) {
+            table.tBodies[0].appendChild(row);
+            switching = true;
+          }
+        });
+      }
+    }
+  </script>
 </head>
 <body>
 <h1>Avtalskunder</h1>
 <table>
   <thead>
   <tr>
-    <th>Företagsnamn</th>
-    <th>Kontaktnamn</th>
-    <th>Country</th>
-    <th>ID</th>
+    <th><button onclick="sortTable(0)">Företagsnamn</button></th>
+    <th><button onclick="sortTable(1)">Kontaktnamn</button></th>
+    <th><button onclick="sortTable(2)">Country</button></th>
+    <th><button onclick="sortTable(3)">ID</button></th>
   </tr>
   </thead>
   <tbody>
@@ -28,4 +66,3 @@
 </table>
 </body>
 </html>
-
