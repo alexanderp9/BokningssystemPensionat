@@ -52,16 +52,6 @@ public class BokningService {
     }
 
 
-
-
-    private Bokning updateBokningDetails(Bokning existingBokning, Bokning updatedBokning) {
-        existingBokning.setNätter(updatedBokning.getNätter());
-        existingBokning.setStartSlutDatum(updatedBokning.getStartSlutDatum());
-        existingBokning.setKund(updatedBokning.getKund());
-        existingBokning.setRum(updatedBokning.getRum());
-        return bokningRepo.save(existingBokning);
-    }
-
     public Bokning convertToEntity(BokningDTO bokningDTO) {
         Kund kund = kundRepo.findById(bokningDTO.getKundId()).orElse(null);
         Rum rum = rumRepo.findById(bokningDTO.getRumId()).orElse(null);
@@ -81,16 +71,6 @@ public class BokningService {
         return bokningar.stream()
                 .map(this::convertToBokningDTO)
                 .collect(Collectors.toList());
-    }
-
-    public BokningDTO findBokningDTOById(Long id) {
-        Optional<Bokning> optionalBokning = bokningRepo.findById(id);
-        return optionalBokning.map(this::convertToBokningDTO).orElse(null);
-    }
-
-    public BokningDTO addBokning(Bokning bokning) {
-        Bokning savedBokning = bokningRepo.save(bokning);
-        return convertToBokningDTO(savedBokning);
     }
 
     public BokningDTO addBokningFromDTO(BokningDTO bokningDTO) {
@@ -128,29 +108,19 @@ public class BokningService {
     }
 
 
+// Finns kvar om vi vill lägga till uppdatering av bokning.
+//    public BokningDTO updateBokning(Long id, BokningDTO updatedBokningDTO) {
+//        Bokning updatedBokning = convertToEntity(updatedBokningDTO);
+//        Optional<Bokning> optionalBokning = bokningRepo.findById(id);
+//        if (optionalBokning.isPresent()) {
+//            Bokning existingBokning = optionalBokning.get();
+//            Bokning savedBokning = updateBokningDetails(existingBokning, updatedBokning);
+//            return convertToBokningDTO(savedBokning);
+//        } else {
+//            throw new RuntimeException("Bokning not found with id: " + id);
+//        }
+//    }
 
-    public BokningDTO updateBokning(Long id, BokningDTO updatedBokningDTO) {
-        Bokning updatedBokning = convertToEntity(updatedBokningDTO);
-        Optional<Bokning> optionalBokning = bokningRepo.findById(id);
-        if (optionalBokning.isPresent()) {
-            Bokning existingBokning = optionalBokning.get();
-            Bokning savedBokning = updateBokningDetails(existingBokning, updatedBokning);
-            return convertToBokningDTO(savedBokning);
-        } else {
-            throw new RuntimeException("Bokning not found with id: " + id);
-        }
-    }
-
-    public BokningDTO updateBokningFromEntity(Long id, Bokning updatedBokning) {
-        Optional<Bokning> optionalBokning = bokningRepo.findById(id);
-        if (optionalBokning.isPresent()) {
-            Bokning existingBokning = optionalBokning.get();
-            Bokning savedBokning = updateBokningDetails(existingBokning, updatedBokning);
-            return convertToBokningDTO(savedBokning);
-        } else {
-            throw new RuntimeException("Bokning not found with id: " + id);
-        }
-    }
 
     public boolean isRoomAvailable(Rum rum, String startSlutDatum) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
@@ -174,6 +144,8 @@ public class BokningService {
         return true;
     }
 
+    // för sökningen av rummen
+
     public List<Rum> searchAvailableRoomsByDateRange(String startSlutDatum) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
         String[] parts = startSlutDatum.split("-");
@@ -191,6 +163,8 @@ public class BokningService {
         return availableRooms;
     }
 
+
+    // för matchandet av datimet när en bokning ska göras
     private boolean isRoomAvailable(Rum rum, LocalDate startDate, LocalDate endDate) {
         List<Bokning> bookings = bokningRepo.findByRum(rum);
 

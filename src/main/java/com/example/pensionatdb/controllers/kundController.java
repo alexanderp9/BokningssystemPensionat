@@ -38,11 +38,6 @@ public class kundController {
         return ks.getAllKund();
     }
 
-    @RequestMapping("/kund/{id}")
-    public Kund findById(@PathVariable Long id){
-        return ks.findById(id).get();
-    }
-
 
     @PostMapping("/kund/add")
     public RedirectView addKund(@ModelAttribute Kund b){
@@ -50,7 +45,6 @@ public class kundController {
             ks.save(b);
             return new RedirectView("/kund",true);
     }
-
 
 
     @PostMapping("/kund/delete")
@@ -75,25 +69,12 @@ public class kundController {
         if (namn != null || adress != null) {
             ks.updateKundNameById(customerId, namn);
             ks.updateKundAddressById(customerId, adress);
+
             log.info("Kund med id:  " + customerId +  " har uppdaterats") ;
             redirectAttributes.addFlashAttribute("error","Kund har uppdateras");
 
         }
         return new RedirectView("/kund", true);
-    }
-
-
-
-    @RequestMapping("/kundNameChange/{id}/{namn}")
-    public List<DetailedKundDto> updateName(@PathVariable Long id, @PathVariable String namn){
-        ks.updateKundNameById(id, namn);
-        return ks.getAllKund();
-    }
-
-    @RequestMapping("/kundAddressChange/{id}/{adress}")
-    public List<DetailedKundDto> updateAddress(@PathVariable Long id, @PathVariable String adress){
-        ks.updateKundAddressById(id, adress);
-        return ks.getAllKund();
     }
 
 }
