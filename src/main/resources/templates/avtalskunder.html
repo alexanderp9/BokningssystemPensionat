@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Avtalskunder</title>
   <script>
+    //retunerar true om value är numerisk sträng eller nummer  annars false.
     function isNumeric(value) {
       return !isNaN(parseFloat(value)) && isFinite(value);
     }
@@ -14,7 +15,7 @@
       let table, rows, switching, i, shouldSwitch;
       table = document.querySelector("table");
       switching = true;
-
+      //Detta är en array som håller reda på riktningsordningen för sortering ('asc' för stigande, 'desc' för fallande)
       sortDirection[columnIndex] = sortDirection[columnIndex] === 'asc' ? 'desc' : 'asc';
 
       while (switching) {
@@ -26,13 +27,15 @@
           let y = b.cells[columnIndex].textContent.trim();
 
           if (columnIndex === 3 && isNumeric(x) && isNumeric(y)) {
+            //numeriska värden
             return sortDirection[columnIndex] === 'asc' ? (parseInt(x) - parseInt(y)) : (parseInt(y) - parseInt(x));
           } else {
-
+      //localeCompare används för att jämföra två strängar (x och y) baserat på angivet språk ('sv' för svenska).
             return sortDirection[columnIndex] === 'asc' ? x.localeCompare(y, 'sv') : y.localeCompare(x, 'sv');
           }
         });
-
+//läggser de sorterade raderna tillbaka i tabellen enligt den nya ordningen
+        //Loopen fortsätter tills inga fler omarrangeringar krävs (switching blir false).
         rows.forEach((row, index) => {
           if (table.rows[index + 1] !== row) {
             table.tBodies[0].appendChild(row);
