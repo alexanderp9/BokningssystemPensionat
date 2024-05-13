@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,34 +57,20 @@ public class AvtalsKundController {
         return "avtalskundSida";
     }
 
-    @GetMapping(path="")
-    String empty(Model model,  @RequestParam(defaultValue = "1") int pageNo,
-                 @RequestParam(defaultValue = "10") int pageSize,
-                 @RequestParam(defaultValue = "name") String sortCol,
-                 @RequestParam(defaultValue = "ASC") String sortOrder,
-                 @RequestParam(defaultValue = "") String q)
-    {
-        model.addAttribute("activeFunction", "home");
-
-
+    @GetMapping("/search/avtalskunder")
+    public String searchAvtalskunder(Model model, @RequestParam(defaultValue = "") String q) {
         q = q.trim();
-
         model.addAttribute("q", q);
 
-        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortCol);
-        Pageable pageable = PageRequest.of(pageNo-1, pageSize, sort);
-        if(!q.isEmpty()){
-            Page<customers> page = cr.findAllByCompanyNameContainsOrContactNameContainsOrCountryContains(q, q, q, pageable);
-            model.addAttribute("Customers", page);
-            model.addAttribute("totalPages",  page.getTotalPages());
-            model.addAttribute("pageNo",  pageNo);
-        }else {
-            Page<customers> page = cr.findAll(pageable);
-            model.addAttribute("pageNo", pageNo);
-            model.addAttribute("totalPages",  page.getTotalPages());
-            model.addAttribute("Customers", page);
+        List<customers> searchResults;
+        if (!q.isEmpty()) {
+            searchResults = cr.findAllByCompanyNameContainsOrContactNameContainsOrCountryContains(q, q, q);
+        } else {
+            searchResults = Collections.emptyList(); // Tom lista för tom sökning
         }
-        return "avtalskunder";
+
+        model.addAttribute("customers", searchResults); // Använd "customers" för sökresultat
+        return "avtalskunder"; // Visa avtalskunder.html med sökresultat
     }
 }
 

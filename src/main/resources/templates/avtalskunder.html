@@ -12,7 +12,7 @@
 
     let sortDirection = ['asc', 'asc', 'asc', 'asc'];
     function sortTable(columnIndex) {
-      let table, rows, switching, i, shouldSwitch;
+      let table, rows, switching;
       table = document.querySelector("table");
       switching = true;
       //Detta är en array som håller reda på riktningsordningen för sortering ('asc' för stigande, 'desc' för fallande)
@@ -49,10 +49,10 @@
 <body>
 <h1>Avtalskunder</h1>
 <table>
-  <form method="GET">
+  <form method="GET" action="/search/avtalskunder">
     Search:
-    <input type="text" name="q" value="<?php echo $q; ?>" />
-
+    <input type="text" name="q" value="${q}" />
+    <button type="submit">Search</button>
   </form>
   <thead>
   <tr>
