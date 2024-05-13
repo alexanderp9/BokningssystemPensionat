@@ -28,8 +28,7 @@ public class AvtalsKundController {
 
     private final customersService customersService;
 
-    @Autowired
-    customersRepo cr;
+
 
     @GetMapping("/avtalskunder")
     public String getAllContractCustomers(Model model) {
@@ -62,14 +61,14 @@ public class AvtalsKundController {
         q = q.trim();
         model.addAttribute("q", q);
 
-        List<customers> searchResults;
+        List<customers> contractCustomers;
         if (!q.isEmpty()) {
-            searchResults = cr.findAllByCompanyNameContainsOrContactNameContainsOrCountryContains(q, q, q);
+            contractCustomers = customersService.findAllByCompanyNameContainsOrContactNameContainsOrCountryContainsDTO(q, q, q);
         } else {
-            searchResults = Collections.emptyList(); // Tom lista för tom sökning
+            contractCustomers = Collections.emptyList(); // Tom lista för tom sökning
         }
 
-        model.addAttribute("customers", searchResults); // Använd "customers" för sökresultat
+        model.addAttribute("contractCustomers", contractCustomers); // Använd "customers" för sökresultat
         return "avtalskunder"; // Visa avtalskunder.html med sökresultat
     }
 }
