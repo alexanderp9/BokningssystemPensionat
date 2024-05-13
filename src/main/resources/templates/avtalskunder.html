@@ -49,6 +49,11 @@
 <body>
 <h1>Avtalskunder</h1>
 <table>
+  <form method="GET">
+    Search:
+    <input type="text" name="q" value="<?php echo $q; ?>" />
+
+  </form>
   <thead>
   <tr>
     <th><button onclick="sortTable(0)">Företagsnamn</button></th>

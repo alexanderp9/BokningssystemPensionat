@@ -39,8 +39,10 @@ public class KundServiceTest {
 
     String adress = "solgatan2";
 
+    String email = "hejhej";
 
-    Kund kund = new Kund(1L, namn, adress);
+
+    Kund kund = new Kund(1L, namn, adress, email);
 
     DetailedKundDto detailedKundDto = DetailedKundDto.builder()
             .id(id)

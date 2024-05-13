@@ -36,7 +36,7 @@ public class RumServiceTest {
 
 
 
-    Kund kund = new Kund(1L, "Anders", "solgatan2");
+    Kund kund = new Kund(1L, "Anders", "solgatan2", "hejhej");
 
     long id = 1L;
 
