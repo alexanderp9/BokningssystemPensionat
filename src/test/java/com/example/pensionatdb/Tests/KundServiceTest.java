@@ -1,6 +1,7 @@
 package com.example.pensionatdb.Tests;
 
 
+import com.example.pensionatdb.PensionatDbApplication;
 import com.example.pensionatdb.dtos.DetailedKundDto;
 import com.example.pensionatdb.models.Kund;
 import com.example.pensionatdb.repos.kundRepo;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
@@ -48,15 +51,18 @@ public class KundServiceTest {
             .id(id)
             .namn(namn)
             .adress(adress)
+            .email(email)
             .build();
 
     @Test
     void getAllKonton(){
+        //SpringApplicationBuilder pws = new SpringApplicationBuilder(PensionatDbApplication.class);
         when(kr.findAll()).thenReturn(Arrays.asList(kund));
         KundService service1 = new KundService(kr);
         List<DetailedKundDto> allKonton = service1.getAllKund();
 
         assertEquals(1, allKonton.size());
+        //pws.run();
     }
 
     @Test
@@ -95,6 +101,7 @@ public class KundServiceTest {
         assertEquals(kund.getId(), foundKund.get().getId());
         assertEquals(kund.getNamn(), foundKund.get().getNamn());
         assertEquals(kund.getAdress(), foundKund.get().getAdress());
+        assertEquals(kund.getEmail(), foundKund.get().getEmail());
     }
 
     @Test
@@ -106,6 +113,7 @@ public class KundServiceTest {
         assertEquals(actual.getId(), detailedKundDto.getId());
         assertEquals(actual.getNamn(), detailedKundDto.getNamn());
         assertEquals(actual.getAdress(), detailedKundDto.getAdress());
+        assertEquals(actual.getEmail(), detailedKundDto.getEmail());
 
     }
 }
