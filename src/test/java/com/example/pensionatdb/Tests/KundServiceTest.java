@@ -83,6 +83,8 @@ public class KundServiceTest {
         verify(kr).updateAddressById(kund.getId(), "Solgatan 3");
     }
 
+
+    //optional för att inte orsaka NullPointerException
     @Test
     void findByKundId(){
         when(kr.findById(kund.getId())).thenReturn(Optional.ofNullable(kund));
@@ -97,7 +99,8 @@ public class KundServiceTest {
 
     @Test
     void detailedKundDto(){
-
+//Det här testet kontrollerar om kundToDetDetailedKundDto
+// i KundService konverterar en kund till en DetailedKundDto
         DetailedKundDto actual = service.kundToDetDetailedKundDto(kund);
 
         assertEquals(actual.getId(), detailedKundDto.getId());
