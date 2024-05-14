@@ -1,50 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <title>Avtalskunder</title>
-  <script>
-    //retunerar true om value är numerisk sträng eller nummer  annars false.
-    function isNumeric(value) {
-      return !isNaN(parseFloat(value)) && isFinite(value);
-    }
-
-    let sortDirection = ['asc', 'asc', 'asc', 'asc'];
-    function sortTable(columnIndex) {
-      let table, rows, switching;
-      table = document.querySelector("table");
-      switching = true;
-      //Detta är en array som håller reda på riktningsordningen för sortering ('asc' för stigande, 'desc' för fallande)
-      sortDirection[columnIndex] = sortDirection[columnIndex] === 'asc' ? 'desc' : 'asc';
-
-      while (switching) {
-        switching = false;
-        rows = Array.from(table.rows).slice(1);
-
-        rows.sort((a, b) => {
-          let x = a.cells[columnIndex].textContent.trim();
-          let y = b.cells[columnIndex].textContent.trim();
-
-          if (columnIndex === 3 && isNumeric(x) && isNumeric(y)) {
-            //numeriska värden
-            return sortDirection[columnIndex] === 'asc' ? (parseInt(x) - parseInt(y)) : (parseInt(y) - parseInt(x));
-          } else {
-      //localeCompare används för att jämföra två strängar (x och y) baserat på angivet språk ('sv' för svenska).
-            return sortDirection[columnIndex] === 'asc' ? x.localeCompare(y, 'sv') : y.localeCompare(x, 'sv');
-          }
-        });
-//läggser de sorterade raderna tillbaka i tabellen enligt den nya ordningen
-        //Loopen fortsätter tills inga fler omarrangeringar krävs (switching blir false).
-        rows.forEach((row, index) => {
-          if (table.rows[index + 1] !== row) {
-            table.tBodies[0].appendChild(row);
-            switching = true;
-          }
-        });
-      }
-    }
-  </script>
 </head>
 <body>
 <h1>Avtalskunder</h1>
@@ -56,10 +17,26 @@
   </form>
   <thead>
   <tr>
-    <th><button onclick="sortTable(0)">Företagsnamn</button></th>
-    <th><button onclick="sortTable(1)">Kontaktnamn</button></th>
-    <th><button onclick="sortTable(2)">Country</button></th>
-    <th><button onclick="sortTable(3)">ID</button></th>
+    <th >
+      Företagsnamn
+      <a href="?sortCol=companyName&sortOrder=asc"><i class="fa-solid fa-arrow-up-a-z"></i></a>
+      <a href="?sortCol=companyName&sortOrder=desc"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+    </th>
+    <th >
+      Kontaktnamn
+      <a href="?sortCol=contactName&sortOrder=asc"><i class="fa-solid fa-arrow-up-a-z"></i></a>
+      <a href="?sortCol=contactName&sortOrder=desc"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+    </th>
+    <th >
+      Country
+      <a href="?sortCol=country&sortOrder=asc"><i class="fa-solid fa-arrow-up-a-z"></i></a>
+      <a href="?sortCol=country&sortOrder=desc"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+    </th>
+    <th >
+      ID
+      <a href="?sortCol=id&sortOrder=asc"><i class="fa-solid fa-arrow-up-a-z"></i></a>
+      <a href="?sortCol=id&sortOrder=desc"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+    </th>
   </tr>
   </thead>
   <tbody>

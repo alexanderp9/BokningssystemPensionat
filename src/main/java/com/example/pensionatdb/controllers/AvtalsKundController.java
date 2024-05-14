@@ -57,19 +57,25 @@ public class AvtalsKundController {
     }
 
     @GetMapping("/search/avtalskunder")
-    public String searchAvtalskunder(Model model, @RequestParam(defaultValue = "") String q) {
+    public String searchAvtalskunder(Model model, @RequestParam(defaultValue = "") String q,
+                                     @RequestParam(defaultValue = "companyName") String sortCol,
+                                     @RequestParam(defaultValue = "ASC") String sortOrder) {
         q = q.trim();
         model.addAttribute("q", q);
+        log.info("Searching with q={}, sortCol={}, sortOrder={}", q, sortCol, sortOrder);
+
+        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortCol);
+        log.info("Using sort: {}", sort);
 
         List<customers> contractCustomers;
         if (!q.isEmpty()) {
-            contractCustomers = customersService.findAllByCompanyNameContainsOrContactNameContainsOrCountryContainsDTO(q, q, q);
+            contractCustomers = customersService.findAllByCompanyNameContainsOrContactNameContainsOrCountryContainsDTO(q, q, q, sort);
         } else {
-            contractCustomers = Collections.emptyList(); // Tom lista för tom sökning
+            contractCustomers = Collections.emptyList(); // Empty list for empty search
         }
 
-        model.addAttribute("contractCustomers", contractCustomers); // Använd "customers" för sökresultat
-        return "avtalskunder"; // Visa avtalskunder.html med sökresultat
+        model.addAttribute("contractCustomers", contractCustomers);
+        return "avtalskunder";
     }
 }
 
