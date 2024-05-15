@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rum och Events</title>
+    <style>
+        /* CSS-stilar här */
+        /* Du kan inkludera dina egna CSS-stilar här */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        .container {
+            margin-top: 50px;
+            width: 80%;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        li:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Rum och Events</h1>
+    <div id="roomList">
+        <h2>Tillgängliga Rum</h2>
+        <ul id="roomEventsList">
+            <!-- Här kommer rum att visas -->
+            <li><a href="/room-events/1">Rum 1</a></li>
+            <li><a href="/room-events/2">Rum 2</a></li>
+            <li><a href="/room-events/3">Rum 3</a></li>
+        </ul>
+    </div>
+    <div id="eventDetails">
+        <h2>Event Detaljer</h2>
+        <p>Välj ett rum för att se dess händelser.</p>
+    </div>
+</div>
+
+<script>
+    // Hämta rumselement och eventlyssnare
+    const roomList = document.getElementById('roomEventsList');
+    roomList.addEventListener('click', showRoomEvents);
+
+    // Funktion för att visa rumshändelser baserat på det valda rummet
+    function showRoomEvents(event) {
+        const selectedRoomId = event.target.getAttribute('data-room-id');
+        if (selectedRoomId) {
+            // Simulerad AJAX-begäran för att hämta händelser för det valda rummet
+            // Ersätt denna del med din faktiska logik för att hämta händelser från servern
+            const events = getEventsForRoom(selectedRoomId);
+            updateEventDetails(events);
+        }
+    }
+
+    // Simulerad funktion för att hämta händelser för ett rum från servern
+    function getEventsForRoom(roomId) {
+        // Anta att du har en funktion på serversidan som returnerar händelser för ett givet rum
+        // Här returnerar vi bara några simulära händelser för demonstration
+        const events = [
+            { id: 1, description: 'Event 1 för rum ' + roomId },
+            { id: 2, description: 'Event 2 för rum ' + roomId },
+            { id: 3, description: 'Event 3 för rum ' + roomId }
+        ];
+        return events;
+    }
+
+    // Funktion för att uppdatera eventdetaljerna på sidan
+    function updateEventDetails(events) {
+        const eventDetailsContainer = document.getElementById('eventDetails');
+        eventDetailsContainer.innerHTML = '<h2>Event Detaljer</h2>';
+        if (events.length === 0) {
+            eventDetailsContainer.innerHTML += '<p>Inga händelser för detta rum.</p>';
+        } else {
+            const ul = document.createElement('ul');
+            events.forEach(event => {
+                const li = document.createElement('li');
+                li.textContent = event.description;
+                ul.appendChild(li);
+            });
+            eventDetailsContainer.appendChild(ul);
+        }
+    }
+</script>
+</body>
+</html>

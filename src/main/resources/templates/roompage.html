@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hantera rum</title>
+    <title>Rum</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -62,14 +62,18 @@
 <div id="rumlista">
     <ul style="list-style: none">
         <li th:each="room : ${rum}">
-            <span th:text="${room.id} + '. ' + 'Rumtyp: ' + ${room.rumTyp} + ' - ' + 'Extra sängar: ' + ${room.extraSäng}" class="room-info"
-                  th:attr="data-roomId=${room.id}, data-rumTyp=${room.rumTyp}, data-extraSäng=${room.extraSäng}"
-                  onclick="document.getElementById('roomId').value = this.getAttribute('data-roomId');
-                           document.getElementById('rumTyp').value = this.getAttribute('data-rumTyp');
-                           document.getElementById('extraSäng').value = this.getAttribute('data-extraSäng');"></span>
+            <a th:href="@{'/room-events/' + ${room.id}}">
+    <span th:text="${room.id} + '. ' + 'Rumtyp: ' + ${room.rumTyp} + ' - ' + 'Extra sängar: ' + ${room.extraSäng}" class="room-info"
+          th:attr="data-room-id=${room.id}, data-rumTyp=${room.rumTyp}, data-extraSäng=${room.extraSäng}"
+          onclick="document.getElementById('roomId').value = this.getAttribute('data-room-id');
+                   document.getElementById('rumTyp').value = this.getAttribute('data-rumTyp');
+                   document.getElementById('extraSäng').value = this.getAttribute('data-extraSäng');"></span>
+            </a>
+
         </li>
     </ul>
 </div>
+
 
 <div id="form-container">
     <form id="rumlistaform" method="post" action="/rum">
@@ -82,8 +86,6 @@
 </div>
 
 </body>
-
-
 
 <script>
     function validateExtraSäng() {
@@ -100,4 +102,3 @@
     document.getElementById('rumTyp').addEventListener('change', validateExtraSäng);
 </script>
 </html>
-

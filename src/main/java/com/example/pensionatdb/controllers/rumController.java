@@ -29,7 +29,7 @@ public class rumController {
         return "roompage";
     }
 
-    @GetMapping("/rum/{id}")
+    /*@GetMapping("/rum/{id}")
     public ResponseEntity<RumDTO> findById(@PathVariable Long id) {
         RumDTO rum = rumService.findRumDTOById(id);
         if (rum != null) {
@@ -37,6 +37,15 @@ public class rumController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }*/
+
+    @GetMapping("/rum/{id}")
+    public String getRoomDetails(@PathVariable Long id, Model model) {
+        // Här kan du implementera logik för att hämta detaljer om ett specifikt rum baserat på rum-id
+        // Exempelvis, du kan hämta händelserna för det specifika rummet och skicka dem till RoomEvent-sidan
+
+        // För närvarande skickar vi bara användaren till RoomEvent-sidan för det specifika rummet
+        return "redirect:/room-events/" + id;
     }
 
     @PostMapping("/rum/add")
