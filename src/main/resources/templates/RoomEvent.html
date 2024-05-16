@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rum och Events</title>
     <style>
-        /* CSS-stilar här */
-        /* Du kan inkludera dina egna CSS-stilar här */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -52,61 +50,67 @@
         <h2>Tillgängliga Rum</h2>
         <ul id="roomEventsList">
             <!-- Här kommer rum att visas -->
-            <li><a href="/room-events/1">Rum 1</a></li>
-            <li><a href="/room-events/2">Rum 2</a></li>
-            <li><a href="/room-events/3">Rum 3</a></li>
         </ul>
     </div>
     <div id="eventDetails">
         <h2>Event Detaljer</h2>
-        <p>Välj ett rum för att se dess händelser.</p>
+        <div id="doorEvents">
+            <h3>Dörrhändelser</h3>
+            <ul id="doorEventsList"></ul>
+        </div>
+        <div id="cleaningEvents">
+            <h3>Städhändelser</h3>
+            <ul id="cleaningEventsList"></ul>
+        </div>
     </div>
 </div>
 
 <script>
-    // Hämta rumselement och eventlyssnare
-    const roomList = document.getElementById('roomEventsList');
-    roomList.addEventListener('click', showRoomEvents);
+    function fetchRoomsAndRender() {
+        fetch('/rum')
+            .then(response => response.json())
+            .then(data => {
+                const roomEventsList = document.getElementById('roomEventsList');
+                roomEventsList.innerHTML = '';
+                data.forEach(room => {
+                    const li = document.createElement('li');
+                    li.textContent = `Rum ${room.id}`;
+                    li.setAttribute('data-room-id', room.id);
+                    li.addEventListener('click', showRoomEvents);
+                    roomEventsList.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Error fetching rooms:', error));
+    }
 
-    // Funktion för att visa rumshändelser baserat på det valda rummet
     function showRoomEvents(event) {
-        const selectedRoomId = event.target.getAttribute('data-room-id');
-        if (selectedRoomId) {
-            // Simulerad AJAX-begäran för att hämta händelser för det valda rummet
-            // Ersätt denna del med din faktiska logik för att hämta händelser från servern
-            const events = getEventsForRoom(selectedRoomId);
-            updateEventDetails(events);
-        }
+        const roomId = event.target.getAttribute('data-room-id');
+        fetch(`/room-events/${roomId}`)
+            .then(response => response.json())
+            .then(data => {
+                const doorEventsList = document.getElementById('doorEventsList');
+                const cleaningEventsList = document.getElementById('cleaningEventsList');
+                doorEventsList.innerHTML = '';
+                cleaningEventsList.innerHTML = '';
+
+                if (data.length === 0) {
+                    document.getElementById('eventDetails').innerHTML += '<p>Inga händelser för detta rum.</p>';
+                } else {
+                    data.forEach(event => {
+                        const li = document.createElement('li');
+                        li.textContent = `${event.eventName} - ${event.eventTime}`;
+                        if (event.eventName.startsWith("Dörren")) {
+                            doorEventsList.appendChild(li);
+                        } else if (event.eventName.includes("Städning")) {
+                            cleaningEventsList.appendChild(li);
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error(`Error fetching events for room ${roomId}:`, error));
     }
 
-    // Simulerad funktion för att hämta händelser för ett rum från servern
-    function getEventsForRoom(roomId) {
-        // Anta att du har en funktion på serversidan som returnerar händelser för ett givet rum
-        // Här returnerar vi bara några simulära händelser för demonstration
-        const events = [
-            { id: 1, description: 'Event 1 för rum ' + roomId },
-            { id: 2, description: 'Event 2 för rum ' + roomId },
-            { id: 3, description: 'Event 3 för rum ' + roomId }
-        ];
-        return events;
-    }
-
-    // Funktion för att uppdatera eventdetaljerna på sidan
-    function updateEventDetails(events) {
-        const eventDetailsContainer = document.getElementById('eventDetails');
-        eventDetailsContainer.innerHTML = '<h2>Event Detaljer</h2>';
-        if (events.length === 0) {
-            eventDetailsContainer.innerHTML += '<p>Inga händelser för detta rum.</p>';
-        } else {
-            const ul = document.createElement('ul');
-            events.forEach(event => {
-                const li = document.createElement('li');
-                li.textContent = event.description;
-                ul.appendChild(li);
-            });
-            eventDetailsContainer.appendChild(ul);
-        }
-    }
+    document.addEventListener('DOMContentLoaded', fetchRoomsAndRender);
 </script>
 </body>
 </html>

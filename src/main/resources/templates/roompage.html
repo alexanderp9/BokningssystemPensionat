@@ -62,17 +62,19 @@
 <div id="rumlista">
     <ul style="list-style: none">
         <li th:each="room : ${rum}">
-            <a th:href="@{'/room-events/' + ${room.id}}">
-    <span th:text="${room.id} + '. ' + 'Rumtyp: ' + ${room.rumTyp} + ' - ' + 'Extra sängar: ' + ${room.extraSäng}" class="room-info"
-          th:attr="data-room-id=${room.id}, data-rumTyp=${room.rumTyp}, data-extraSäng=${room.extraSäng}"
-          onclick="document.getElementById('roomId').value = this.getAttribute('data-room-id');
-                   document.getElementById('rumTyp').value = this.getAttribute('data-rumTyp');
-                   document.getElementById('extraSäng').value = this.getAttribute('data-extraSäng');"></span>
+            <a th:href="@{'/room-events/' + ${room.id}}"
+               th:attr="data-room-id=${room.id}"
+               onclick="showRoomEvents(event)">
+                <span th:text="${room.id} + '. ' + 'Rumtyp: ' + ${room.rumTyp} + ' - ' + 'Extra sängar: ' + ${room.extraSäng}" class="room-info"
+                      th:attr="data-room-id=${room.id}, data-rumTyp=${room.rumTyp}, data-extraSäng=${room.extraSäng}"
+                      onclick="document.getElementById('roomId').value = this.getAttribute('data-room-id');
+                               document.getElementById('rumTyp').value = this.getAttribute('data-rumTyp');
+                               document.getElementById('extraSäng').value = this.getAttribute('data-extraSäng');"></span>
             </a>
-
         </li>
     </ul>
 </div>
+
 
 
 <div id="form-container">
