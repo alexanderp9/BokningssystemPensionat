@@ -41,7 +41,7 @@ public class RoomEventService {
                 .collect(Collectors.toList());
     }
 
-    private RoomEventDTO convertToDTO(RoomEvent roomEvent) {
+    public RoomEventDTO convertToDTO(RoomEvent roomEvent) {
         RoomEventDTO dto = new RoomEventDTO();
         dto.setId(roomEvent.getId());
         dto.setRoomId(roomEvent.getRoomId());
