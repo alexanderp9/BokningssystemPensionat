@@ -12,4 +12,5 @@ public class BokningDTO {
     private long kundId;
     private long rumId;
     private boolean avbokad;
+    private String email;
 }

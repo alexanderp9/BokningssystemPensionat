@@ -8,24 +8,32 @@ import com.example.pensionatdb.repos.bokningRepo;
 import com.example.pensionatdb.repos.kundRepo;
 import com.example.pensionatdb.repos.rumRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class BokningService {
 
+    private static final Logger log = Logger.getLogger(BokningService.class.getName());
+
     private final bokningRepo bokningRepo;
     private final kundRepo kundRepo;
     private final rumRepo rumRepo;
+
+    RestTemplate rt = new RestTemplate();
 
     @Autowired
     public BokningService(bokningRepo bokningRepo, kundRepo kundRepo, rumRepo rumRepo) {
@@ -47,20 +55,11 @@ public class BokningService {
         dto.setNamn(bokning.getKund().getNamn());
         dto.setKundId(bokning.getKund().getId());
         dto.setRumId(bokning.getRum().getId());
+        dto.setEmail(bokning.getKund().getEmail());
 
         return dto;
     }
 
-
-
-
-    private Bokning updateBokningDetails(Bokning existingBokning, Bokning updatedBokning) {
-        existingBokning.setNätter(updatedBokning.getNätter());
-        existingBokning.setStartSlutDatum(updatedBokning.getStartSlutDatum());
-        existingBokning.setKund(updatedBokning.getKund());
-        existingBokning.setRum(updatedBokning.getRum());
-        return bokningRepo.save(existingBokning);
-    }
 
     public Bokning convertToEntity(BokningDTO bokningDTO) {
         Kund kund = kundRepo.findById(bokningDTO.getKundId()).orElse(null);
@@ -87,7 +86,6 @@ public class BokningService {
         Optional<Bokning> optionalBokning = bokningRepo.findById(id);
         return optionalBokning.map(this::convertToBokningDTO).orElse(null);
     }
-
 
 
     public BokningDTO addBokningFromDTO(BokningDTO bokningDTO) {
@@ -124,30 +122,6 @@ public class BokningService {
         bokningRepo.deleteById(id);
     }
 
-
-
-    public BokningDTO updateBokning(Long id, BokningDTO updatedBokningDTO) {
-        Bokning updatedBokning = convertToEntity(updatedBokningDTO);
-        Optional<Bokning> optionalBokning = bokningRepo.findById(id);
-        if (optionalBokning.isPresent()) {
-            Bokning existingBokning = optionalBokning.get();
-            Bokning savedBokning = updateBokningDetails(existingBokning, updatedBokning);
-            return convertToBokningDTO(savedBokning);
-        } else {
-            throw new RuntimeException("Bokning not found with id: " + id);
-        }
-    }
-
-    public BokningDTO updateBokningFromEntity(Long id, Bokning updatedBokning) {
-        Optional<Bokning> optionalBokning = bokningRepo.findById(id);
-        if (optionalBokning.isPresent()) {
-            Bokning existingBokning = optionalBokning.get();
-            Bokning savedBokning = updateBokningDetails(existingBokning, updatedBokning);
-            return convertToBokningDTO(savedBokning);
-        } else {
-            throw new RuntimeException("Bokning not found with id: " + id);
-        }
-    }
 
     public boolean isRoomAvailable(Rum rum, String startSlutDatum) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
@@ -202,5 +176,39 @@ public class BokningService {
         return true;
     }
 
+    public boolean checkBlacklist(String email) {
+        String url = "https://javabl.systementor.se/api/stefan/blacklist?email=" + email;
+        try {
+            ResponseEntity<String> response = rt.getForEntity(url, String.class);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                String responseBody = response.getBody();
+                log.info("responsen från api " + responseBody);
 
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode responseArray = objectMapper.readTree(responseBody);
+
+                for (JsonNode node : responseArray) {
+                    String nodeEmail = node.get("email").asText();
+                    boolean ok = node.get("ok").asBoolean();
+                    if (nodeEmail.equalsIgnoreCase(email) && !ok) {
+                        return true; // mailen är blacklistat
+                    }
+                }
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+
+            return false;
+        }
+        return false;
+    }
+
+    public String getEmail(Long kundId) {
+        Kund kund = kundRepo.findById(kundId).orElse(null);
+        assert kund != null;
+        return kund.getEmail();
+    }
 }
+
+

@@ -53,11 +53,6 @@ public class kundController {
             //tar tillbaka till kund
     }
 
-//RedirectAttributes används för att skicka data till en sida efter omdirigering
-    //lagrar data temporärt
-
-//RedirectView omdirigerar användaren till en anna sida, innehåller om vilken
-    //URL användaren ska omdirigeras till
 
     @PostMapping("/kund/delete")
     public RedirectView deleteKund(@RequestParam Long customerId, RedirectAttributes ra) {

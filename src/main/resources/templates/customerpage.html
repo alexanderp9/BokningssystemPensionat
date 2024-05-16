@@ -76,15 +76,17 @@
 <div id="kundlista">
     <ul style="list-style: none">
         <li th:each="customer : ${customers}">
-            <span th:text="${customer.id} + '. ' + 'Namn: ' + ${customer.namn} + ' - ' + 'Adress: ' + ${customer.adress}" class="customer-info"
-                  th:attr="data-customerId=${customer.id}, data-customerName=${customer.namn}, data-customerAddress=${customer.adress}"
+            <span th:text="${customer.id + '. ' + 'Namn: ' + customer.namn + ' - ' + 'Adress: ' + customer.adress + ' - ' + 'Mejl: ' + customer.email}" class="customer-info"
+                  th:attr="data-customerId=${customer.id}, data-customerName=${customer.namn}, data-customerAddress=${customer.adress}, data-customerEmail=${customer.email}"
                   onclick="document.getElementById('customerId').value = this.getAttribute('data-customerId');
                            document.getElementById('namn').value = this.getAttribute('data-customerName');
-                           document.getElementById('address').value = this.getAttribute('data-customerAddress');"></span>
+                           document.getElementById('address').value = this.getAttribute('data-customerAddress');
+                           document.getElementById('email').value = this.getAttribute('data-customerEmail');"></span>
 
         </li>
     </ul>
 </div>
+
 
 <div id="form-container">
     <form id="kundlistaform" method="post" action="/kund">
@@ -93,8 +95,11 @@
         <input type="text" id="namn" name="namn"/>
         <label for="address">Adress:</label>
         <input type="text" id="address" name="adress"/>
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email"/>
     </form>
 </div>
+
 
 </body>
 

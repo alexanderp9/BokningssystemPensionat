@@ -1,18 +1,16 @@
 package com.example.pensionatdb.controllers;
 
 import com.example.pensionatdb.dtos.BokningDTO;
-import com.example.pensionatdb.models.Bokning;
 import com.example.pensionatdb.models.Rum;
 import com.example.pensionatdb.services.BokningService;
+import com.example.pensionatdb.services.KundService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
@@ -23,6 +21,7 @@ import java.util.List;
 public class bokningController {
 
     private final BokningService bokningService;
+    private final KundService ks;
 
     private static final Logger log = LoggerFactory.getLogger(bokningController.class);
 
@@ -48,6 +47,10 @@ public class bokningController {
 
     @PostMapping("/bokning/add")
     public RedirectView addBokning(@ModelAttribute("bokningDTO") BokningDTO bokningDTO) {
+        if (bokningService.checkBlacklist(bokningService.getEmail(bokningDTO.getKundId()))) {
+            log.info("Personen är blacklistad från att göra en bokning.");
+            return new RedirectView("/bokning");
+        }
         BokningDTO addedBokning = bokningService.addBokningFromDTO(bokningDTO);
         if (addedBokning != null) {
             log.info("Bokning lades till");
