@@ -12,7 +12,7 @@
 <table>
   <form method="GET" action="/search/avtalskunder">
     Search:
-    <input type="text" name="q" value="" />
+    <input type="text" name="q" th:value="${q}" />
     <button type="submit">Search</button>
   </form>
   <thead>
@@ -41,7 +41,7 @@
   </thead>
   <tbody>
   <!-- Loopa igenom avtalskunder och skapa länkar för varje kund -->
-  <tr th:each="customer : ${contractCustomers}">
+  <tr th:each="customer : ${contractCustomers}" >
     <td><a th:href="@{'/avtalskund?id=' + ${customer.id}}" th:text="${customer.companyName}"></a></td>
     <td th:text="${customer.contactName}"></td>
     <td th:text="${customer.country}"></td>

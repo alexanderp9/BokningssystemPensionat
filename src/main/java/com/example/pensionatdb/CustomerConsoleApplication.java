@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.List;
 
 
-@ComponentScan
+@SpringBootApplication
 public class CustomerConsoleApplication implements CommandLineRunner {
 
     @Autowired

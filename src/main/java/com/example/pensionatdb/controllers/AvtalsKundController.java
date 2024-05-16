@@ -73,12 +73,13 @@ public class AvtalsKundController {
         if (!q.isEmpty()) {
             contractCustomers = customersService.findAllByCompanyNameContainsOrContactNameContainsOrCountryContainsDTO(q, q, q, sort);
         } else {
-            contractCustomers = customersService.findAllSortDTO(sort); // Empty list for empty search
+            contractCustomers = customersService.findAllSortDTO(sort);
         }
 
         model.addAttribute("contractCustomers", contractCustomers);
         return "avtalskunder";
     }
+
 }
 
 
