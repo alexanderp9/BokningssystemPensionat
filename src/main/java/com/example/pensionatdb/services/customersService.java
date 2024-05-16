@@ -66,9 +66,15 @@ public class customersService {
     public List<customers> findAllByCompanyNameContainsOrContactNameContainsOrCountryContainsDTO(String companyName,
                                                                                                  String contactName,
                                                                                                  String country, Sort sort){
+
+
         return customersRepo.findAllByCompanyNameContainsOrContactNameContainsOrCountryContains(companyName,
                 contactName,
                 country, sort);
+    }
+
+    public List<customers> findAllSortDTO(Sort sort){
+        return customersRepo.findAll(sort);
     }
 
     public customersDTO getCustomerById(Long customerId) {

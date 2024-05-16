@@ -28,6 +28,8 @@ public class AvtalsKundController {
 
     private final customersService customersService;
 
+    customersRepo repo;
+
 
 
     @GetMapping("/avtalskunder")
@@ -71,7 +73,7 @@ public class AvtalsKundController {
         if (!q.isEmpty()) {
             contractCustomers = customersService.findAllByCompanyNameContainsOrContactNameContainsOrCountryContainsDTO(q, q, q, sort);
         } else {
-            contractCustomers = Collections.emptyList(); // Empty list for empty search
+            contractCustomers = customersService.findAllSortDTO(sort); // Empty list for empty search
         }
 
         model.addAttribute("contractCustomers", contractCustomers);

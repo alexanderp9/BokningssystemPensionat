@@ -19,23 +19,23 @@
   <tr>
     <th >
       Företagsnamn
-      <a href="?sortCol=companyName&sortOrder=asc"><i class="fa-solid fa-arrow-up-a-z"></i></a>
-      <a href="?sortCol=companyName&sortOrder=desc"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+      <a th:href="@{|?q=${q}&sortCol=companyName&sortOrder=asc|}"><i class="fa-solid fa-arrow-up-a-z"></i></a>
+      <a th:href="@{|?q=${q}&sortCol=companyName&sortOrder=desc|}"><i class="fa-solid fa-arrow-down-z-a"></i></a>
     </th>
     <th >
       Kontaktnamn
-      <a href="?sortCol=contactName&sortOrder=asc"><i class="fa-solid fa-arrow-up-a-z"></i></a>
-      <a href="?sortCol=contactName&sortOrder=desc"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+      <a th:href="@{|?q=${q}&sortCol=contactName&sortOrder=asc|}"><i class="fa-solid fa-arrow-up-a-z"></i></a>
+      <a th:href="@{|?q=${q}&sortCol=contactName&sortOrder=desc|}"><i class="fa-solid fa-arrow-down-z-a"></i></a>
     </th>
     <th >
       Country
-      <a href="?sortCol=country&sortOrder=asc"><i class="fa-solid fa-arrow-up-a-z"></i></a>
-      <a href="?sortCol=country&sortOrder=desc"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+      <a th:href="@{|?q=${q}&sortCol=country&sortOrder=asc|}"><i class="fa-solid fa-arrow-up-a-z"></i></a>
+      <a th:href="@{|?q=${q}&sortCol=country&sortOrder=desc|}"><i class="fa-solid fa-arrow-down-z-a"></i></a>
     </th>
     <th >
       ID
-      <a href="?sortCol=id&sortOrder=asc"><i class="fa-solid fa-arrow-up-a-z"></i></a>
-      <a href="?sortCol=id&sortOrder=desc"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+      <a th:href="@{|?q=${q}&sortCol=id&sortOrder=asc|}"><i class="fa-solid fa-arrow-up-a-z"></i></a>
+      <a th:href="@{|?q=${q}&sortCol=id&sortOrder=desc|}"><i class="fa-solid fa-arrow-down-z-a"></i></a>
     </th>
   </tr>
   </thead>

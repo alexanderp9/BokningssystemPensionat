@@ -12,6 +12,8 @@ public interface customersRepo extends JpaRepository<customers, Long> {
 
     List<customers> findAll();
 
+    List<customers> findAll(Sort sort);
+
 
     List<customers> findAllByCompanyNameContainsOrContactNameContainsOrCountryContains(String companyName,
                                                                                        String contactName,
