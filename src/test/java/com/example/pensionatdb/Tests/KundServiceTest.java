@@ -1,6 +1,7 @@
 package com.example.pensionatdb.Tests;
 
 
+import com.example.pensionatdb.PensionatDbApplication;
 import com.example.pensionatdb.dtos.DetailedKundDto;
 import com.example.pensionatdb.models.Kund;
 import com.example.pensionatdb.repos.kundRepo;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
@@ -39,22 +42,27 @@ public class KundServiceTest {
 
     String adress = "solgatan2";
 
+    String email = "hejhej";
 
-    Kund kund = new Kund(1L, namn, adress);
+
+    Kund kund = new Kund(1L, namn, adress, email);
 
     DetailedKundDto detailedKundDto = DetailedKundDto.builder()
             .id(id)
             .namn(namn)
             .adress(adress)
+            .email(email)
             .build();
 
     @Test
     void getAllKonton(){
+        //SpringApplicationBuilder pws = new SpringApplicationBuilder(PensionatDbApplication.class);
         when(kr.findAll()).thenReturn(Arrays.asList(kund));
         KundService service1 = new KundService(kr);
         List<DetailedKundDto> allKonton = service1.getAllKund();
 
         assertEquals(1, allKonton.size());
+        //pws.run();
     }
 
     @Test
@@ -81,6 +89,8 @@ public class KundServiceTest {
         verify(kr).updateAddressById(kund.getId(), "Solgatan 3");
     }
 
+
+    //optional för att inte orsaka NullPointerException
     @Test
     void findByKundId(){
         when(kr.findById(kund.getId())).thenReturn(Optional.ofNullable(kund));
@@ -91,16 +101,19 @@ public class KundServiceTest {
         assertEquals(kund.getId(), foundKund.get().getId());
         assertEquals(kund.getNamn(), foundKund.get().getNamn());
         assertEquals(kund.getAdress(), foundKund.get().getAdress());
+        assertEquals(kund.getEmail(), foundKund.get().getEmail());
     }
 
     @Test
     void detailedKundDto(){
-
+//Det här testet kontrollerar om kundToDetDetailedKundDto
+// i KundService konverterar en kund till en DetailedKundDto
         DetailedKundDto actual = service.kundToDetDetailedKundDto(kund);
 
         assertEquals(actual.getId(), detailedKundDto.getId());
         assertEquals(actual.getNamn(), detailedKundDto.getNamn());
         assertEquals(actual.getAdress(), detailedKundDto.getAdress());
+        assertEquals(actual.getEmail(), detailedKundDto.getEmail());
 
     }
 }

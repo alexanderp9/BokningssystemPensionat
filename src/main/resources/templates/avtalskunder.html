@@ -1,24 +1,47 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <title>Avtalskunder</title>
 </head>
 <body>
 <h1>Avtalskunder</h1>
 <table>
+  <form method="GET" action="/search/avtalskunder">
+    Search:
+    <input type="text" name="q" th:value="${q}" />
+    <button type="submit">Search</button>
+  </form>
   <thead>
   <tr>
-    <th>Företagsnamn</th>
-    <th>Kontaktnamn</th>
-    <th>Country</th>
-    <th>ID</th>
+    <th >
+      Företagsnamn
+      <a th:href="@{|?q=${q}&sortCol=companyName&sortOrder=asc|}"><i class="fa-solid fa-arrow-up-a-z"></i></a>
+      <a th:href="@{|?q=${q}&sortCol=companyName&sortOrder=desc|}"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+    </th>
+    <th >
+      Kontaktnamn
+      <a th:href="@{|?q=${q}&sortCol=contactName&sortOrder=asc|}"><i class="fa-solid fa-arrow-up-a-z"></i></a>
+      <a th:href="@{|?q=${q}&sortCol=contactName&sortOrder=desc|}"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+    </th>
+    <th >
+      Country
+      <a th:href="@{|?q=${q}&sortCol=country&sortOrder=asc|}"><i class="fa-solid fa-arrow-up-a-z"></i></a>
+      <a th:href="@{|?q=${q}&sortCol=country&sortOrder=desc|}"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+    </th>
+    <th >
+      ID
+      <a th:href="@{|?q=${q}&sortCol=id&sortOrder=asc|}"><i class="fa-solid fa-arrow-up-a-z"></i></a>
+      <a th:href="@{|?q=${q}&sortCol=id&sortOrder=desc|}"><i class="fa-solid fa-arrow-down-z-a"></i></a>
+    </th>
   </tr>
   </thead>
   <tbody>
   <!-- Loopa igenom avtalskunder och skapa länkar för varje kund -->
-  <tr th:each="customer : ${contractCustomers}">
+  <tr th:each="customer : ${contractCustomers}" >
     <td><a th:href="@{'/avtalskund?id=' + ${customer.id}}" th:text="${customer.companyName}"></a></td>
     <td th:text="${customer.contactName}"></td>
     <td th:text="${customer.country}"></td>
@@ -28,4 +51,3 @@
 </table>
 </body>
 </html>
-

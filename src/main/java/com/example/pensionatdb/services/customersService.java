@@ -5,6 +5,7 @@ import com.example.pensionatdb.models.customers;
 import com.example.pensionatdb.repos.customersRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,6 +62,21 @@ public class customersService {
     public List<customers> getAllCustomers() {
         return customersRepo.findAll();
     }
+
+    public List<customers> findAllByCompanyNameContainsOrContactNameContainsOrCountryContainsDTO(String companyName,
+                                                                                                 String contactName,
+                                                                                                 String country, Sort sort){
+
+
+        return customersRepo.findAllByCompanyNameContainsOrContactNameContainsOrCountryContains(companyName,
+                contactName,
+                country, sort);
+    }
+
+    public List<customers> findAllSortDTO(Sort sort){
+        return customersRepo.findAll(sort);
+    }
+
     public customersDTO getCustomerById(Long customerId) {
         customers customer = customersRepo.findById(customerId).orElse(null);
         if (customer != null) {

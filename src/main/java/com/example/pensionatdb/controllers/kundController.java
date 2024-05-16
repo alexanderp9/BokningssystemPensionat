@@ -30,34 +30,45 @@ public class kundController {
     private final customersService cs;
 
 
+//model används för att skicka data från javakoden till HTML-Sidan
     @GetMapping("/kund")
     public String getAllKund(Model model) {
+        //gettAllKund retunerar end lista med alla kunder
         List<DetailedKundDto> customers = ks.getAllKund();
+        //här läggs listan till i model för att visa den på HTML-Sidan
         model.addAttribute("customers", customers);
-        return "customerpage";
+        return "customerpage"; //retunerar namnet på sidan man ska till
     }
 
-    @RequestMapping("/kund/{id}")
-    public Kund findById(@PathVariable Long id){
-        return ks.findById(id).get();
-    }
-
+//model används för att skicka data till html-sidan for att rendera information
+//på användarens webbläsare
 
     @PostMapping("/kund/add")
+    //@ModelAttribute används för att binda data till en modell
+    //binda inkommande data från html till kund
     public RedirectView addKund(@ModelAttribute Kund b){
             log.info("lagt till kund");
             ks.save(b);
             return new RedirectView("/kund",true);
+            //tar tillbaka till kund
     }
 
+//RedirectAttributes används för att skicka data till en sida efter omdirigering
+    //lagrar data temporärt
 
+//RedirectView omdirigerar användaren till en anna sida, innehåller om vilken
+    //URL användaren ska omdirigeras till
 
     @PostMapping("/kund/delete")
     public RedirectView deleteKund(@RequestParam Long customerId, RedirectAttributes ra) {
+        //metoden retunerar ett objekt av typen RedirectView som anger vilken URL omdirigeras till
+        //tar ett objekt av typen RedirectAttributes som används för att skicka data till nästa sida
         Optional<Kund> kundOptional = ks.findById(customerId);
+        //findById retunerar en kund (optional betyder antigen kund eller null)
         if (kundOptional.isPresent()) {
             Kund kund = kundOptional.get();
             List<Bokning> bokningar = bs.findBokningarByKund(kund);
+            //hämtar bokningar för kunden
             if (bokningar.isEmpty()) {
                 ks.deleteById(customerId);
                 log.info("Kund bortagen med id:  " + customerId);
@@ -66,33 +77,26 @@ public class kundController {
                 ra.addFlashAttribute("popupMessage", "Kund med id: " + customerId + " kan ej tas bort då personen finns i bokning");
             }
         }
-        return new RedirectView("/kund", true);
+        return new RedirectView("/kund", true); //omdirigerar användaren till /kund
     }
 
+
+
     @PostMapping("/kund/update")
-    public RedirectView updateraKund(@RequestParam Long customerId, @RequestParam(required = false) String namn, @RequestParam(required = false) String adress, RedirectAttributes redirectAttributes) {
+    public RedirectView updateraKund(@RequestParam Long customerId,
+                                     @RequestParam(required = false) String namn,
+                                     @RequestParam(required = false) String adress,
+                                     RedirectAttributes redirectAttributes) {
+                                    //används för att skicka tillbaka data till nästa sida
         if (namn != null || adress != null) {
             ks.updateKundNameById(customerId, namn);
             ks.updateKundAddressById(customerId, adress);
             log.info("Kund med id:  " + customerId +  " har uppdaterats") ;
-            redirectAttributes.addFlashAttribute("error","Kund har uppdateras");
+            redirectAttributes.addFlashAttribute("error","Kund har uppdateras");//meddelande
 
         }
         return new RedirectView("/kund", true);
-    }
-
-
-
-    @RequestMapping("/kundNameChange/{id}/{namn}")
-    public List<DetailedKundDto> updateName(@PathVariable Long id, @PathVariable String namn){
-        ks.updateKundNameById(id, namn);
-        return ks.getAllKund();
-    }
-
-    @RequestMapping("/kundAddressChange/{id}/{adress}")
-    public List<DetailedKundDto> updateAddress(@PathVariable Long id, @PathVariable String adress){
-        ks.updateKundAddressById(id, adress);
-        return ks.getAllKund();
+        //omdirigerar användaren till /kund
     }
 
 
