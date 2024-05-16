@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface RoomEventRepository extends JpaRepository<RoomEvent, Long> {
-
     List<RoomEvent> findByRoomId(Long roomId);
 }

@@ -34,6 +34,13 @@ public class RoomEventService {
 
     // Andra metoder för att hämta, uppdatera eller ta bort rumshändelser kan läggas till här
 
+    public List<RoomEventDTO> getRoomEventsByRoomId(Long roomId) {
+        List<RoomEvent> roomEvents = roomEventRepository.findByRoomId(roomId);
+        return roomEvents.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     private RoomEventDTO convertToDTO(RoomEvent roomEvent) {
         RoomEventDTO dto = new RoomEventDTO();
         dto.setId(roomEvent.getId());
@@ -53,15 +60,4 @@ public class RoomEventService {
         entity.setDescription(dto.getDescription());
         return entity;
     }
-    public List<RoomEventDTO> getRoomEventsByRoomId(Long roomId) {
-        // Implementera logiken för att hämta rumshändelser baserat på rum-id från din repository
-        // Anropa repository-metoden findByRoomId
-        List<RoomEvent> roomEvents = roomEventRepository.findByRoomId(roomId);
-
-        // Konvertera RoomEvent-entiteter till RoomEventDTO:s och returnera listan
-        return roomEvents.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
 }

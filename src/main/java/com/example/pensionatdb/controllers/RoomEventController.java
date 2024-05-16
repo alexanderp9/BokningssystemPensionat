@@ -14,10 +14,10 @@ import java.util.List;
 public class RoomEventController {
 
     private final RoomEventService roomEventService;
-    private final EventSeeder eventSeeder; // Lägg till en instans av EventSeeder
+    private final EventSeeder eventSeeder;
 
     @Autowired
-    public RoomEventController(RoomEventService roomEventService, EventSeeder eventSeeder) { // Injicera EventSeeder i konstruktorn
+    public RoomEventController(RoomEventService roomEventService, EventSeeder eventSeeder) {
         this.roomEventService = roomEventService;
         this.eventSeeder = eventSeeder;
     }
@@ -32,19 +32,13 @@ public class RoomEventController {
         return roomEventService.saveRoomEvent(roomEventDTO);
     }
 
-    @GetMapping("/seed") // Skapa en ny endpoint för att köra seed-metoden
+    @GetMapping("/seed")
     public void seedEvents() {
-        eventSeeder.seedEvents(); // Anropa seed-metoden från EventSeeder
+        eventSeeder.seedEvents();
     }
-
-    // Andra endpoint-metoder för att hantera andra operationer på rumshändelser kan läggas till här
 
     @GetMapping("/{roomId}")
-    public String getRoomEventsByRoomId(@PathVariable Long roomId, Model model) {
-        List<RoomEventDTO> roomEvents = roomEventService.getRoomEventsByRoomId(roomId);
-        model.addAttribute("roomEvents", roomEvents);
-        return "RoomEvent";
+    public List<RoomEventDTO> getRoomEventsByRoomId(@PathVariable Long roomId) {
+        return roomEventService.getRoomEventsByRoomId(roomId);
     }
-
-
 }
