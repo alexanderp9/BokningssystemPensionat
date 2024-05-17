@@ -2,11 +2,17 @@ package com.example.pensionatdb;
 
 import com.example.pensionatdb.dtos.RoomEventDTO;
 import com.example.pensionatdb.models.RoomEvent;
+import com.example.pensionatdb.models.SpecialRoomEvent;
 import com.example.pensionatdb.services.RoomEventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.rabbitmq.client.*;
-
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.DeliverCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +30,20 @@ public class EventConsumer {
     public EventConsumer(RoomEventService roomEventService) {
         this.roomEventService = roomEventService;
         this.mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        configureObjectMapper();
+        System.out.println("EventConsumer initialized with RoomEventService");
+    }
+
+    private void configureObjectMapper() {
+        PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
+                .allowIfSubType(RoomEvent.class)
+                .build();
+
+        SimpleModule module = new SimpleModule();
+        module.registerSubtypes(SpecialRoomEvent.class);
+
+        mapper.registerModule(module)
+                .activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL);
     }
 
     public void consumeEvents() throws IOException, TimeoutException {
@@ -41,14 +61,21 @@ public class EventConsumer {
             String message = new String(delivery.getBody(), "UTF-8");
             System.out.println(" [x] Received '" + message + "'");
 
-            // Konvertera JSON-meddelandet till ett RoomEvent-objekt
-            RoomEvent roomEvent = mapper.readValue(message, RoomEvent.class);
+            try {
+                // Konvertera JSON-meddelandet till ett RoomEvent-objekt
+                RoomEvent roomEvent = mapper.readValue(message, RoomEvent.class);
+                System.out.println(" [x] Parsed RoomEvent: " + roomEvent);
 
-            RoomEventDTO roomEventDTO = roomEventService.convertToDTO(roomEvent);
+                RoomEventDTO roomEventDTO = roomEventService.convertToDTO(roomEvent);
+                System.out.println(" [x] Converted to DTO: " + roomEventDTO);
 
-            // Gör insättning i databasen
-            roomEventService.saveRoomEvent(roomEventDTO);
-            System.out.println(" [x] Inserted event into database");
+                // Gör insättning i databasen
+                roomEventService.saveRoomEvent(roomEventDTO);
+                System.out.println(" [x] Inserted event into database");
+            } catch (Exception e) {
+                System.err.println(" [!] Error processing message: " + e.getMessage());
+                e.printStackTrace();
+            }
         };
 
         channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {

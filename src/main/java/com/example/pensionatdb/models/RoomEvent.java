@@ -1,5 +1,7 @@
 package com.example.pensionatdb.models;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,10 +14,16 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = RoomEvent.class, name = "roomEvent"),
+        @JsonSubTypes.Type(value = SpecialRoomEvent.class, name = "specialRoomEvent")
+})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public class RoomEvent {
 
     @Id
