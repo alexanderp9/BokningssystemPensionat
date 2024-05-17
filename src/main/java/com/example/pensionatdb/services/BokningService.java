@@ -33,7 +33,7 @@ public class BokningService {
     private final kundRepo kundRepo;
     private final rumRepo rumRepo;
 
-    RestTemplate rt = new RestTemplate();
+
 
     @Autowired
     public BokningService(bokningRepo bokningRepo, kundRepo kundRepo, rumRepo rumRepo) {
@@ -176,39 +176,8 @@ public class BokningService {
         return true;
     }
 
-    public boolean checkBlacklist(String email) {
-        String url = "https://javabl.systementor.se/api/stefan/blacklist?email=" + email;
-        try {
-            ResponseEntity<String> response = rt.getForEntity(url, String.class);
-            if (response.getStatusCode().is2xxSuccessful()) {
-                String responseBody = response.getBody();
-                log.info("responsen från api " + responseBody);
 
-                ObjectMapper objectMapper = new ObjectMapper();
-                JsonNode responseArray = objectMapper.readTree(responseBody);
 
-                for (JsonNode node : responseArray) {
-                    String nodeEmail = node.get("email").asText();
-                    boolean ok = node.get("ok").asBoolean();
-                    if (nodeEmail.equalsIgnoreCase(email) && !ok) {
-                        return true; // mailen är blacklistat
-                    }
-                }
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-
-            return false;
-        }
-        return false;
-    }
-
-    public String getEmail(Long kundId) {
-        Kund kund = kundRepo.findById(kundId).orElse(null);
-        assert kund != null;
-        return kund.getEmail();
-    }
 }
 
 

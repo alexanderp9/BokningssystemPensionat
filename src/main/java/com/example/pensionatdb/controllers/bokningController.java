@@ -2,6 +2,7 @@ package com.example.pensionatdb.controllers;
 
 import com.example.pensionatdb.dtos.BokningDTO;
 import com.example.pensionatdb.models.Rum;
+import com.example.pensionatdb.services.BlacklistService;
 import com.example.pensionatdb.services.BokningService;
 import com.example.pensionatdb.services.KundService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class bokningController {
 
     private final BokningService bokningService;
     private final KundService ks;
+    private final BlacklistService blacklistService;
 
     private static final Logger log = LoggerFactory.getLogger(bokningController.class);
 
@@ -47,7 +49,7 @@ public class bokningController {
 
     @PostMapping("/bokning/add")
     public RedirectView addBokning(@ModelAttribute("bokningDTO") BokningDTO bokningDTO) {
-        if (bokningService.checkBlacklist(bokningService.getEmail(bokningDTO.getKundId()))) {
+        if (blacklistService.checkBlacklist(blacklistService.getEmail(bokningDTO.getKundId()))) {
             log.info("Personen är blacklistad från att göra en bokning.");
             return new RedirectView("/bokning");
         }

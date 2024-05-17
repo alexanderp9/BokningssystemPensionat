@@ -12,6 +12,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.net.URL;
 import java.util.List;
 
+
+// ingen wrapper class i denna.
+
 @SpringBootApplication
 public class ShipperConsoleApplication implements CommandLineRunner {
 
