@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hantera Svartlista</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            background: antiquewhite;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: row;
+            margin-top: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+            text-transform: uppercase;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        #blacklistContainer, #formContainer {
+            background-color: white;
+            width: 60%;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #blacklistContainer {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .blacklist-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .blacklist-info:hover {
+            background-color: antiquewhite;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="email"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="button-container">
+    <button type="button" onclick="window.location.href='/';">Tillbaka</button>
+</div>
+
+<h1>Svartlista Administration</h1>
+
+<div id="blacklistContainer">
+    <h2>Nuvarande Svartlista</h2>
+    <ul style="list-style: none; padding: 0;">
+        <li th:each="entry : ${blacklisted}">
+            <div class="blacklist-info"
+                 th:attr="data-id=${entry.get('id').asText()}, data-email=${entry.get('email').asText()}, data-ok=${entry.get('ok').asBoolean()}"
+                 onclick="document.getElementById('email').value = this.getAttribute('data-email');
+                     document.getElementById('ok').value = this.getAttribute('data-ok') === 'true' ? 'true' : 'false';
+                     document.getElementById('blacklistId').value = this.getAttribute('data-id');">
+                <span th:text="'Email: ' + ${entry.get('email').asText()}"></span>
+                <span th:text="'Status: ' + (${entry.get('ok').asBoolean()} ? 'OK' : 'Svartlistad')"></span>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div id="formContainer">
+    <h2>Hantera Svartlistning</h2>
+    <form id="blacklistForm" method="post">
+        <input type="hidden" id="blacklistId" name="blacklistId"/>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="ok">Status:</label>
+            <select id="ok" name="ok">
+                <option value="true">Ok</option>
+                <option value="false">Svartlista</option>
+            </select>
+        </div>
+        <div class="button-container">
+            <button type="submit" onclick="document.getElementById('blacklistForm').action = '/blacklist/add';">Lägg till</button>
+            <button type="button" onclick="document.getElementById('blacklistForm').action = '/blacklist/update'; document.getElementById('blacklistForm').submit();">Uppdatera</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
