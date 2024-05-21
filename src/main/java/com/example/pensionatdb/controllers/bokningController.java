@@ -14,10 +14,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.time.LocalDate;
 import java.util.List;
 
-
-@Controller()
+@Controller
 @RequiredArgsConstructor
 public class bokningController {
 
@@ -27,7 +27,6 @@ public class bokningController {
 
     private static final Logger log = LoggerFactory.getLogger(bokningController.class);
 
-
     @GetMapping("/bokning")
     public String getAllBokning(Model model) {
         List<BokningDTO> bokningar = bokningService.getAllBokningDTOs();
@@ -35,7 +34,6 @@ public class bokningController {
         log.info(bokningar.toString());
         return "bookingpage";
     }
-
 
     @GetMapping("/bokning/{id}")
     public ResponseEntity<BokningDTO> findById(@PathVariable Long id) {
@@ -67,13 +65,15 @@ public class bokningController {
     public RedirectView deleteBooking(@RequestParam Long bookingId) {
         bokningService.deleteBokning(bookingId);
         return new RedirectView("/bokning", true);
-
     }
 
-
     @GetMapping("/bokning/search")
-    public String searchAvailableRooms(@RequestParam("startSlutDatum") String startSlutDatum, Model model) {
-        List<Rum> availableRooms = bokningService.searchAvailableRoomsByDateRange(startSlutDatum);
+    public String searchAvailableRooms(@RequestParam("startDatum") String startDatumStr,
+                                       @RequestParam("slutDatum") String slutDatumStr, Model model) {
+        LocalDate startDatum = LocalDate.parse(startDatumStr);
+        LocalDate slutDatum = LocalDate.parse(slutDatumStr);
+
+        List<Rum> availableRooms = bokningService.searchAvailableRoomsByDateRange(startDatum, slutDatum);
         List<BokningDTO> bokningar = bokningService.getAllBokningDTOs();
 
         model.addAttribute("availableRooms", availableRooms);
@@ -82,7 +82,4 @@ public class bokningController {
         return "bookingpage";
     }
 
-
 }
-
-

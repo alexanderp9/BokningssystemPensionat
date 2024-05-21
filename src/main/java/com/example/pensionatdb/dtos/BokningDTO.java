@@ -3,11 +3,14 @@ package com.example.pensionatdb.dtos;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class BokningDTO {
     private Long id;
     private int nätter;
-    private String startSlutDatum;
+    private LocalDate startDatum;
+    private LocalDate slutDatum;
     private String namn;
     private long kundId;
     private long rumId;

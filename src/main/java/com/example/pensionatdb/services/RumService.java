@@ -40,9 +40,7 @@ public class RumService {
     }
 
     public boolean isRoomAvailable(Rum rum, LocalDate startDate, LocalDate endDate) {
-        String startEndDate = startDate.format(DateTimeFormatter.ofPattern("yyMMdd")) + "-" +
-                endDate.format(DateTimeFormatter.ofPattern("yyMMdd"));
-        return bokningService.isRoomAvailable(rum, startEndDate);
+        return bokningService.isRoomAvailable(rum, startDate, endDate);
     }
 
     public void deleteRumById(Long id) {
