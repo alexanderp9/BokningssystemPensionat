@@ -25,12 +25,14 @@ public class BokningService {
     private final bokningRepo bokningRepo;
     private final kundRepo kundRepo;
     private final rumRepo rumRepo;
+    private final DiscountService discountService;
 
     @Autowired
-    public BokningService(bokningRepo bokningRepo, kundRepo kundRepo, rumRepo rumRepo) {
+    public BokningService(bokningRepo bokningRepo, kundRepo kundRepo, rumRepo rumRepo, DiscountService discountService) {
         this.bokningRepo = bokningRepo;
         this.kundRepo = kundRepo;
         this.rumRepo = rumRepo;
+        this.discountService = discountService;
     }
 
     public List<Bokning> findBokningarByKund(Kund kund) {
@@ -93,6 +95,9 @@ public class BokningService {
             return null;
         }
 
+        double roomPrice = rum.getRumTyp().equalsIgnoreCase("Enkelrum") ? 100.0 : 200.0;
+        double discountedPrice = discountService.calculateDiscount(kund, bokningDTO.getStartDatum(), bokningDTO.getSlutDatum(), roomPrice);
+
         Bokning bokning = new Bokning(
                 bokningDTO.getId(),
                 bokningDTO.getNätter(),
@@ -103,6 +108,8 @@ public class BokningService {
                 bokningDTO.isAvbokad()
         );
 
+        log.info("Totalpris med rabatt: " + discountedPrice);
+
         Bokning savedBokning = bokningRepo.save(bokning);
         return convertToBokningDTO(savedBokning);
     }
@@ -112,7 +119,7 @@ public class BokningService {
     }
 
     public boolean isRoomAvailable(Rum rum, LocalDate startDatum, LocalDate slutDatum) {
-        List<Bokning> existingBookings = bokningRepo.findByRumAndStartDatumBetween(rum, startDatum, slutDatum);
+        List<Bokning> existingBookings = bokningRepo.findByRumAndStartDatumLessThanEqualAndSlutDatumGreaterThanEqual(rum, slutDatum, startDatum);
 
         for (Bokning booking : existingBookings) {
             if (startDatum.isBefore(booking.getSlutDatum()) && slutDatum.isAfter(booking.getStartDatum())) {
@@ -133,5 +140,4 @@ public class BokningService {
         }
         return availableRooms;
     }
-
 }
