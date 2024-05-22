@@ -3,6 +3,7 @@ package com.example.pensionatdb;
 
 import com.example.pensionatdb.models.allcustomers;
 import com.example.pensionatdb.models.customers;
+import com.example.pensionatdb.services.XmlStreamProvider;
 import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,43 +14,33 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.pensionatdb.repos.customersRepo;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 
-@SpringBootApplication
+@ComponentScan
 public class CustomerConsoleApplication implements CommandLineRunner {
 
     @Autowired
     private customersRepo customersRepository;
 
+    @Autowired
+    private XmlStreamProvider xmlStreamProvider;
+
     @Override
     public void run(String... args) throws Exception {
-        // Skapa en JacksonXmlModule och XmlMapper för att pars XML-data
-        JacksonXmlModule module = new JacksonXmlModule();
-        module.setDefaultUseWrapper(false);
-        XmlMapper xmlMapper = new XmlMapper(module);
-
-        // Hämta XML-data från länken
-        URL url = new URL("https://javaintegration.systementor.se/customers");
-        allcustomers allCustomers = xmlMapper.readValue(url, allcustomers.class);
-
-        // Hämta befintliga kunder från databasen
+        XmlMapper xmlMapper = new XmlMapper(new JacksonXmlModule());
+        InputStream inputStream = xmlStreamProvider.getDataStream();
+        customers[] allCustomers = xmlMapper.readValue(inputStream, customers[].class);
+        
         List<customers> existingCustomers = customersRepository.findAll();
 
-        // Loopa genom kunderna från XML och spara dem i databasen
-        for (customers customer : allCustomers.getCustomers()) {
-            // Kontrollera om kunden redan finns i databasen
-            boolean customerExists = existingCustomers.stream()
-                    .anyMatch(existingCustomer -> existingCustomer.getCompanyName().equals(customer.getCompanyName()));
-
-            // Om kunden inte finns i databasen, spara den
-            if (!customerExists) {
-                customersRepository.save(customer);
-            }
-        }
+        Arrays.stream(allCustomers)
+                .filter(customer -> existingCustomers.stream().noneMatch(existingCustomer -> existingCustomer.getCompanyName().equals(customer.getCompanyName())))
+                .forEach(customersRepository::save);
     }
-
     public static void main(String[] args) {
         SpringApplication.run(CustomerConsoleApplication.class, args);
     }
