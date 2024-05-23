@@ -22,7 +22,7 @@ import java.util.concurrent.TimeoutException;
 @Component
 public class EventConsumer {
 
-    private final String queueName = "dd007e46-8d2d-47f7-9429-3bf8cb5802c9"; // Kö-ID
+    private final String queueName = "dd007e46-8d2d-47f7-9429-3bf8cb5802c9";
     private final RoomEventService roomEventService;
     private final ObjectMapper mapper;
 
