@@ -2,31 +2,35 @@ package com.example.pensionatdb;
 
 import com.example.pensionatdb.models.Shipper;
 import com.example.pensionatdb.repos.shippersRepo;
+import com.example.pensionatdb.services.XmlStreamProvider;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-@SpringBootApplication
+@ComponentScan
 public class ShipperConsoleApplication implements CommandLineRunner {
 
     @Autowired
     private shippersRepo shippersRepo;
 
+    @Autowired
+    private XmlStreamProvider xmlStreamProvider;
+
     @Override
     public void run(String... args) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-
-        //mapper för att ignorera de fält vi inte är intresserad av
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        URL url = new URL("https://javaintegration.systementor.se/shippers");
-        Shipper[] shippers = mapper.readValue(url, Shipper[].class);
+        InputStream inputStream = xmlStreamProvider.getDataStreamShippers();
+        Shipper[] shippers = mapper.readValue(inputStream, Shipper[].class);
 
         List<Shipper> existingShippers = shippersRepo.findAll();
 
