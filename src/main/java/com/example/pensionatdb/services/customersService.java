@@ -20,7 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class customersService {
     private final customersRepo customersRepo;
-    private final XmlStreamProvider xmlStreamProvider;
+    public final XmlStreamProvider xmlStreamProvider;
 
     public customersDTO customersToCustomersDTO(customers c) {
         return customersDTO.builder()
