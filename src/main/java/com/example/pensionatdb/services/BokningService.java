@@ -96,7 +96,7 @@ public class BokningService {
         }
 
         double roomPrice = rum.getRumTyp().equalsIgnoreCase("Enkelrum") ? 100.0 : 200.0;
-        double discountedPrice = discountService.calculateDiscount(kund, bokningDTO.getStartDatum(), bokningDTO.getSlutDatum(), roomPrice);
+        double discountedPrice = discountService.discountBokning(kund, bokningDTO.getNätter(), bokningDTO.getStartDatum(), bokningDTO.getSlutDatum(), roomPrice);
 
         Bokning bokning = new Bokning(
                 bokningDTO.getId(),

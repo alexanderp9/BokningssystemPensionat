@@ -15,36 +15,35 @@ public class DiscountService {
 
     private final bokningRepo bokningRepo;
 
+
+
     @Autowired
     public DiscountService(bokningRepo bokningRepo) {
         this.bokningRepo = bokningRepo;
     }
-
-    public double calculateDiscount(Kund kund, LocalDate startDate, LocalDate endDate, double roomPrice) {
+    public double discountBokning(Kund kund, int nätter, LocalDate startDate, LocalDate endDate, double roomPrice) {
         double discount = 0.0;
-        int nights = (int) (endDate.toEpochDay() - startDate.toEpochDay());
 
-        if (nights >= 2) {
-            discount += 0.005; // 0.5% rabatt för bokningar med två eller fler nätter
+        // rabatt för bokning 2 elr fler nätter
+        if (nätter >= 2) {
+            discount += 0.005;
         }
-
-        // om en av nätterna är söndag till måndag
+        // natt från söndag till måndag rabatt
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
             if (date.getDayOfWeek() == DayOfWeek.SUNDAY && date.plusDays(1).getDayOfWeek() == DayOfWeek.MONDAY) {
-                discount += 0.02; // 2% rabatt för natt från söndag till måndag
+                discount += 0.02;
                 break;
             }
         }
-
-        // om kunden har bokat minst 10 nätter det senaste året
+        // rabatt för kund med mer än 10 nätter bokade under 1 år
         LocalDate oneYearAgo = LocalDate.now().minusYears(1);
         List<Bokning> bokningar = bokningRepo.findByKundAndStartDatumAfter(kund, oneYearAgo);
         int totalNights = bokningar.stream().mapToInt(Bokning::getNätter).sum();
 
         if (totalNights >= 10) {
-            discount += 0.02; // Ytterligare 2% rabatt för kunder som bokat minst 10 nätter senaste året
+            discount += 0.02;
         }
 
-        return roomPrice * (1 - discount);
+        return roomPrice * nätter * (1 - discount);
     }
 }
