@@ -22,7 +22,7 @@ public class customersTestIT {
     customersService sut;
 
     @Test
-    void getBooksWillFetch() throws IOException {
+    void getCustomersWillFetch() throws IOException {
         sut = new customersService(cr, xmlStreamProvider);
         Scanner s = new Scanner(sut.xmlStreamProvider.getDataStreamCustomers()).useDelimiter("\\A");
         String result = s.hasNext() ? s.next() : "";
@@ -51,6 +51,19 @@ public class customersTestIT {
         assertTrue(result.contains("</phone>"));
         assertTrue(result.contains("<fax>"));
         assertTrue(result.contains("</fax>"));
+
+    }
+
+    @Test
+    void getShipperWillFetch() throws IOException {
+        sut = new customersService(cr, xmlStreamProvider);
+        Scanner s = new Scanner(sut.xmlStreamProvider.getDataStreamCustomers()).useDelimiter("\\A");
+        String result = s.hasNext() ? s.next() : "";
+
+        assertTrue(result.contains("id"));
+        assertTrue(result.contains("companyName"));
+        assertTrue(result.contains("phone"));
+
 
     }
 

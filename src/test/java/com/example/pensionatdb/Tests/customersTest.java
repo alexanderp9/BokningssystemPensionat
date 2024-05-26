@@ -6,24 +6,26 @@ import com.example.pensionatdb.services.XmlStreamProvider;
 import com.example.pensionatdb.services.customersService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 public class customersTest {
 
     private XmlStreamProvider xmlStreamProvider = mock(XmlStreamProvider.class);
-    private customersRepo cr = mock(customersRepo.class);
+    private customersRepo customersRepo = mock(customersRepo.class);
 
     customersService sut;
 
     @BeforeEach()
     void setup(){
-        sut = new customersService(cr,xmlStreamProvider);
+        sut = new customersService(customersRepo,xmlStreamProvider);
     }
 
     @Test
@@ -41,5 +43,36 @@ public class customersTest {
         assertEquals("gardener", result.get(0).getContactTitle() );
 
     }
+    @Test
+    void fetchAndSaveCustomersShouldInsertNewRecords() throws IOException {
+        // Arrange
+        when(xmlStreamProvider.getDataStreamCustomers())
+                .thenReturn(getClass().getClassLoader().getResourceAsStream("customers.xml"));
+        when(customersRepo.findById(any(Long.class))).thenReturn(Optional.empty());
+
+        // Act
+        sut.fetchAndSaveCustomers();
+
+        // Assert
+        verify(customersRepo, times(3)).save(argThat(customer -> customer.getId() == null));
+    }
+
+    @Test
+    void fetchAndSaveBooksShouldUpdateExistingRecords() throws IOException {
+        // Arrange
+        customers existing = new customers();
+        existing.setId(123L);
+
+        when(xmlStreamProvider.getDataStreamCustomers()).thenReturn(getClass().getClassLoader().getResourceAsStream("customers.xml"));
+        when(customersRepo.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+        when(customersRepo.findById(123L)).thenReturn(Optional.of(existing));
+
+        // Act
+        sut.fetchAndSaveCustomers();
+
+        // Assert
+        verify(customersRepo, times(3)).save(argThat(customer -> customer.getId() == null || customer.getId().equals(123L)));
+    }
+
 
 }
