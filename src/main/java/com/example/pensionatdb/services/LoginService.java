@@ -1,5 +1,6 @@
 package com.example.pensionatdb.services;
 
+import com.example.pensionatdb.models.Role;
 import com.example.pensionatdb.models.User;
 import com.example.pensionatdb.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class LoginService {
         User user = new User();
         user.setUsername(username);
         user.setPassword(encodedPassword);
+        user.setRole(Role.USER);
         userRepository.save(user);
     }
 }

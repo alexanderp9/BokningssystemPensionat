@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Startsida</title>
+    <title>Admin Panel</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,11 +13,10 @@
             flex-direction: column;
             align-items: center;
             height: 100vh;
-            background: antiquewhite;
+            background: #f0f0f0;
         }
         .button-container {
-            display: flex;
-            flex-direction: row;
+            margin-top: 20px;
         }
         .button {
             padding: 10px 20px;
@@ -41,19 +40,13 @@
     </style>
 </head>
 <body>
+<h1>Admin Panel</h1>
+<p>Välkommen till adminpanelen!</p>
+
 <div class="button-container">
-    <a th:href="@{/avtalskunder}" class="button">Avtalskunder</a>
-    <a th:href="@{/kund}" class="button">Kund</a>
-    <a th:href="@{/bokning}" class="button">Bokning</a>
-    <a th:href="@{/rum}" class="button">Rum</a>
-
-    <sec:authorize access="!isAuthenticated()">
-        <a th:href="@{/login}" class="button">Logga in</a>
-    </sec:authorize>
-
-    <a th:href="@{/register}" class="button">Registrera</a>
-
+    <a href="/admin/users" class="button">Lista Användare</a>
+    <a href="/admin/users/new" class="button">Skapa Användare</a>
 </div>
-<h1>Bokningssystem</h1>
+
 </body>
 </html>

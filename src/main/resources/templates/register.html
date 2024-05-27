@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrera</title>
+    <style>
+        /* Styla popup-rutan */
+        .popup {
+            display: none; /* Dölj popupen som standard */
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f4f4f4;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+<h1>Registrera</h1>
+<form action="/register" method="post">
+    <label for="username">Användarnamn:</label>
+    <input type="text" id="username" name="username" required><br>
+    <label for="password">Lösenord:</label>
+    <input type="password" id="password" name="password" required><br>
+    <button type="submit">Registrera</button>
+</form>
+
+<!-- Popup-ruta för bekräftelsemeddelande -->
+<div id="registrationSuccess" class="popup">
+    Registreringen lyckades!
+</div>
+
+<!-- JavaScript för att visa popup-rutan -->
+<script>
+    // Visa popup-rutan när sidan laddas om URL-parametern "success" finns
+    window.onload = function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var success = urlParams.get('success');
+        if (success === 'true') {
+            document.getElementById('registrationSuccess').style.display = 'block';
+        }
+    };
+</script>
+
+</body>
+</html>

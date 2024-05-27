@@ -47,13 +47,18 @@
     <a th:href="@{/bokning}" class="button">Bokning</a>
     <a th:href="@{/rum}" class="button">Rum</a>
 
-    <sec:authorize access="!isAuthenticated()">
-        <a th:href="@{/login}" class="button">Logga in</a>
+    <sec:authorize access="isAuthenticated()">
+        <form th:action="@{/logout}" method="post" style="display: inline;">
+            <input type="submit" class="button" value="Logga ut">
+        </form>
+
     </sec:authorize>
 
-    <a th:href="@{/register}" class="button">Registrera</a>
+    <sec:authorize access="hasAuthority('Admin')">
+        <a th:href="@{/admin}" class="button">Admin</a>
+    </sec:authorize>
 
 </div>
-<h1>Bokningssystem</h1>
+<h1>Välkommen till Pensionat</h1>
 </body>
 </html>

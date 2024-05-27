@@ -46,39 +46,49 @@ public class EventConsumer {
                 .activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL);
     }
 
-    public void consumeEvents() throws IOException, TimeoutException {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("128.140.81.47");
-        factory.setUsername("djk47589hjkew789489hjf894");
-        factory.setPassword("sfdjkl54278frhj7");
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
+    public void consumeEvents() {
+        try {
+            ConnectionFactory factory = new ConnectionFactory();
+            factory.setHost("128.140.81.47");
+            factory.setUsername("djk47589hjkew789489hjf894");
+            factory.setPassword("sfdjkl54278frhj7");
+            Connection connection = factory.newConnection();
+            Channel channel = connection.createChannel();
 
-        channel.queueDeclare(queueName, true, false, false, null);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+            channel.queueDeclare(queueName, true, false, false, null);
+            System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
-        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
-            System.out.println(" [x] Received '" + message + "'");
+            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+                String message = new String(delivery.getBody(), "UTF-8");
+                System.out.println(" [x] Received '" + message + "'");
 
-            try {
-                // Konvertera JSON-meddelandet till ett RoomEvent-objekt
-                RoomEvent roomEvent = mapper.readValue(message, RoomEvent.class);
-                System.out.println(" [x] Parsed RoomEvent: " + roomEvent);
+                try {
+                    // Konvertera JSON-meddelandet till ett RoomEvent-objekt
+                    RoomEvent roomEvent = mapper.readValue(message, RoomEvent.class);
+                    System.out.println(" [x] Parsed RoomEvent: " + roomEvent);
 
-                RoomEventDTO roomEventDTO = roomEventService.convertToDTO(roomEvent);
-                System.out.println(" [x] Converted to DTO: " + roomEventDTO);
+                    RoomEventDTO roomEventDTO = roomEventService.convertToDTO(roomEvent);
+                    System.out.println(" [x] Converted to DTO: " + roomEventDTO);
 
-                // Gör insättning i databasen
-                roomEventService.saveRoomEvent(roomEventDTO);
-                System.out.println(" [x] Inserted event into database");
-            } catch (Exception e) {
-                System.err.println(" [!] Error processing message: " + e.getMessage());
-                e.printStackTrace();
-            }
-        };
+                    // Gör insättning i databasen
+                    roomEventService.saveRoomEvent(roomEventDTO);
+                    System.out.println(" [x] Inserted event into database");
+                } catch (Exception e) {
+                    System.err.println(" [!] Error processing message: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            };
 
-        channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {
-        });
+            channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {});
+        } catch (IOException e) {
+            // Hantera IOException
+            System.err.println("IOException occurred while consuming events: " + e.getMessage());
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            // Hantera TimeoutException
+            System.err.println("TimeoutException occurred while consuming events: " + e.getMessage());
+            e.printStackTrace();
+        }
+
     }
 }

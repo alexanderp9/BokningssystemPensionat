@@ -19,19 +19,18 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Skapa en standardadminanvändare
         User admin = new User();
         admin.setUsername("admin");
-        admin.setPassword(passwordEncoder.encode("admin123")); // Lösenordet bör vara krypterat
+        admin.setPassword(passwordEncoder.encode("admin123"));
         admin.setRole(Role.ADMIN);
 
-        // Skapa en standardreceptionistanvändare
+
         User receptionist = new User();
         receptionist.setUsername("receptionist");
-        receptionist.setPassword(passwordEncoder.encode("receptionist123")); // Lösenordet bör vara krypterat
+        receptionist.setPassword(passwordEncoder.encode("receptionist123"));
         receptionist.setRole(Role.RECEPTIONIST);
 
-        // Spara användarna i databasen
+
         userRepository.save(admin);
         userRepository.save(receptionist);
     }
