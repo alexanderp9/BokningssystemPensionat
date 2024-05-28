@@ -13,19 +13,14 @@ public class UserController {
     @Autowired
     private LoginService loginService;
 
-    // Metod för att visa registreringssidan
     @GetMapping("/register")
     public String showRegisterPage() {
-        return "register"; // Returnera namnet på din HTML-sida för registrering
+        return "register";
     }
 
-    // Metod för att hantera registrering av användare
     @PostMapping("/register")
     public String registerUser(@RequestParam String username, @RequestParam String password) {
-        // Anropa LoginService för att registrera användaren
         loginService.register(username, password);
-
-        // Returnera vyn för bekräftelse av registreringen
         return "registration_success";
     }
 }

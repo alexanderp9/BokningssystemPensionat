@@ -47,18 +47,20 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/js/**", "/css/**", "/images/**", "/login", "/logout", "/register", "/queues/**").permitAll()
+                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/receptionist/**").hasAuthority("ROLE_RECEPTIONIST")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login") // Specify custom login page
-                        .loginProcessingUrl("/login") // Ensure form action URL matches this
-                        .defaultSuccessUrl("/home", true) // Redirect to /home after successful login
-                        .failureUrl("/login?error=true") // Redirect to login page with error on failure
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/home", true)
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .logout((logout) -> {
                     logout.permitAll();
-                    logout.logoutSuccessUrl("/"); // Redirect to root after logout
+                    logout.logoutSuccessUrl("/");
                 })
                 .csrf(AbstractHttpConfigurer::disable);
 
