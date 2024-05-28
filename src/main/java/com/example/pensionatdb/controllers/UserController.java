@@ -21,6 +21,6 @@ public class UserController {
     @PostMapping("/register")
     public String registerUser(@RequestParam String username, @RequestParam String password) {
         loginService.register(username, password);
-        return "registration_success";
+        return "home";
     }
 }
