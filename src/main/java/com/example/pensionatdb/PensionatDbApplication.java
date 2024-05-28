@@ -17,3 +17,14 @@ public class PensionatDbApplication {
         }
     }
 }
+
+
+
+//if(args.length == 0) {
+//        SpringApplication.run(PensionatDbApplication.class, args);
+//        }else if(Objects.equals(args[0], "CustomerConsoleApplication")){
+//SpringApplication application = new SpringApplication(CustomerConsoleApplication.class);
+//            application.setWebApplicationType(WebApplicationType.NONE);
+//            application.run(args);
+//
+//        }
