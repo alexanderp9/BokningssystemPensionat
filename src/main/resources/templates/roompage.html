@@ -80,12 +80,18 @@
 <div id="form-container">
     <form id="rumlistaform" method="post" action="/rum">
         <input type="hidden" id="roomId" name="roomId"/>
+
         <label for="rumTyp">Rumstyp:</label>
-        <input type="text" id="rumTyp" name="rumTyp" onchange="validateExtraSäng()">
+        <select id="rumTyp" name="rumTyp" onchange="validateExtraSäng()">
+            <option value="Enkelrum">Enkelrum</option>
+            <option value="Dubbelrum">Dubbelrum</option>
+        </select>
+
         <label for="extraSäng">Extra sängar:</label>
         <input type="number" id="extraSäng" name="extraSäng" min="0" max="2"/>
     </form>
 </div>
+
 
 </body>
 

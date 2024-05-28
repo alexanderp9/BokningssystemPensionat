@@ -6,11 +6,9 @@ import com.example.pensionatdb.repos.rumRepo;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,7 +21,6 @@ public class RumService {
     private final BokningService bokningService;
     private static final Logger log = LoggerFactory.getLogger(RumService.class);
 
-
     public List<RumDTO> getAllRumDTOs() {
         List<Rum> rumList = rumRepo.findAll();
         return rumList.stream()
@@ -31,18 +28,20 @@ public class RumService {
                 .collect(Collectors.toList());
     }
 
-
     public RumDTO addRumFromDTO(RumDTO rumDTO) {
         Rum rum = convertToRum(rumDTO);
+        if (rum.getRumTyp().equalsIgnoreCase("Enkelrum")) {
+            rum.setPrice(100);
+        } else if (rum.getRumTyp().equalsIgnoreCase("Dubbelrum")) {
+            rum.setPrice(200);
+        }
         Rum savedRum = rumRepo.save(rum);
         log.info("Rum added: " + savedRum.toString());
         return convertToRumDTO(savedRum);
     }
 
     public boolean isRoomAvailable(Rum rum, LocalDate startDate, LocalDate endDate) {
-        String startEndDate = startDate.format(DateTimeFormatter.ofPattern("yyMMdd")) + "-" +
-                endDate.format(DateTimeFormatter.ofPattern("yyMMdd"));
-        return bokningService.isRoomAvailable(rum, startEndDate);
+        return bokningService.isRoomAvailable(rum, startDate, endDate);
     }
 
     public void deleteRumById(Long id) {
@@ -62,6 +61,7 @@ public class RumService {
         rumDTO.setId(rum.getId());
         rumDTO.setRumTyp(rum.getRumTyp());
         rumDTO.setExtraSäng(rum.getExtraSäng());
+        rumDTO.setPrice(rum.getPrice());
         return rumDTO;
     }
 
@@ -72,4 +72,5 @@ public class RumService {
         rum.setExtraSäng(rumDTO.getExtraSäng());
         return rum;
     }
+
 }

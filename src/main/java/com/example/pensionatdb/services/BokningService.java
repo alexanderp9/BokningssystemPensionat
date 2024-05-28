@@ -10,56 +10,47 @@ import com.example.pensionatdb.repos.rumRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
 public class BokningService {
 
+    private static final Logger log = Logger.getLogger(BokningService.class.getName());
+
     private final bokningRepo bokningRepo;
     private final kundRepo kundRepo;
     private final rumRepo rumRepo;
+    private final DiscountService discountService;
 
     @Autowired
-    public BokningService(bokningRepo bokningRepo, kundRepo kundRepo, rumRepo rumRepo) {
+    public BokningService(bokningRepo bokningRepo, kundRepo kundRepo, rumRepo rumRepo, DiscountService discountService) {
         this.bokningRepo = bokningRepo;
         this.kundRepo = kundRepo;
         this.rumRepo = rumRepo;
+        this.discountService = discountService;
     }
 
     public List<Bokning> findBokningarByKund(Kund kund) {
         return bokningRepo.findByKund(kund);
     }
 
-
     private BokningDTO convertToBokningDTO(Bokning bokning) {
         BokningDTO dto = new BokningDTO();
         dto.setId(bokning.getId());
         dto.setNätter(bokning.getNätter());
-        dto.setStartSlutDatum(bokning.getStartSlutDatum());
+        dto.setStartDatum(bokning.getStartDatum());
+        dto.setSlutDatum(bokning.getSlutDatum());
         dto.setNamn(bokning.getKund().getNamn());
         dto.setKundId(bokning.getKund().getId());
         dto.setRumId(bokning.getRum().getId());
+        dto.setEmail(bokning.getKund().getEmail());
 
         return dto;
-    }
-
-
-
-
-    private Bokning updateBokningDetails(Bokning existingBokning, Bokning updatedBokning) {
-        existingBokning.setNätter(updatedBokning.getNätter());
-        existingBokning.setStartSlutDatum(updatedBokning.getStartSlutDatum());
-        existingBokning.setKund(updatedBokning.getKund());
-        existingBokning.setRum(updatedBokning.getRum());
-        return bokningRepo.save(existingBokning);
     }
 
     public Bokning convertToEntity(BokningDTO bokningDTO) {
@@ -69,7 +60,8 @@ public class BokningService {
         return new Bokning(
                 bokningDTO.getId(),
                 bokningDTO.getNätter(),
-                bokningDTO.getStartSlutDatum(),
+                bokningDTO.getStartDatum(),
+                bokningDTO.getSlutDatum(),
                 kund,
                 rum,
                 bokningDTO.isAvbokad()
@@ -88,119 +80,64 @@ public class BokningService {
         return optionalBokning.map(this::convertToBokningDTO).orElse(null);
     }
 
-
-
     public BokningDTO addBokningFromDTO(BokningDTO bokningDTO) {
         Rum rum = rumRepo.findById(bokningDTO.getRumId()).orElse(null);
         if (rum == null) {
             return null;
         }
 
-        if (!isRoomAvailable(rum, bokningDTO.getStartSlutDatum())) {
+        if (!isRoomAvailable(rum, bokningDTO.getStartDatum(), bokningDTO.getSlutDatum())) {
             return null;
         }
 
         Kund kund = kundRepo.findById(bokningDTO.getKundId()).orElse(null);
         if (kund == null) {
-
             return null;
         }
+
+        double roomPrice = rum.getRumTyp().equalsIgnoreCase("Enkelrum") ? 100.0 : 200.0;
+        double discountedPrice = discountService.discountBokning(kund, bokningDTO.getNätter(), bokningDTO.getStartDatum(), bokningDTO.getSlutDatum(), roomPrice);
 
         Bokning bokning = new Bokning(
                 bokningDTO.getId(),
                 bokningDTO.getNätter(),
-                bokningDTO.getStartSlutDatum(),
+                bokningDTO.getStartDatum(),
+                bokningDTO.getSlutDatum(),
                 kund,
                 rum,
                 bokningDTO.isAvbokad()
         );
 
+        log.info("Totalpris med rabatt: " + discountedPrice);
+
         Bokning savedBokning = bokningRepo.save(bokning);
         return convertToBokningDTO(savedBokning);
     }
-
 
     public void deleteBokning(Long id) {
         bokningRepo.deleteById(id);
     }
 
-
-
-    public BokningDTO updateBokning(Long id, BokningDTO updatedBokningDTO) {
-        Bokning updatedBokning = convertToEntity(updatedBokningDTO);
-        Optional<Bokning> optionalBokning = bokningRepo.findById(id);
-        if (optionalBokning.isPresent()) {
-            Bokning existingBokning = optionalBokning.get();
-            Bokning savedBokning = updateBokningDetails(existingBokning, updatedBokning);
-            return convertToBokningDTO(savedBokning);
-        } else {
-            throw new RuntimeException("Bokning not found with id: " + id);
-        }
-    }
-
-    public BokningDTO updateBokningFromEntity(Long id, Bokning updatedBokning) {
-        Optional<Bokning> optionalBokning = bokningRepo.findById(id);
-        if (optionalBokning.isPresent()) {
-            Bokning existingBokning = optionalBokning.get();
-            Bokning savedBokning = updateBokningDetails(existingBokning, updatedBokning);
-            return convertToBokningDTO(savedBokning);
-        } else {
-            throw new RuntimeException("Bokning not found with id: " + id);
-        }
-    }
-
-    public boolean isRoomAvailable(Rum rum, String startSlutDatum) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-
-        String[] parts = startSlutDatum.split("-");
-        String startDateStr = parts[0].trim();
-        String endDateStr = parts[1].trim();
-        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
-        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
-
-        List<Bokning> existingBookings = bokningRepo.findByRumAndStartSlutDatumBetween(rum, startDateStr, endDateStr);
+    public boolean isRoomAvailable(Rum rum, LocalDate startDatum, LocalDate slutDatum) {
+        List<Bokning> existingBookings = bokningRepo.findByRumAndStartDatumLessThanEqualAndSlutDatumGreaterThanEqual(rum, slutDatum, startDatum);
 
         for (Bokning booking : existingBookings) {
-            LocalDate bookingStartDate = LocalDate.parse(booking.getStartSlutDatum().substring(0, 6), formatter);
-            LocalDate bookingEndDate = LocalDate.parse(booking.getStartSlutDatum().substring(7), formatter);
-
-            if (startDate.isBefore(bookingEndDate) && endDate.isAfter(bookingStartDate)) {
+            if (startDatum.isBefore(booking.getSlutDatum()) && slutDatum.isAfter(booking.getStartDatum())) {
                 return false;
             }
         }
         return true;
     }
 
-    public List<Rum> searchAvailableRoomsByDateRange(String startSlutDatum) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-        String[] parts = startSlutDatum.split("-");
-        LocalDate startDate = LocalDate.parse(parts[0].trim(), formatter);
-        LocalDate endDate = LocalDate.parse(parts[1].trim(), formatter);
-
+    public List<Rum> searchAvailableRoomsByDateRange(LocalDate startDatum, LocalDate slutDatum) {
         List<Rum> allRooms = rumRepo.findAll();
         List<Rum> availableRooms = new ArrayList<>();
 
         for (Rum rum : allRooms) {
-            if (isRoomAvailable(rum, startDate, endDate)) {
+            if (isRoomAvailable(rum, startDatum, slutDatum)) {
                 availableRooms.add(rum);
             }
         }
         return availableRooms;
     }
-
-    private boolean isRoomAvailable(Rum rum, LocalDate startDate, LocalDate endDate) {
-        List<Bokning> bookings = bokningRepo.findByRum(rum);
-
-        for (Bokning booking : bookings) {
-            LocalDate bookingStartDate = LocalDate.parse(booking.getStartSlutDatum().substring(0, 6), DateTimeFormatter.ofPattern("yyMMdd"));
-            LocalDate bookingEndDate = LocalDate.parse(booking.getStartSlutDatum().substring(7), DateTimeFormatter.ofPattern("yyMMdd"));
-
-            if (!(endDate.isBefore(bookingStartDate) || startDate.isAfter(bookingEndDate))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
 }

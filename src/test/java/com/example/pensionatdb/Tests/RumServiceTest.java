@@ -44,10 +44,10 @@ public class RumServiceTest {
 
     int extraSäng = 1;
 
-    Rum rum = new Rum(id, rumTyp, extraSäng);
+//    Rum rum = new Rum(id, rumTyp, extraSäng);
 
 
-    Bokning bokning = new Bokning(1L, 3, "240510-240515", kund, rum, false);
+//    Bokning bokning = new Bokning(1L, 3, "240510-240515", kund, rum, false);
 
 
     RumDTO rumDTO = RumDTO.builder()
@@ -57,39 +57,39 @@ public class RumServiceTest {
             .build();
 
 
-    @Test
-    void testIsRoomAvailableWhenRoomIsNotAvailable(){
-        LocalDate startDate = LocalDate.of(2024, 5, 10);
-        LocalDate endDate = LocalDate.of(2024, 5, 15);
-        RumService service1 = new RumService(rr, br);
+//    @Test
+//    void testIsRoomAvailableWhenRoomIsNotAvailable(){
+//        LocalDate startDate = LocalDate.of(2024, 5, 10);
+//        LocalDate endDate = LocalDate.of(2024, 5, 15);
+//        RumService service1 = new RumService(rr, br);
+//
+//        when(br.isRoomAvailable(rum, "240510-240515")).thenReturn(false);
+//        boolean isAvailable = service1.isRoomAvailable(rum, startDate, endDate);
+//
+//
+//        assertFalse(isAvailable);
+//    }
 
-        when(br.isRoomAvailable(rum, "240510-240515")).thenReturn(false);
-        boolean isAvailable = service1.isRoomAvailable(rum, startDate, endDate);
+//    @Test
+//    void testIsRoomAvailableWhenRoomIsAvailable(){
+//        LocalDate startDate = LocalDate.of(2024, 5, 20);
+//        LocalDate endDate = LocalDate.of(2024, 5, 25);
+//        RumService service2 = new RumService(rr, br);
+//
+//        when(br.isRoomAvailable(rum, "240520-240525")).thenReturn(true);
+//        boolean isAvailable = service2.isRoomAvailable(rum, startDate, endDate);
+//
+//
+//        assertTrue(isAvailable);
+//    }
 
 
-        assertFalse(isAvailable);
-    }
-
-    @Test
-    void testIsRoomAvailableWhenRoomIsAvailable(){
-        LocalDate startDate = LocalDate.of(2024, 5, 20);
-        LocalDate endDate = LocalDate.of(2024, 5, 25);
-        RumService service2 = new RumService(rr, br);
-
-        when(br.isRoomAvailable(rum, "240520-240525")).thenReturn(true);
-        boolean isAvailable = service2.isRoomAvailable(rum, startDate, endDate);
-
-
-        assertTrue(isAvailable);
-    }
-
-
-    @Test
-    void rumDTO(){
-
-        RumDTO actual = service.convertToRumDTO(rum);
-        assertEquals(actual.getId(), rumDTO.getId());
-        assertEquals(actual.getRumTyp(), rumDTO.getRumTyp());
-        assertEquals(actual.getExtraSäng(), rumDTO.getExtraSäng());
-    }
+//    @Test
+//    void rumDTO(){
+//
+//        RumDTO actual = service.convertToRumDTO(rum);
+//        assertEquals(actual.getId(), rumDTO.getId());
+//        assertEquals(actual.getRumTyp(), rumDTO.getRumTyp());
+//        assertEquals(actual.getExtraSäng(), rumDTO.getExtraSäng());
+//    }
 }

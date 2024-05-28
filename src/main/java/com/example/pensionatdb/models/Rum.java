@@ -20,6 +20,8 @@ public class Rum {
     @Column(name = "rumTyp")
     private String rumTyp;
 
+    private double price;
+
     private int extraSäng;
 
 }
