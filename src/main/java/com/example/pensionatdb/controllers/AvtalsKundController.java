@@ -62,6 +62,7 @@ public class AvtalsKundController {
     public String searchAvtalskunder(Model model, @RequestParam(defaultValue = "") String q,
                                      @RequestParam(defaultValue = "companyName") String sortCol,
                                      @RequestParam(defaultValue = "ASC") String sortOrder) {
+
         q = q.trim();
         model.addAttribute("q", q);
         log.info("Searching with q={}, sortCol={}, sortOrder={}", q, sortCol, sortOrder);
