@@ -50,5 +50,19 @@ tasks.named('test') {
 
 
 
+/*
+//profile IntegrationTests
+val integrationTestTask = tasks.register<Test>("integrationTest") {
+    group = "verification"
+    filter {
+        includeTestsMatching("*IT")
+    }
+}
+//profile Tests
+tasks.test{
+    filter{
+        includeTestsMatching("*Tests")
 
-
+    }
+}
+*/
