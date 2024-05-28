@@ -1,3 +1,4 @@
+
 package com.example.pensionatdb;
 
 import com.example.pensionatdb.dtos.RoomEventDTO;
@@ -37,6 +38,7 @@ public class EventConsumer {
     private void configureObjectMapper() {
         PolymorphicTypeValidator ptv = BasicPolymorphicTypeValidator.builder()
                 .allowIfSubType(RoomEvent.class)
+                .allowIfSubType(SpecialRoomEvent.class)
                 .build();
 
         SimpleModule module = new SimpleModule();
@@ -82,3 +84,4 @@ public class EventConsumer {
         });
     }
 }
+

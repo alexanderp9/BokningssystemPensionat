@@ -68,8 +68,14 @@
 <script>
     function fetchRoomsAndRender() {
         fetch('/rum')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
+                console.log('Rooms data:', data); // Log the rooms data
                 const roomEventsList = document.getElementById('roomEventsList');
                 roomEventsList.innerHTML = '';
                 data.forEach(room => {
@@ -86,8 +92,14 @@
     function showRoomEvents(event) {
         const roomId = event.target.getAttribute('data-room-id');
         fetch(`/room-events/${roomId}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
+                console.log(`Events for room ${roomId}:`, data); // Log the events data
                 const doorEventsList = document.getElementById('doorEventsList');
                 const cleaningEventsList = document.getElementById('cleaningEventsList');
                 doorEventsList.innerHTML = '';

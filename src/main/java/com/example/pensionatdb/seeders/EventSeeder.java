@@ -28,19 +28,50 @@ public class EventSeeder {
         Random random = new Random();
 
         for (Rum room : rooms) {
-            for (int i = 0; i < 10; i++) { // Generate 10 random events for each room
-                RoomEvent event = new RoomEvent();
-                event.setRoomId(room.getId());
-                event.setEventName(generateRandomEvent());
-                event.setEventTime(LocalDateTime.now().minusDays(random.nextInt(30))); // Random date within the last 30 days
-                event.setDescription("Random event description");
-                roomEventRepository.save(event);
-            }
+            // Generate a series of events for each room
+            generateRoomEvents(room, random);
         }
     }
 
-    private String generateRandomEvent() {
-        // Implement logic to generate random event names
-        return "Random Event";
+    private void generateRoomEvents(Rum room, Random random) {
+        LocalDateTime startTime = LocalDateTime.now().minusDays(random.nextInt(30));
+        String[] cleaners = {"Per Persson", "Anna Andersson", "Kalle Karlsson"};
+
+        for (int i = 0; i < 3; i++) { // Generate 3 sets of door and cleaning events
+            LocalDateTime eventTime = startTime.plusDays(i).plusHours(random.nextInt(12));
+
+            // Door opened
+            createAndSaveEvent(room.getId(), "Dörren öppnad", eventTime, null);
+
+            // Door closed
+            createAndSaveEvent(room.getId(), "Dörren stängd", eventTime.plusMinutes(2), null);
+
+            // Another door opened
+            createAndSaveEvent(room.getId(), "Dörren öppnad", eventTime.plusHours(2), null);
+
+            // Cleaning started
+            String cleaner = cleaners[random.nextInt(cleaners.length)];
+            createAndSaveEvent(room.getId(), "Städning påbörjat", eventTime.plusHours(2).plusMinutes(2), "Städning påbörjat av " + cleaner);
+
+            // Door closed
+            createAndSaveEvent(room.getId(), "Dörren stängd", eventTime.plusHours(2).plusMinutes(10), null);
+
+            // Cleaning finished
+            createAndSaveEvent(room.getId(), "Städning avslutat", eventTime.plusHours(4), "Städning avslutat av " + cleaner);
+
+            // Door opened and closed again
+            createAndSaveEvent(room.getId(), "Dörren öppnad", eventTime.plusHours(4).plusMinutes(20), null);
+            createAndSaveEvent(room.getId(), "Dörren stängd", eventTime.plusHours(4).plusMinutes(24), null);
+        }
+    }
+
+    private void createAndSaveEvent(Long roomId, String eventName, LocalDateTime eventTime, String description) {
+        RoomEvent event = new RoomEvent();
+        event.setRoomId(roomId);
+        event.setEventName(eventName);
+        event.setEventTime(eventTime);
+        event.setDescription(description);
+        roomEventRepository.save(event);
     }
 }
+
