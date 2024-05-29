@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 @Component
@@ -52,25 +53,25 @@ public class EventConsumer {
             factory.setHost("128.140.81.47");
             factory.setUsername("djk47589hjkew789489hjf894");
             factory.setPassword("sfdjkl54278frhj7");
+
             Connection connection = factory.newConnection();
             Channel channel = connection.createChannel();
+            System.out.println(" [*] Connected to RabbitMQ");
 
             channel.queueDeclare(queueName, true, false, false, null);
             System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-                String message = new String(delivery.getBody(), "UTF-8");
-                System.out.println(" [x] Received '" + message + "'");
+                String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
+                System.out.println(" [x] Received raw message: '" + message + "'");
 
                 try {
-                    // Konvertera JSON-meddelandet till ett RoomEvent-objekt
                     RoomEvent roomEvent = mapper.readValue(message, RoomEvent.class);
                     System.out.println(" [x] Parsed RoomEvent: " + roomEvent);
 
                     RoomEventDTO roomEventDTO = roomEventService.convertToDTO(roomEvent);
                     System.out.println(" [x] Converted to DTO: " + roomEventDTO);
 
-                    // Gör insättning i databasen
                     roomEventService.saveRoomEvent(roomEventDTO);
                     System.out.println(" [x] Inserted event into database");
                 } catch (Exception e) {
@@ -79,16 +80,12 @@ public class EventConsumer {
                 }
             };
 
-            channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {});
-        } catch (IOException e) {
-            // Hantera IOException
-            System.err.println("IOException occurred while consuming events: " + e.getMessage());
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            // Hantera TimeoutException
-            System.err.println("TimeoutException occurred while consuming events: " + e.getMessage());
+            channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {
+                System.out.println(" [*] Consumer cancelled");
+            });
+        } catch (IOException | TimeoutException e) {
+            System.err.println("Error occurred while consuming events: " + e.getMessage());
             e.printStackTrace();
         }
-
     }
 }
