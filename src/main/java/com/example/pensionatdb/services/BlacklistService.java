@@ -1,9 +1,12 @@
 package com.example.pensionatdb.services;
 
+import com.example.pensionatdb.config.IntegrationProperties;
 import com.example.pensionatdb.models.Kund;
 import com.example.pensionatdb.repos.kundRepo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,11 @@ public class BlacklistService {
     private final kundRepo kundRepo;
     private static final Logger log = Logger.getLogger(BlacklistService.class.getName());
 
+
+    @Qualifier("integrationProperties")
+    @Autowired
+    IntegrationProperties properties;
+
     public BlacklistService(kundRepo kundRepo) {
         this.kundRepo = kundRepo;
     }
@@ -30,7 +38,7 @@ public class BlacklistService {
     private final HttpClient client = HttpClient.newHttpClient();
 
     public ResponseEntity<String> addBlacklistMail(String email, boolean ok) {
-        String url = "https://javabl.systementor.se/api/stefan/blacklist";
+        String url = properties.getBlacklist().getUrl();
         String requestBody = "{\"email\":\"" + email + "\",\"name\":\"Kalle\",\"isOk\":\"" + ok + "\"}";
 
         HttpHeaders headers = new HttpHeaders();
@@ -52,7 +60,7 @@ public class BlacklistService {
     }
 
     public ResponseEntity<String> updateBlacklistMail(String email, boolean ok) {
-        String url = "https://javabl.systementor.se/api/stefan/blacklist/" + email;
+        String url = properties.getBlacklist().getUrl() + email;
         String requestBody = "{\"name\":\"Kalle\",\"isOk\":\"" + ok + "\"}";
 
         try {
@@ -73,7 +81,7 @@ public class BlacklistService {
     }
 
     public boolean checkBlacklist(String email) {
-        String url = "https://javabl.systementor.se/api/stefan/blacklistcheck/" + email;
+        String url = properties.getBlacklist().getUrl() + email;
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -100,7 +108,7 @@ public class BlacklistService {
     }
 
     public List<JsonNode> getAllBlacklisted() {
-        String url = "https://javabl.systementor.se/api/stefan/blacklist";
+        String url = properties.getBlacklist().getUrl();
         List<JsonNode> blacklisted = new ArrayList<>();
         try {
             HttpRequest request = HttpRequest.newBuilder()
