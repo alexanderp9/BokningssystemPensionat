@@ -81,7 +81,8 @@ public class BlacklistService {
     }
 
     public boolean checkBlacklist(String email) {
-        String url = properties.getBlacklist().getUrl() + email;
+        String url = "https://javabl.systementor.se/api/stefan/blacklistcheck/" + email;
+        System.out.println(email);
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))

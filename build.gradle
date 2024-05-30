@@ -36,6 +36,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'com.rabbitmq:amqp-client:5.13.1'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'jakarta.mail:jakarta.mail-api:2.0.1'
+    implementation 'com.sun.mail:jakarta.mail:2.0.1'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.mysql:mysql-connector-j'
@@ -48,21 +51,3 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-
-
-/*
-//profile IntegrationTests
-val integrationTestTask = tasks.register<Test>("integrationTest") {
-    group = "verification"
-    filter {
-        includeTestsMatching("*IT")
-    }
-}
-//profile Tests
-tasks.test{
-    filter{
-        includeTestsMatching("*Tests")
-
-    }
-}
-*/

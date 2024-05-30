@@ -5,6 +5,7 @@ import com.example.pensionatdb.models.Rum;
 import com.example.pensionatdb.services.BlacklistService;
 import com.example.pensionatdb.services.BokningService;
 import com.example.pensionatdb.services.KundService;
+import com.example.pensionatdb.services.MailService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+
 
 @Controller
 @RequiredArgsConstructor
@@ -24,6 +29,7 @@ public class bokningController {
     private final BokningService bokningService;
     private final KundService ks;
     private final BlacklistService blacklistService;
+    private final MailService mailService;
 
     private static final Logger log = LoggerFactory.getLogger(bokningController.class);
 
@@ -54,6 +60,21 @@ public class bokningController {
         BokningDTO addedBokning = bokningService.addBokningFromDTO(bokningDTO);
         if (addedBokning != null) {
             log.info("Bokning lades till");
+
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("namn", bokningDTO.getNamn());
+            variables.put("antal", bokningDTO.getNätter());
+            variables.put("startdate", bokningDTO.getStartDatum());
+            variables.put("slutdate", bokningDTO.getSlutDatum());
+
+            try {
+                String customerEmail = blacklistService.getEmail(bokningDTO.getKundId());
+                mailService.sendMail(customerEmail, "Boknings bekräftelse", "bookingConfirmation", variables);
+                log.info("Confirmation email sent to " + customerEmail);
+            } catch (jakarta.mail.MessagingException e) {
+                log.error("Failed to send confirmation email", e);
+            }
+
             return new RedirectView("/bokning", true);
         } else {
             log.info("Rummet är upptaget för det datumet");
@@ -81,5 +102,4 @@ public class bokningController {
 
         return "bookingpage";
     }
-
 }
