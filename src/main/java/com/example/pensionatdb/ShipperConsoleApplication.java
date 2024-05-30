@@ -28,7 +28,8 @@ public class ShipperConsoleApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
+        // deserialiserar för att omvandla datat till java objekt
+        // mapper konfigurerad till att ignorera okända egenskaper som vi inte bryr oss om.
         InputStream inputStream = xmlStreamProvider.getDataStreamShippers();
         Shipper[] shippers = mapper.readValue(inputStream, Shipper[].class);
 

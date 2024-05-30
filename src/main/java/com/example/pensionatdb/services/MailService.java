@@ -25,6 +25,8 @@ public class MailService {
         context.setVariables(variables);
         String body = templateEngine.process(templateName, context);
 
+
+        //klass från api som gör tillåter skapande och manipulering av epost meddelande. i vårt fall våra variabler samt att det ska innehålla html
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 

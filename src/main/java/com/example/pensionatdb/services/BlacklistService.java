@@ -60,7 +60,7 @@ public class BlacklistService {
     }
 
     public ResponseEntity<String> updateBlacklistMail(String email, boolean ok) {
-        String url = properties.getBlacklist().getUrl() + email;
+        String url = properties.getBlacklist().getUrl() + "/" + email;
         String requestBody = "{\"name\":\"Kalle\",\"isOk\":\"" + ok + "\"}";
 
         try {
@@ -97,7 +97,7 @@ public class BlacklistService {
 
             return !ok;
         } catch (Exception e) {
-            log.severe("Exception with att kolla mot listan " + e.getMessage());
+            log.severe("Exception med att kolla mot listan " + e.getMessage());
             return false;
         }
     }

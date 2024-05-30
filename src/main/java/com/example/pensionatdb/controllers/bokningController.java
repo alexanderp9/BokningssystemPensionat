@@ -62,7 +62,7 @@ public class bokningController {
             log.info("Bokning lades till");
 
             Map<String, Object> variables = new HashMap<>();
-            variables.put("namn", bokningDTO.getNamn());
+            variables.put("namn", addedBokning.getNamn());
             variables.put("antal", bokningDTO.getNätter());
             variables.put("startdate", bokningDTO.getStartDatum());
             variables.put("slutdate", bokningDTO.getSlutDatum());
