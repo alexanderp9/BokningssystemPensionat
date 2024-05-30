@@ -16,4 +16,11 @@ public class BokningDTO {
     private long rumId;
     private boolean avbokad;
     private String email;
+    private double totalPrice;
+
+    public double calculateTotalPrice(double pricePerNight) {
+        return nätter*pricePerNight;
+    }
+
 }
+

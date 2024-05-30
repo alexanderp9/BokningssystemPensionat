@@ -66,6 +66,7 @@ public class bokningController {
             variables.put("antal", bokningDTO.getNätter());
             variables.put("startdate", bokningDTO.getStartDatum());
             variables.put("slutdate", bokningDTO.getSlutDatum());
+            variables.put("totalPrice", addedBokning.getTotalPrice());
 
             try {
                 String customerEmail = blacklistService.getEmail(bokningDTO.getKundId());

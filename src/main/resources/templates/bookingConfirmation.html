@@ -4,7 +4,8 @@
     <title>Boknings Bekfräftelse</title>
 </head>
 <body>
-<h1>Hej, <span th:text="${namn}">Guest</span></h1>
-<p>Du har bokat hotellrum för <span th:text="${antal}">N</span> nätter från <span th:text="${startdate}">startdate</span> till <span th:text="${slutdate}">slutdate</span>.</p>
+<h1>Hej, <span th:text="${namn}">namn</span></h1>
+<p>Du har bokat hotellrum för <span th:text="${antal}">N</span> nätter från <span th:text="${startdate}">startdate</span> till <span th:text="${slutdate}">slutdate</span>
+  Totala summan för bokningen:  <span th:text="${totalPrice}">slut pris</span>kr.</p>
 </body>
 </html>

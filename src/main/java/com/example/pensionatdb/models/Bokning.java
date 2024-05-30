@@ -31,4 +31,7 @@ public class Bokning {
     private Rum rum;
 
     private boolean avbokad = false;
+
+    private double totalPrice;
+
 }

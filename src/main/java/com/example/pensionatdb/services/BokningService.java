@@ -49,6 +49,7 @@ public class BokningService {
         dto.setKundId(bokning.getKund().getId());
         dto.setRumId(bokning.getRum().getId());
         dto.setEmail(bokning.getKund().getEmail());
+        dto.setTotalPrice(bokning.getTotalPrice());
 
         return dto;
     }
@@ -57,6 +58,9 @@ public class BokningService {
         Kund kund = kundRepo.findById(bokningDTO.getKundId()).orElse(null);
         Rum rum = rumRepo.findById(bokningDTO.getRumId()).orElse(null);
 
+        double roomPrice = rum.getPrice();
+        double discountedPrice = discountService.discountBokning(kund, bokningDTO.getNätter(), bokningDTO.getStartDatum(), bokningDTO.getSlutDatum(), roomPrice);
+
         return new Bokning(
                 bokningDTO.getId(),
                 bokningDTO.getNätter(),
@@ -64,7 +68,8 @@ public class BokningService {
                 bokningDTO.getSlutDatum(),
                 kund,
                 rum,
-                bokningDTO.isAvbokad()
+                bokningDTO.isAvbokad(),
+                discountedPrice
         );
     }
 
@@ -105,7 +110,8 @@ public class BokningService {
                 bokningDTO.getSlutDatum(),
                 kund,
                 rum,
-                bokningDTO.isAvbokad()
+                bokningDTO.isAvbokad(),
+                discountedPrice
         );
 
         log.info("Totalpris med rabatt: " + discountedPrice);
